@@ -97,17 +97,28 @@ public class Rotor {
 	public void reset() {
 		curCharMap = charMap;
 	}
-	
-	public char[] getCurCharMap(){
+
+	/**
+	 * Returns a copy of the curCharMap. Currently only used for testing
+	 * purposes.
+	 * 
+	 * @return a copy of the curCharMap
+	 */
+	public char[] getCurCharMap() {
 		char[] temp = new char[curCharMap.length];
-		for(int i = 0; i < temp.length; i++)
+		for (int i = 0; i < temp.length; i++)
 			temp[i] = curCharMap[i];
 		return temp;
 	}
-	
-	public char[] getCharMap(){
+
+	/**
+	 * Returns a copy of the charMap. Currently only used for testing purposes.
+	 * 
+	 * @return a copy of the charMap
+	 */
+	public char[] getCharMap() {
 		char[] temp = new char[charMap.length];
-		for(int i = 0; i < temp.length; i++)
+		for (int i = 0; i < temp.length; i++)
 			temp[i] = charMap[i];
 		return temp;
 	}
