@@ -1,4 +1,4 @@
-// This is a comment by J.Ikley, to prove that I can commit and push.
+// This is a comment by Ikley, to prove that I can commit and push.
 
 package enigma;
 
