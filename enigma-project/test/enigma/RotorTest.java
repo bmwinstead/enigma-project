@@ -1,3 +1,5 @@
+// This is a comment by J.Ikley, to prove that I can commit.
+
 package enigma;
 
 import static org.junit.Assert.*;
