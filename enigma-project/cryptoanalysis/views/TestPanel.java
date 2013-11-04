@@ -56,7 +56,7 @@ public class TestPanel extends JFrame {
 		instructionsTextArea.setColumns(40);
 		instructionsTextArea.setRows(3);
 		instructionsTextArea.setWrapStyleWord(true);
-		instructionsTextArea.setText("Instructions: Click Browse or type in a file path to select a text file for parsing, and select Parse  to break the text into 1, 2, and 3 word groups (unigrams, bigrams, and trigrams). Note: Text may take some time to parse.");
+		instructionsTextArea.setText("Instructions: Click Browse or type in a file path to select a text file for parsing, and select Parse  to break the text into 1, 2, and 3 word groups (unigrams, bigrams, and trigrams). Adding subsequent files will add to the databases. Note: Text may take some time to parse.");
 		instructionPanel.add(instructionsTextArea);
 		
 		JPanel buttonPanel = new JPanel();
