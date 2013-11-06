@@ -4,20 +4,26 @@ public class CA_Rotor {
 	private final char[] forwardWiring;
 	private final char[] reverseWiring;
 	
-	private int indexOffset;
+	private int stepOffset;
+	private int ringOffset;
 	private final char notchPosition;
 	private final int size;
 	
+	public static final CA_Rotor ROTOR1 = new CA_Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'R');
+	public static final CA_Rotor ROTOR2 = new CA_Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'F');
+	public static final CA_Rotor ROTOR3 = new CA_Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'W');
+	public static final CA_Rotor REFLECTORB = new CA_Rotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+	
 	public CA_Rotor(String code) {
-		this(code, '!', 'a');
+		this(code, '!');
 	}
 	
-	public CA_Rotor(String code, char newNotch, char startPosition) {
+	public CA_Rotor(String code, char newNotch) {
 		size = code.length();
 		notchPosition = Character.toUpperCase(newNotch);
 		forwardWiring = new char[size];
 		reverseWiring = new char[size];
-		setPosition(startPosition);
+		setRingPosition('A');
 		
 		char[] chars = code.toUpperCase().toCharArray();
 		
@@ -27,24 +33,39 @@ public class CA_Rotor {
 		}
 	}
 	
-	public void setPosition(char newPosition) {
-		indexOffset = Character.toUpperCase(newPosition) - 'A';
+	public char getNotchPosition() {
+		return (char)(notchPosition - 1);
+	}
+	
+	public char getPosition() {
+		return (char)('A' + stepOffset);
+	}
+	
+	public void setRingPosition(char newPosition) {
+		ringOffset = Character.toUpperCase(newPosition) - 'A';
+	}
+	
+	public void setStartPosition(char newPosition) {
+		stepOffset = Character.toUpperCase(newPosition) - 'A';
 	}
 	
 	public boolean cycleRotor() {
-		indexOffset = (indexOffset + 1) % forwardWiring.length;	// Allows wrap-around.
+		stepOffset = (stepOffset + 1) % forwardWiring.length;	// Allows wrap-around.
 		
-		return indexOffset == (notchPosition - 'A');		// Returns if the rotor is in the notch position.
+		return stepOffset == (notchPosition - 'A');		// Returns if the rotor is in the notch position.
 	}
 	
 	public char forwardEncrypt(char letter) {
-		int index = (Character.toUpperCase(letter) - 'A' + indexOffset) % size;
-		return forwardWiring[index];
+		int letterIndex = Character.toUpperCase(letter) - 'A';
+		int offset = (letterIndex + stepOffset + ringOffset) % size;
+		int resultOffset = (size + forwardWiring[offset] - 'A' - stepOffset) % size;
+		return (char)('A' + resultOffset);
 	}
 	
 	public char reverseEncrypt(char letter) {
 		int index = Character.toUpperCase(letter) - 'A';
-		int offset = (size + reverseWiring[index] - indexOffset - 'A') % size;
+		int letterIndex = (size + index + stepOffset) % size;
+		int offset = (2 * size + reverseWiring[letterIndex] - stepOffset - ringOffset - 'A') % size;
 		return (char)('A' + offset);
 	}
 }

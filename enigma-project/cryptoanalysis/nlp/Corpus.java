@@ -41,21 +41,21 @@ public class Corpus {
 	}
 	
 	public PriorityQueue<String> getUnigramTestQueue() {
-		PriorityQueue<String> result = new PriorityQueue<String>(unigramQueue.size(), new GramComparator(unigramTable));
+		PriorityQueue<String> result = new PriorityQueue<String>(unigramTable.size(), new GramComparator(unigramTable));
 		result.addAll(unigramTable.keySet());
 		
 		return result;
 	}
 	
 	public PriorityQueue<String> getBigramTestQueue() {
-		PriorityQueue<String> result = new PriorityQueue<String>(bigramQueue.size(), new GramComparator(bigramTable));
+		PriorityQueue<String> result = new PriorityQueue<String>(bigramTable.size(), new GramComparator(bigramTable));
 		result.addAll(bigramTable.keySet());
 		
 		return result;
 	}
 	
 	public PriorityQueue<String> getTrigramTestQueue() {
-		PriorityQueue<String> result = new PriorityQueue<String>(trigramQueue.size(), new GramComparator(trigramTable));
+		PriorityQueue<String> result = new PriorityQueue<String>(trigramTable.size(), new GramComparator(trigramTable));
 		result.addAll(trigramTable.keySet());
 		
 		return result;
@@ -113,6 +113,17 @@ public class Corpus {
 		for (String trigram : trigramTable.keySet()) {
 			trigramQueue.add(trigram);
 		}
+	}
+	
+	public boolean testString(String test) {
+		String[] words = test.split("\\s");
+		
+		for (int index = 0; index < words.length; index++) {
+			if (!unigramTable.keySet().contains(words[index].toLowerCase()))
+				return false;
+		}
+		
+		return true;
 	}
 	
 	public String printTestStatistics() {
