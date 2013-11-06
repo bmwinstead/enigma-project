@@ -1,4 +1,4 @@
-// This is a comment by Ikley, to test committing and pushing. 
+// This is a test comment by Ikley. 
 
 package enigma;
 
