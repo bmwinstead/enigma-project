@@ -19,7 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
-import breakers.CribDetector;
+import decoders.CribDetector;
+
 import machine.CA_Rotor;
 import machine.Encryptor;
 import nlp.Corpus;

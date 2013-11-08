@@ -2,13 +2,7 @@ package nlp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Scanner;
-
-import javax.swing.JFileChooser;
 
 public class TextParser {
 	private Corpus database;

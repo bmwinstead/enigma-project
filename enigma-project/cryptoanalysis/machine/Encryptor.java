@@ -23,6 +23,10 @@ public class Encryptor {
 		String result = "";
 		boolean doubleStep = false;
 		
+		left.setRingPosition('B');
+		middle.setRingPosition('B');
+		right.setRingPosition('B');
+		
 		for (int index = 0; index < text.length(); index++) {
 			char letter = text.charAt(index);
 			

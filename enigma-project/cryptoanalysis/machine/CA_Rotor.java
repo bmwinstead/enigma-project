@@ -5,7 +5,7 @@ public class CA_Rotor {
 	private final char[] reverseWiring;
 	
 	private int stepOffset;
-	private int ringOffset;
+	private int ringSetting;
 	private final char notchPosition;
 	private final int size;
 	
@@ -42,7 +42,7 @@ public class CA_Rotor {
 	}
 	
 	public void setRingPosition(char newPosition) {
-		ringOffset = Character.toUpperCase(newPosition) - 'A';
+		ringSetting = Character.toUpperCase(newPosition) - 'A';
 	}
 	
 	public void setStartPosition(char newPosition) {
@@ -57,15 +57,17 @@ public class CA_Rotor {
 	
 	public char forwardEncrypt(char letter) {
 		int letterIndex = Character.toUpperCase(letter) - 'A';
-		int offset = (letterIndex + stepOffset + ringOffset) % size;
-		int resultOffset = (size + forwardWiring[offset] - 'A' - stepOffset) % size;
+		int offset = stepOffset - ringSetting;
+		int rotorAdjust = (size + letterIndex + offset) % size;
+		int resultOffset = (size + forwardWiring[rotorAdjust] - 'A' - offset) % size;
 		return (char)('A' + resultOffset);
 	}
 	
 	public char reverseEncrypt(char letter) {
-		int index = Character.toUpperCase(letter) - 'A';
-		int letterIndex = (size + index + stepOffset) % size;
-		int offset = (2 * size + reverseWiring[letterIndex] - stepOffset - ringOffset - 'A') % size;
-		return (char)('A' + offset);
+		int letterIndex = Character.toUpperCase(letter) - 'A';
+		int offset = stepOffset - ringSetting;
+		int rotorAdjust = (size + letterIndex + offset) % size;
+		int resultOffset = (size + reverseWiring[rotorAdjust] - 'A' - offset) % size;
+		return (char)('A' + resultOffset);
 	}
 }

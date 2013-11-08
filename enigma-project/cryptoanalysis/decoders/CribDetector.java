@@ -1,4 +1,4 @@
-package breakers;
+package decoders;
 
 import machine.CA_Rotor;
 import machine.Encryptor;
@@ -39,7 +39,7 @@ public class CribDetector {
 						String sample = testString.substring(index, crib.length() + index);
 						
 						if (sample.equals(crib.toUpperCase())) {
-							String result = "" + leftRotorSetting + (char)middleRotorSetting + rightRotorSetting;
+							String result = "" + leftRotorSetting + middleRotorSetting + rightRotorSetting;
 							return result;
 						}
 					}
