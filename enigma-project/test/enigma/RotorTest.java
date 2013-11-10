@@ -1,4 +1,5 @@
 // This is a test comment by Ikley. 
+//Additional comment to test git changes by Eohlmacher.
 
 package enigma;
 
