@@ -26,6 +26,12 @@ import machine.Encryptor;
 import nlp.Corpus;
 import nlp.TextParser;
 
+// Testing GUI interface for word demonstration.
+// Used GWT Designer in Eclipse to build GUI.
+// This was designed on Ubuntu, Windows builds may look off,
+// but this was intended for proof-of-concept and to get an idea
+// of GUI requirements.
+
 public class TestPanel extends JFrame {
 	private JTextField fileTextField;
 	

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+// This class takes a text file and parses into unigram, bigram, and trigram words and stores them.
 public class TextParser {
 	private Corpus database;
 	
@@ -18,6 +19,7 @@ public class TextParser {
 			String secondWord = "";
 			String thirdWord = "";
 			
+			// Parse words.
 			while (scanner.hasNext()) {
 				thirdWord = secondWord;
 				secondWord = firstWord;
@@ -45,6 +47,7 @@ public class TextParser {
 			e.printStackTrace();
 		}
 		
+		// Parsing complete; sort for ready use.
 		database.sortDatabase();
 	}
 }

@@ -5,11 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+// This class represents a corpus (word database) containing unigram, bigram, and trigram words.
+// Counts of each type of gram are kept for future statistical use.
+// PriorityQueues are also provided with sorts by word count.
+// It is intended that all words are first loaded into HashMaps (fast lookup with counts),
+// and then sortDatabase() is called to load priority queues with the entered words in descending word count order.
+// Then each call to get(n-gram)TestQueue() returns a shallow copy of each queue for word processing.
+
 public class Corpus {
+	// Statistic databases.
 	private Map<String, Integer> unigramTable;
 	private Map<String, Integer> bigramTable;
 	private Map<String, Integer> trigramTable;
 	
+	// Sorted databases.
 	private PriorityQueue<String> unigramQueue;
 	private PriorityQueue<String> bigramQueue;
 	private PriorityQueue<String> trigramQueue;
@@ -18,6 +27,7 @@ public class Corpus {
 	private int bigramCount;
 	private int trigramCount;
 	
+	// Constructor.
 	public Corpus() {
 		unigramTable = new HashMap<String, Integer>();
 		bigramTable = new HashMap<String, Integer>();
@@ -40,6 +50,7 @@ public class Corpus {
 		return trigramCount;
 	}
 	
+	// Returns shallow copy of test queue.
 	public PriorityQueue<String> getUnigramTestQueue() {
 		PriorityQueue<String> result = new PriorityQueue<String>(unigramTable.size(), new GramComparator(unigramTable));
 		result.addAll(unigramTable.keySet());
@@ -47,6 +58,7 @@ public class Corpus {
 		return result;
 	}
 	
+	// Returns shallow copy of test queue.
 	public PriorityQueue<String> getBigramTestQueue() {
 		PriorityQueue<String> result = new PriorityQueue<String>(bigramTable.size(), new GramComparator(bigramTable));
 		result.addAll(bigramTable.keySet());
@@ -54,6 +66,7 @@ public class Corpus {
 		return result;
 	}
 	
+	// Returns shallow copy of test queue.
 	public PriorityQueue<String> getTrigramTestQueue() {
 		PriorityQueue<String> result = new PriorityQueue<String>(trigramTable.size(), new GramComparator(trigramTable));
 		result.addAll(trigramTable.keySet());
@@ -97,6 +110,7 @@ public class Corpus {
 		trigramCount++;
 	}
 	
+	// This method is intended to be called after all words are sorted.
 	public void sortDatabase() {
 		unigramQueue.clear();
 		bigramQueue.clear();
@@ -115,6 +129,7 @@ public class Corpus {
 		}
 	}
 	
+	// Test a series of words split by whitespace for unigram matches.
 	public boolean testString(String test) {
 		String[] words = test.split("\\s");
 		
@@ -126,6 +141,7 @@ public class Corpus {
 		return true;
 	}
 	
+	// Debug method to show statistics.
 	public String printTestStatistics() {
 		String result = "";
 		String[] buffer = new String[10];
@@ -178,6 +194,7 @@ public class Corpus {
 		return result;
 	}
 	
+	// Inner class to sort database words in descending count order.
 	public class GramComparator implements Comparator<String> {
 		private Map<String, Integer> table;
 		

@@ -1,14 +1,17 @@
 package machine;
 
+// This implementation uses two substitution databases for ensuring that both forward
+// and reverse encryption is done in O(1) time.
 public class CA_Rotor {
 	private final char[] forwardWiring;
 	private final char[] reverseWiring;
 	
-	private int stepOffset;
-	private int ringSetting;
+	private int stepOffset;				// Rotor offset (Grundstellung)
+	private int ringSetting;			// Ring offset (Ringstellung)
 	private final char notchPosition;
-	private final int size;
+	private final int size;				// Substitution alphabet size for easy reading.
 	
+	// Standard Enigma rotor definitions.
 	public static final CA_Rotor ROTOR1 = new CA_Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'R');
 	public static final CA_Rotor ROTOR2 = new CA_Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'F');
 	public static final CA_Rotor ROTOR3 = new CA_Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'W');
@@ -23,7 +26,7 @@ public class CA_Rotor {
 		notchPosition = Character.toUpperCase(newNotch);
 		forwardWiring = new char[size];
 		reverseWiring = new char[size];
-		setRingPosition('A');
+		setRingPosition('A');			// Default for now; Setting the ring requires a call to setRingPosition().
 		
 		char[] chars = code.toUpperCase().toCharArray();
 		
@@ -41,14 +44,17 @@ public class CA_Rotor {
 		return (char)('A' + stepOffset);
 	}
 	
+	// Sets ring setting (Ringstellung)
 	public void setRingPosition(char newPosition) {
 		ringSetting = Character.toUpperCase(newPosition) - 'A';
 	}
 	
+	// Sets rotor offset (Grundstellung)
 	public void setStartPosition(char newPosition) {
 		stepOffset = Character.toUpperCase(newPosition) - 'A';
 	}
 	
+	// Steps the rotor 1 position.
 	public boolean cycleRotor() {
 		stepOffset = (stepOffset + 1) % forwardWiring.length;	// Allows wrap-around.
 		
@@ -63,6 +69,7 @@ public class CA_Rotor {
 		return (char)('A' + resultOffset);
 	}
 	
+	// Encrypts on the reverse path from the reflector.
 	public char reverseEncrypt(char letter) {
 		int letterIndex = Character.toUpperCase(letter) - 'A';
 		int offset = stepOffset - ringSetting;
