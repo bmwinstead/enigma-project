@@ -11,6 +11,7 @@ public class EnigmaMachine {
 		rotors.setPositions(initialPositions);
 		plugboard = null;
 	}
+	
 	//Plugboard
 	public EnigmaMachine(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap){
 		rotors = new Rotors(rotorChoices, reflectorChoice);
