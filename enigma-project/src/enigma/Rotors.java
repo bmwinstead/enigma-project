@@ -2,16 +2,16 @@ package enigma;
 
 public class Rotors {
 	public final static String[] rotorWirings = { 
-		 "EKMFLGDQVZNTOWYHXUSPAIBRCJ", //I     1-3 Only
-		 "AJDKSIRUXBLHWTMCQGZNPYFVOE", //II    1-3 Only
-		 "BDFHJLCPRTXVZNYEIWGAKMUSQO", //III   1-3 Only
-		 "ESOVPZJAYQUIRHXLNFTGKDCMWB", //IV    1-3 Only
-		 "VZBRGITYUPSDNHLXAWMJQOFECK", //V     1-3 Only
-		 "JPGVOUMFYQBENHZRDKASXLICTW", //VI    1-3 Only
-		 "NZJHGRCXMYSWBOUFAIVLPEKQDT", //VII   1-3 Only
-		 "FKQHTLXOCBJSPDZRAMEWNIUYGV", //VII   1-3 Only
-		 "LEYJVCNIXWPBQMDRTAKZGFUHOS", //BETA  4 Only
-		 "FSOKANUERHMBTIYCWLQPZXVGJD"  //GAMMA 4 Only
+		 "EKMFLGDQVZNTOWYHXUSPAIBRCJ", //I     1-3 Only 0
+		 "AJDKSIRUXBLHWTMCQGZNPYFVOE", //II    1-3 Only 1
+		 "BDFHJLCPRTXVZNYEIWGAKMUSQO", //III   1-3 Only 2
+		 "ESOVPZJAYQUIRHXLNFTGKDCMWB", //IV    1-3 Only 3
+		 "VZBRGITYUPSDNHLXAWMJQOFECK", //V     1-3 Only 4
+		 "JPGVOUMFYQBENHZRDKASXLICTW", //VI    1-3 Only 5
+		 "NZJHGRCXMYSWBOUFAIVLPEKQDT", //VII   1-3 Only 6
+		 "FKQHTLXOCBJSPDZRAMEWNIUYGV", //VIII  1-3 Only 7
+		 "LEYJVCNIXWPBQMDRTAKZGFUHOS", //BETA  4 Only   8
+		 "FSOKANUERHMBTIYCWLQPZXVGJD"  //GAMMA 4 Only   9
 	}; 
 	
 	public final static char[][] rotorNotches = {
@@ -28,10 +28,10 @@ public class Rotors {
 	};
 	
 	public final static String[] reflectors = {
-		"YRUHQSLDPXNGOKMIEBFZCWVJAT", //B
-		"FVPJIAOYEDRZXWGCTKUQSBNMHL", //C
-		"ENKQAUYWJICOPBLMDXZVFTHRGS", //B Thin
-		"RDOBJNTKVEHMLFCWZAXGYIPSUQ", //C Thin
+		"YRUHQSLDPXNGOKMIEBFZCWVJAT", //B      0
+		"FVPJIAOYEDRZXWGCTKUQSBNMHL", //C      1
+		"ENKQAUYWJICOPBLMDXZVFTHRGS", //B Thin 2
+		"RDOBJNTKVEHMLFCWZAXGYIPSUQ", //C Thin 3
 	};
 	
 	private Rotor left;
@@ -39,7 +39,7 @@ public class Rotors {
 	private Rotor right;
 	private Rotor fourth = null; //possibly not used
 	private Rotor reflector;
-	
+	//TODO change array ordering to reflect physical rotors e.g. {1,2,3,4} where 1 is 'fourth' rotor (left-most).
 	public Rotors(int[] rotorChoices, int reflectorChoice){
 		left = new Rotor(rotorWirings[rotorChoices[0]],rotorNotches[rotorChoices[0]]);
 		middle = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
@@ -49,6 +49,7 @@ public class Rotors {
 		reflector = new Rotor(reflectors[reflectorChoice],new char[]{'!','!'});
 	}
 	
+	//TODO change array ordering to reflect physical rotors e.g. {1,2,3,4} where 1 is 'fourth' rotor (left-most).
 	public void setPositions(char[] choices) {
 		left.setStartPosition(choices[0]);
 		middle.setStartPosition(choices[1]);
@@ -57,6 +58,7 @@ public class Rotors {
 			fourth.setStartPosition(choices[3]);
 	}
 	
+	//TODO change array ordering to reflect physical rotors e.g. {1,2,3,4} where 1 is 'fourth' rotor (left-most).
 	public void setRingSettings(char[] choices) {
 		left.setRingPosition(choices[0]);
 		middle.setRingPosition(choices[1]);
