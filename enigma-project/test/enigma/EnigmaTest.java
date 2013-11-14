@@ -42,30 +42,38 @@ public class EnigmaTest {
 		assertEquals("three1",expected1,result1);
 		assertEquals("three2",expected2,result2);
 		assertEquals("three3",expected3,result3);
+		three1.reset();
+		three2.reset();
+		three3.reset();
+		assertEquals("three1Decrypt",test1,three1.encryptString(expected1));
+		assertEquals("three2Decrypt",test2,three2.encryptString(expected2));
+		assertEquals("three3Decrypt",test3,three3.encryptString(expected3));
 	}
 	
 	@Test
 	public void testFourRotor(){
-		int[] fourRotor1  = {0,1,2,8}; //Beta,I,II,III
-		int[] fourRotor2  = {4,2,6,9}; //Gamma,V,II,VII
-		int[] fourRotor3  = {3,7,5,8}; //Gamma,IV,VIII,VI
 		int reflectorBThin= 2;
 		int reflectorCThin= 3;
-		char[] fourRing1  = {'A','B','C','D'}; //ACTUALLY D,A,B,C
-		char[] fourRing2  = {'Z','X','Y','U'}; //ACTUALLY U,Z,X,Y
-		char[] fourRing3  = {'G','M','N','P'}; //ACTUALLY P,G,M,N
+		int[] fourRotor1  = {8,0,1,2}; //Beta,I,II,III
+		char[] fourRing1  = {'A','B','C','D'}; 
 		char[] fourInit1  = {'A','A','A','A'};
-		char[] fourInit2  = {'Z','Y','X','W'}; //ACTUALLY W,Z,Y,X
-		char[] fourInit3  = {'I','U','F','S'}; //ACTUALLY S,I,U,F
 		EnigmaMachine four1 = new EnigmaMachine(fourRotor1,reflectorBThin,fourRing1,fourInit1);
+		
+		int[] fourRotor2  = {9,4,2,6}; //Gamma,V,III,VII
+		char[] fourRing2  = {'Z','X','Y','U'};
+		char[] fourInit2  = {'Z','Y','X','W'}; 
 		EnigmaMachine four2 = new EnigmaMachine(fourRotor2,reflectorCThin,fourRing2,fourInit2,pb2);
+		
+		int[] fourRotor3  = {9,3,7,5}; //Gamma,IV,VIII,VI
+		char[] fourRing3  = {'G','M','N','P'}; 
+		char[] fourInit3  = {'I','U','F','S'}; 
 		EnigmaMachine four3 = new EnigmaMachine(fourRotor3,reflectorBThin,fourRing3,fourInit3,pb3);
 		
 		String test1     = "TESTINGFOURROTORSNOW";
 		String test2     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String test3     = "OLDMCDONALDHADAFARMEIEIO";
 		String expected1 = "RXOHSDFSYSKIGXQJCZMX"; 
-		String expected2 = "RVRIDOINQFSDYVNORILLFDJQES";
+		String expected2 = "KDJFTBAWLZGNLYYEIGPFSBYBKF";
 		String expected3 = "ZJSTAKSMYAVNYVLKKHHVBZEH";
 		String result1   = four1.encryptString(test1);
 		String result2   = four2.encryptString(test2);
@@ -74,5 +82,11 @@ public class EnigmaTest {
 		assertEquals("four1",expected1,result1);
 		assertEquals("four2",expected2,result2);
 		assertEquals("four3",expected3,result3);
+		four1.reset();
+		four2.reset();
+		four3.reset();
+		assertEquals("four1Decrypt",test1,four1.encryptString(expected1));
+		assertEquals("four2Decrypt",test2,four2.encryptString(expected2));
+		assertEquals("four3Decrypt",test3,four3.encryptString(expected3));
 	}
 }

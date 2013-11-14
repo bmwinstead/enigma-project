@@ -37,34 +37,47 @@ public class Rotors {
 	private Rotor left;
 	private Rotor middle;
 	private Rotor right;
-	private Rotor fourth = null; //possibly not used
+	private Rotor fourth;
 	private Rotor reflector;
-	//TODO change array ordering to reflect physical rotors e.g. {1,2,3,4} where 1 is 'fourth' rotor (left-most).
+
 	public Rotors(int[] rotorChoices, int reflectorChoice){
+		if(rotorChoices.length == 3){
 		left = new Rotor(rotorWirings[rotorChoices[0]],rotorNotches[rotorChoices[0]]);
 		middle = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
 		right = new Rotor(rotorWirings[rotorChoices[2]],rotorNotches[rotorChoices[2]]);
-		if(rotorChoices.length == 4)
-			fourth = new Rotor(rotorWirings[rotorChoices[3]],rotorNotches[rotorChoices[3]]);
+		}else{
+			fourth = new Rotor(rotorWirings[rotorChoices[0]], rotorNotches[rotorChoices[0]]);
+			left = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
+			middle = new Rotor(rotorWirings[rotorChoices[2]],rotorNotches[rotorChoices[2]]);
+			right = new Rotor(rotorWirings[rotorChoices[3]],rotorNotches[rotorChoices[3]]);
+		}
 		reflector = new Rotor(reflectors[reflectorChoice],new char[]{'!','!'});
 	}
 	
-	//TODO change array ordering to reflect physical rotors e.g. {1,2,3,4} where 1 is 'fourth' rotor (left-most).
 	public void setPositions(char[] choices) {
+		if(choices.length == 3){
 		left.setStartPosition(choices[0]);
 		middle.setStartPosition(choices[1]);
 		right.setStartPosition(choices[2]);
-		if(choices.length == 4)
-			fourth.setStartPosition(choices[3]);
+		} else{
+			fourth.setStartPosition(choices[0]);
+			left.setStartPosition(choices[1]);
+			middle.setStartPosition(choices[2]);
+			right.setStartPosition(choices[3]);
+		}
 	}
 	
-	//TODO change array ordering to reflect physical rotors e.g. {1,2,3,4} where 1 is 'fourth' rotor (left-most).
 	public void setRingSettings(char[] choices) {
+		if(choices.length == 3){
 		left.setRingPosition(choices[0]);
 		middle.setRingPosition(choices[1]);
 		right.setRingPosition(choices[2]);
-		if(choices.length == 4)
-			fourth.setRingPosition(choices[3]);
+		} else{
+			fourth.setRingPosition(choices[0]);
+			left.setRingPosition(choices[1]);
+			middle.setRingPosition(choices[2]);
+			right.setRingPosition(choices[3]);
+		}
 	}
 	
 	public char encrypt(char letter){

@@ -4,8 +4,10 @@ public class EnigmaMachine {
 
 	private Rotors rotors;
 	private Plugboard plugboard;
+	private char[] initPositions;
 	//No plugboard
 	public EnigmaMachine(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions){
+		initPositions = initialPositions;
 		rotors = new Rotors(rotorChoices, reflectorChoice);
 		rotors.setRingSettings(ringSettings);
 		rotors.setPositions(initialPositions);
@@ -14,6 +16,7 @@ public class EnigmaMachine {
 	
 	//Plugboard
 	public EnigmaMachine(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap){
+		initPositions = initialPositions;
 		rotors = new Rotors(rotorChoices, reflectorChoice);
 		rotors.setRingSettings(ringSettings);
 		rotors.setPositions(initialPositions);
@@ -41,5 +44,9 @@ public class EnigmaMachine {
 			rStr += encryptChar(c);
 		}
 		return rStr;
+	}
+	
+	public void reset(){
+		rotors.setPositions(initPositions);
 	}
 }
