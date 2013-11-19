@@ -1,10 +1,13 @@
 // This is a test comment by Ikley. 
 //Additional comment to test git changes by Eohlmacher.
 
-package enigma;
+package test;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import enigma.EnigmaMachine;
 
 public class EnigmaTest {
 
