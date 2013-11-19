@@ -3,7 +3,7 @@
   <groupId>enigma-project</groupId>
   <artifactId>enigma</artifactId>
   <version>1</version>
-  
+  <testSourceDirectory>src/test</testSourceDirectory>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -11,5 +11,5 @@
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
-</dependencies>
+  </dependencies>
 </project>
