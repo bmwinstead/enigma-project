@@ -3,6 +3,14 @@
   <groupId>enigma-project</groupId>
   <artifactId>enigma</artifactId>
   <version>1</version>
+  <build>
+    <sourceDirectory>
+      ${basedir}/src/main
+    </sourceDirectory>
+    <testSourceDirectory>
+      ${basedir}/src/test
+    </testSourceDirectory>
+  </build>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
