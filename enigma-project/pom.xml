@@ -5,7 +5,7 @@
   <version>1</version>
   <build>
     <sourceDirectory>
-      ${basedir}/src/main
+      ${basedir}/src
     </sourceDirectory>
     <testSourceDirectory>
       ${basedir}/src/test
