@@ -30,11 +30,12 @@
       	<artifactId>maven-jar-plugin</artifactId>
       	<version>2.4</version>
       	<configuration>
-        <archive>
-          <manifest>
-            <mainClass>enigma.Enigma</mainClass>
-          </manifest>
-        </archive>
+          <archive>
+            <manifest>
+              <mainClass>enigma.Enigma</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
   </plugins>
   </build>
