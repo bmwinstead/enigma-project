@@ -3,9 +3,6 @@
   <groupId>enigma-project</groupId>
   <artifactId>enigma</artifactId>
   <version>1</version>
-  <build> 
-    <testSourceDirectory>src/test</testSourceDirectory>
-  </build>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
