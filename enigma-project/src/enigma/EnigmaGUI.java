@@ -58,15 +58,21 @@ public class EnigmaGUI extends JFrame{
         setSize(715, 735);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        this.setResizable(false);
         //New Layered Pane (The art magic!)
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(700, 700));
         add(layeredPane, BorderLayout.CENTER);
         
         //Background Image
-        ImageIcon bgImage = (new javax.swing.ImageIcon
+        ImageIcon bgImage;
+        try{
+        	bgImage = (new javax.swing.ImageIcon
                 (getClass().getResource("/images/backgroundImage.jpg")));
+        } catch(NullPointerException e){
+            bgImage = (new javax.swing.ImageIcon
+                    (getClass().getResource("backgroundImage.jpg")));
+        }
         JLabel backgroundImage = new JLabel(bgImage);
         backgroundImage.setBounds(0, 0, 700, 700);
         backgroundImage.setBorder(null);
