@@ -10,6 +10,11 @@
     <testSourceDirectory>
       ${basedir}/src/test
     </testSourceDirectory>
+    <resources>
+     <resource>
+       <directory>${basedir}/src/images</directory>
+     </resource>
+   </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -19,6 +24,15 @@
           <source>1.7</source>
           <target>1.7</target>
         </configuration>
+      </plugin>
+      <plugin>
+      	<artifactId>maven-assembly-plugin</artifactId>
+      	<configuration>
+        <archive>
+          <manifest>
+            <mainClass>enigma.Enigma</mainClass>
+          </manifest>
+        </archive>
       </plugin>
   </plugins>
   </build>
