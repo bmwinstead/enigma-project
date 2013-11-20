@@ -26,7 +26,7 @@ public class Plugboard {
 		char[] cArr = mapping.toCharArray();
 		numPairs = (int) Math.floor(cArr.length/2);
 		plugboard = new char[numPairs][2];
-		for(int i = 0; i < numPairs * 2; i++){
+		for(int i = 0; i < (numPairs * 2); i++){
 			int j = (int) Math.floor(i/2);
 			plugboard[j][i%2]=cArr[i];
 		}
