@@ -43,8 +43,8 @@ public class RotorTest {
 	@Test
 	public void testGetNotchPosition() {
 
-		String[] expected = { "Q ", "E ", "V ", "J ", "@ ", "@M", "@M", "@M",
-				"  ", "  " };
+		String[] expected = { "Q!", "E!", "V!", "J!", "@!", "@M", "@M", "@M",
+				"!!", "!!" };
 
 		Rotor[] rotors = new Rotor[rotorNotches.length];
 
