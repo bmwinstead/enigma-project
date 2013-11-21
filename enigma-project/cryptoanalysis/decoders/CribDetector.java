@@ -16,12 +16,12 @@ public class CribDetector {
 	
 	public String testCrib(String crib) {
 		// Set up an Enigma to run.
-		Encryptor bomb = new Encryptor(
-				CA_Rotor.ROTOR1,
-				CA_Rotor.ROTOR2,
-				CA_Rotor.ROTOR3,
-				CA_Rotor.REFLECTORB);
-		
+		//Encryptor bomb = new Encryptor(
+				//CA_Rotor.ROTOR1,
+				//CA_Rotor.ROTOR2,
+				//CA_Rotor.ROTOR3,
+				//CA_Rotor.REFLECTORB);
+		/*
 		String formattedText = "";
 		
 		// Skip non-alphabetic characters.
@@ -38,9 +38,9 @@ public class CribDetector {
 					char middleRotorSetting = (char)('A' + middleOffset);
 					char rightRotorSetting = (char)('A' + rightOffset);
 					
-					bomb.setPositions(leftRotorSetting, middleRotorSetting, rightRotorSetting);
+					//bomb.setPositions(leftRotorSetting, middleRotorSetting, rightRotorSetting);
 					
-					String testString = bomb.encrypt(formattedText);
+					//String testString = bomb.encrypt(formattedText);
 					
 					// Step the encrypted crib through the message and check for a match.
 					for (int index = 0; index < testString.length() - crib.length(); index++) {
@@ -54,7 +54,7 @@ public class CribDetector {
 				}
 			}
 		}
-		
+		*/
 		return ""; // Failure; return an empty string.
 	}
 }

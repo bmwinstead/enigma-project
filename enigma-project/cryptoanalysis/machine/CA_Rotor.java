@@ -10,13 +10,7 @@ public class CA_Rotor {
 	private int ringSetting;			// Ring offset (Ringstellung)
 	private final char notchPosition;
 	private final int size;				// Substitution alphabet size for easy reading.
-	
-	// Standard Enigma rotor definitions.
-	public static final CA_Rotor ROTOR1 = new CA_Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'R');
-	public static final CA_Rotor ROTOR2 = new CA_Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'F');
-	public static final CA_Rotor ROTOR3 = new CA_Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'W');
-	public static final CA_Rotor REFLECTORB = new CA_Rotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
-	
+
 	public CA_Rotor(String code) {
 		this(code, '!');
 	}
@@ -37,7 +31,8 @@ public class CA_Rotor {
 	}
 	
 	public char getNotchPosition() {
-		return (char)(notchPosition - 1);
+		int result = (notchPosition - 'A' - 1) % size;
+		return (char)(result + 'A');
 	}
 	
 	public char getPosition() {
@@ -56,7 +51,7 @@ public class CA_Rotor {
 	
 	// Steps the rotor 1 position.
 	public boolean cycleRotor() {
-		stepOffset = (stepOffset + 1) % forwardWiring.length;	// Allows wrap-around.
+		stepOffset = (stepOffset + 1) % size;	// Allows wrap-around.
 		
 		return stepOffset == (notchPosition - 'A');		// Returns if the rotor is in the notch position.
 	}
@@ -76,5 +71,21 @@ public class CA_Rotor {
 		int rotorAdjust = (size + letterIndex + offset) % size;
 		int resultOffset = (size + reverseWiring[rotorAdjust] - 'A' - offset) % size;
 		return (char)('A' + resultOffset);
+	}
+	
+	// Returns a new rotor corresponding to one of the rotors used in the German military Enigma.
+	public static CA_Rotor getNewRotor(char rotor) {
+		switch (rotor) {
+		case '1':
+			return new CA_Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'R');	// Rotor I.
+		case '2':
+			return new CA_Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'F');	// Rotor II.
+		case '3':
+			return new CA_Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'W');	// Rotor III.
+		case 'B':
+			return new CA_Rotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");		// Reflector B.
+		default:
+			return null;	// Fail on invalid input.
+		}
 	}
 }
