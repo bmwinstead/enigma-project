@@ -18,8 +18,8 @@ public class Logger {
 	// Create a new text file if one does not exist.
 	public static void createFile() {
 		try {
-			//output = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Walter\\Documents\\Enigma Text Files\\enigma-debug.txt", true)));
-			output = new PrintWriter(new BufferedWriter(new FileWriter("enigma-debug.txt", true)));
+			//output = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Walter\\Documents\\Enigma Text Files\\enigma-debug.txt", true))); // Testing.
+			output = new PrintWriter(new BufferedWriter(new FileWriter("enigma-debug.txt", true))); // To keep everyone's file system clean.
 			makeEntry("Logger initialized.", true);
 		} catch (IOException e) {
 			if (output != null) {
