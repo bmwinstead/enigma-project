@@ -28,8 +28,8 @@ public class RotorsTest {
 				"AAAAAIKLEY",
 				"AAAAAMONTANEZ",
 				"AAAAALYN",
-				// "AAAAAMATTHEW",
-				// "TESTTOCHECKTHREEROTORSTURNATONCE",
+				"AAAAAMATTHEW",
+				"TESTTOCHECKTHREEROTORSTURNATONCE",
 				"AAAAAOHLMACHER",
 				"AAAAAWINSTEAD",
 				"AAAAAGENEG"
@@ -46,8 +46,8 @@ public class RotorsTest {
 				"GJUBBPFPRS",
 				"MWMJLCFGQEEQF",
 				"UQOFXMBD",
-				// "FJBWZCCJFNOS",
-				// "LLXIXPACYICPKVSLPURSFBSKPPJKCZBJ",
+				"FJBWZCCJFNOS",
+				"LLXIXPACYICPKVSLPURSFBSKPPJKCZBJ",
 				"BDZGOKTGOTWOLM",
 				"VFITYYAYYWCZO",
 				"DCTVGJVFUL"
@@ -64,15 +64,16 @@ public class RotorsTest {
 				{5, 6, 7},
 				{5, 6, 7},
 				{0, 1, 2},
-				// {0, 1, 2},
-				// {0, 1, 2},
+				{0, 1, 2},
+				{0, 1, 2},
 				{8, 0, 1, 2},
 				{9, 7, 6, 5},
 				{9, 7, 5, 6}
 		};
 		
-		// int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 2, 3};
-		int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2, 2, 3};
+		// Walter Adolph - These were misaligned; the top init. was missing a zero. Fixed 11/21/2013.
+		int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 2, 3};
+		//int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2, 2, 3};
 		
 		char[][] positions = {
 				{'A', 'A', 'A'},
@@ -85,8 +86,8 @@ public class RotorsTest {
 				{'A', 'A', 'A'},
 				{'A', 'A', 'A'},
 				{'A', 'A', 'V'},
-				// {'A', 'E', 'A'},
-				// {'A', 'E', 'A'},
+				{'A', 'E', 'A'},
+				{'A', 'E', 'A'},
 				{'A', 'A', 'A', 'A'},
 				{'A', 'A', 'A', 'A'},
 				{'A', 'A', 'A', 'A'},				
@@ -103,8 +104,8 @@ public class RotorsTest {
 				{'A', 'A', 'A'},
 				{'A', 'A', 'A'},
 				{'A', 'A', 'A'},
-				// {'A', 'A', 'A'},
-				// {'A', 'A', 'A'},
+				{'A', 'A', 'A'},
+				{'A', 'A', 'A'},
 				{'A', 'A', 'A', 'A'},
 				{'A', 'A', 'A', 'A'},
 				{'A', 'A', 'A', 'A'},
