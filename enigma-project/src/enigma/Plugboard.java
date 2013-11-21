@@ -23,7 +23,7 @@ public class Plugboard {
 	 * 
 	 */
 	public Plugboard(String mapping){
-		char[] cArr = mapping.toCharArray();
+		char[] cArr = mapping.toUpperCase().toCharArray();
 		numPairs = (int) Math.floor(cArr.length/2);
 		plugboard = new char[numPairs][2];
 		for(int i = 0; i < (numPairs * 2); i++){
