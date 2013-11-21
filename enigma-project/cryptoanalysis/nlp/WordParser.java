@@ -1,3 +1,11 @@
+/**
+ * WordParser.java
+ * @author - walter
+ * @date - Nov 21, 2013
+ * This parser accumulates statistical data from a corpus on individual words.
+ * 1, 2, and 3 word grams are analyzed, with numerals handled individually on a separate case.
+ * Punctuation is currently ignored.
+ */
 package nlp;
 
 import java.io.File;
@@ -23,7 +31,7 @@ public class WordParser {
 	public void parseFile(File file) {
 		try {
 			Scanner scanner = new Scanner(file);
-			Pattern nonAlphanumeric = Pattern.compile("[\\W^_]");	// Pattern to find nonalphanumeric charcters.
+			Pattern nonAlphanumeric = Pattern.compile("[\\W^_]");	// Pattern to find non-alphanumeric characters.
 			
 			// Parse words.
 			while (scanner.hasNext()) {
