@@ -24,7 +24,8 @@ import javax.swing.SpinnerListModel;
 
 @SuppressWarnings("serial")
 public class EnigmaGUI extends JFrame{
-	private JComboBox<String> fourthRotorChoice;
+    //GUI Elements
+    private JComboBox<String> fourthRotorChoice;
     private JComboBox<String>  leftRotorChoice;
     private JComboBox<String>  middleRotorChoice;
     private JComboBox<String>  rightRotorChoice;
@@ -43,6 +44,8 @@ public class EnigmaGUI extends JFrame{
     private JTextArea inputTextArea;
     private JTextArea outputTextArea;
     private JTextField fileTextField;
+    
+    //Machine Options
     int[] threeRotorChoices = new int[3];
     int[] fourRotorChoices = new int[4];
     char[] threeRingSettings = new char[3];
@@ -50,7 +53,27 @@ public class EnigmaGUI extends JFrame{
     char[] threeInitialPositions = new char[3];
     char[] fourInitialPositions = new char[4];
     int finalReflectorChoice;
-    String plugboardMap;
+    
+    //Plugboard Mapping
+    String[] plugMap = {"A", "B", "C", "D", "E", "F", "G", "H", "I", 
+            "J", "K", "L", "M", "N","O", "P", "Q", "R", "S", "T", "U", "V", 
+            "W", "X", "Y", "Z"};
+    String plugboardMap; //Used to send plugoard settings to enigmaMachine
+    @SuppressWarnings("rawtypes")
+	JComboBox[] comboMap = new JComboBox[26];
+    
+    //Rotor, Ring, Plugboard, and Reflector Strings
+    String[] rotorChoices = {"ROTOR I","ROTOR II","ROTOR III","ROTOR IV", 
+        "ROTOR V", "ROTOR VI", "ROTOR VII", "ROTOR VIII"};
+    String[] fourthRotorChoices = {"","BETA","GAMMA"};
+    String[] reflectorChoices = {"REFLECTOR B","REFLECTOR C",
+        "REFLECTOR B THIN", "REFLECTOR C THIN"};
+    String[] letterChoices = {"A", "B", "C", "D", "E", "F", "G", "H", "I", 
+        "J", "K", "L", "M", "N","O", "P", "Q", "R", "S", "T", "U", "V", 
+        "W", "X", "Y", "Z"};
+    String[] fourthLetterChoices = {"", "A", "B", "C", "D", "E", "F", "G", 
+        "H", "I", "J", "K", "L", "M", "N","O", "P", "Q", "R", "S", "T", "U", 
+        "V","W", "X", "Y", "Z"};
 
     public EnigmaGUI() {
         //GUI Set-Up
@@ -78,19 +101,6 @@ public class EnigmaGUI extends JFrame{
         backgroundImage.setBorder(null);
         backgroundImage.setOpaque(true);
         layeredPane.add(backgroundImage, new Integer(1), 1);
-        
-        //Rotor, Ring, Plugboard, and Reflector Strings
-        String[] rotorChoices = {"ROTOR I","ROTOR II","ROTOR III","ROTOR IV", 
-            "ROTOR V", "ROTOR VI", "ROTOR VII", "ROTOR VIII"};
-        String[] fourthRotorChoices = {"","BETA","GAMMA"};
-        String[] reflectorChoices = {"REFLECTOR B","REFLECTOR C",
-            "REFLECTOR B THIN", "REFLECTOR C THIN"};
-        String[] letterChoices = {"A", "B", "C", "D", "E", "F", "G", "H", "I", 
-            "J", "K", "L", "M", "N","O", "P", "Q", "R", "S", "T", "U", "V", 
-            "W", "X", "Y", "Z"};
-        String[] fourthLetterChoices = {"", "A", "B", "C", "D", "E", "F", "G", 
-            "H", "I", "J", "K", "L", "M", "N","O", "P", "Q", "R", "S", "T", "U", 
-            "V","W", "X", "Y", "Z"};
         
         //Rotor Boxes
         fourthRotorChoice = new JComboBox<String>(fourthRotorChoices);
@@ -292,6 +302,34 @@ public class EnigmaGUI extends JFrame{
         plugZ.setSelectedIndex(25);
         layeredPane.add(plugZ, new Integer(2), 2);
         
+        //Combo Box Map
+        comboMap[0] = plugA;
+        comboMap[1] = plugB;
+        comboMap[2] = plugC;
+        comboMap[3] = plugD;
+        comboMap[4] = plugE;
+        comboMap[5] = plugF;
+        comboMap[6] = plugG;
+        comboMap[7] = plugH;
+        comboMap[8] = plugI;
+        comboMap[9] = plugJ;
+        comboMap[10] = plugK;
+        comboMap[11] = plugL;
+        comboMap[12] = plugM;
+        comboMap[13] = plugN;
+        comboMap[14] = plugO;
+        comboMap[15] = plugP;
+        comboMap[16] = plugQ;
+        comboMap[17] = plugR;
+        comboMap[18] = plugS;
+        comboMap[19] = plugT;
+        comboMap[20] = plugU;
+        comboMap[21] = plugV;
+        comboMap[22] = plugW;
+        comboMap[23] = plugX;
+        comboMap[24] = plugY;
+        comboMap[25] = plugZ;
+        
         //Text Entry Area
         JPanel textEntryPanel = new JPanel();
         textEntryPanel.setOpaque(false);
@@ -400,6 +438,7 @@ public class EnigmaGUI extends JFrame{
             }
         });
         browseButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
 
@@ -410,7 +449,206 @@ public class EnigmaGUI extends JFrame{
                 }
             }
         });
+        //Action Listeners for Plugboard
+        plugA.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(0, plugA.getSelectedIndex());
+            }
+        });
+        plugB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(1, plugB.getSelectedIndex());
+            }
+        });
+        plugC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(2, plugC.getSelectedIndex());
+            }
+        });
+        plugD.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(3, plugD.getSelectedIndex());
+            }
+        });
+        plugE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(4, plugE.getSelectedIndex());
+            }
+        });
+        plugF.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(5, plugF.getSelectedIndex());
+            }
+        });
+        plugG.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(6, plugG.getSelectedIndex());
+            }
+        });
+        plugH.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(7, plugH.getSelectedIndex());
+            }
+        });
+        plugI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(8, plugI.getSelectedIndex());
+            }
+        });
+        plugJ.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(9, plugJ.getSelectedIndex());
+            }
+        });
+        plugK.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(10, plugK.getSelectedIndex());
+            }
+        });
+        plugL.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(11, plugL.getSelectedIndex());
+            }
+        });
+        plugM.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(12, plugM.getSelectedIndex());
+            }
+        });
+        plugN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(13, plugN.getSelectedIndex());
+            }
+        });
+        plugO.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(14, plugO.getSelectedIndex());
+            }
+        });
+        plugP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(15, plugP.getSelectedIndex());
+            }
+        });
+        plugQ.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(16, plugQ.getSelectedIndex());
+            }
+        });
+        plugR.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(17, plugR.getSelectedIndex());
+            }
+        });
+        plugS.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(18, plugS.getSelectedIndex());
+            }
+        });
+        plugT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(19, plugT.getSelectedIndex());
+            }
+        });
+        plugU.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(20, plugU.getSelectedIndex());
+            }
+        });
+        plugV.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(21, plugV.getSelectedIndex());
+            }
+        });
+        plugW.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(22, plugW.getSelectedIndex());
+            }
+        });
+        plugX.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(23, plugX.getSelectedIndex());
+            }
+        });
+        plugY.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(24, plugY.getSelectedIndex());
+            }
+        });
+        plugZ.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlugboardSwap(25, plugZ.getSelectedIndex());
+            }
+        });
 
+    }
+    
+    //Swap the plug board settings
+    public void PlugboardSwap(int firstLetter, int secondLetter){
+        int foundIt = 0; //0 = false, 1=true, 2 = true but conflict
+        int conflictLocation = 0;
+        
+        if(firstLetter == secondLetter){ //Setting plugboard to default
+            for(int i = 0; i < 26; i++){ //Check for existing pairs
+                if (plugMap[i].equals(letterChoices[secondLetter]) &&
+                        i != firstLetter){
+                    plugMap[i] = letterChoices[i];
+                    comboMap[i].setSelectedIndex(i); //Reset the pair
+                }
+            }
+        }
+        else{ //Setting a change
+            for(int j = 0; j < 26; j++){
+                if (plugMap[j].equals(letterChoices[secondLetter]) &&
+                        j == secondLetter && j != firstLetter){
+                    foundIt = 1; //Found the match and pair is free
+                }
+            }
+            for(int k = 0; k < 26; k++){
+                if (plugMap[k].equals(letterChoices[firstLetter]) &&
+                        k != firstLetter && k != secondLetter){
+                    foundIt = 2; //Found the match, but conflict exists
+                    conflictLocation = k;
+                }
+            }
+            if (foundIt == 1){ //Make the match
+                comboMap[secondLetter].setSelectedIndex(firstLetter);
+                plugMap[secondLetter] = letterChoices[firstLetter];
+            }
+            else if (foundIt == 2){ //Set back to existing pair
+                plugMap[firstLetter] = letterChoices[conflictLocation];
+                comboMap[firstLetter].setSelectedIndex(conflictLocation);
+            }
+            else { //Selection is already chosen. Go back to default
+                comboMap[firstLetter].setSelectedIndex(firstLetter);
+            }
+        }
     }
 
 }
