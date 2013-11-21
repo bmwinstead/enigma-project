@@ -81,7 +81,11 @@ public class Rotors {
 	}
 	
 	public char encrypt(char letter){
-		boolean doubleStep = false;
+		// Walter Adolph - doubleStep was init. to false; this assumed that there is no chance of a double step on initial position. Fixed 11/21/2013.
+		boolean notch1Test = middle.getPosition() == middle.getNotchPosition()[0];
+		boolean notch2Test = middle.getPosition() == middle.getNotchPosition()[1];
+		boolean doubleStep = (notch1Test || notch2Test);
+		
 		if (Character.isAlphabetic(letter)) {
 			if (right.cycleRotor() || doubleStep) {
 				if (middle.cycleRotor()) {
