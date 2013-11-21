@@ -21,6 +21,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class EnigmaGUI extends JFrame{
@@ -154,21 +156,25 @@ public class EnigmaGUI extends JFrame{
         fourthRotorPosition = new JSpinner();
         fourthRotorPosition.setModel(new SpinnerListModel(fourthLetterChoices));
         fourthRotorPosition.setBounds(55, 159, 46, 28);
+        fourthRotorPosition.setValue("");
         layeredPane.add(fourthRotorPosition, new Integer(2), 2);
 
         leftRotorPosition = new JSpinner();
         leftRotorPosition.setModel(new SpinnerListModel(letterChoices));
         leftRotorPosition.setBounds(187, 159, 46, 28);
+        leftRotorPosition.setValue("A");
         layeredPane.add(leftRotorPosition, new Integer(2), 2);
 
         middleRotorPosition = new JSpinner();
         middleRotorPosition.setModel(new SpinnerListModel(letterChoices));
         middleRotorPosition.setBounds(315, 159, 46, 28);
+        middleRotorPosition.setValue("A");
         layeredPane.add(middleRotorPosition, new Integer(2), 2);
 
         rightRotorPosition = new JSpinner();
         rightRotorPosition.setModel(new SpinnerListModel(letterChoices));
         rightRotorPosition.setBounds(443, 159, 46, 28);
+        rightRotorPosition.setValue("A");
         layeredPane.add(rightRotorPosition, new Integer(2), 2);
         
         //Plug Board Boxes
@@ -604,6 +610,23 @@ public class EnigmaGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 PlugboardSwap(25, plugZ.getSelectedIndex());
+            }
+        });
+        //Action Listeners for Rotors and Ring Settings
+        fourthRotorRingSetting.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fourthRotorChoice.getSelectedIndex() == 0){
+                    fourthRotorRingSetting.setSelectedIndex(0);
+                }
+            }
+        });
+        fourthRotorPosition.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent arg0) {
+                if (fourthRotorChoice.getSelectedIndex() == 0){
+                    fourthRotorPosition.setValue("");
+                }
             }
         });
 
