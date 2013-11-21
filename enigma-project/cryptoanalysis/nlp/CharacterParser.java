@@ -2,9 +2,9 @@
  * CharacterParser.java
  * @author - walter
  * @date - Nov 21, 2013
- * This parser accumulates statistical data from a corpus on indiviudal characters.
- * 1,2,3, and 4 character grams are analyzed.
- * Punctuation is left in place.
+ * This parser accumulates statistical data from a corpus on individual characters.
+ * 1, 2, 3 and 4 character grams are analyzed.
+ * Punctuation is ignored.
  */
 package nlp;
 
@@ -12,10 +12,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-/**
- * @author walter
- *
- */
 public class CharacterParser {
 	private Corpus database;
 	
@@ -35,36 +31,35 @@ public class CharacterParser {
 			// Parse words.
 			while (scanner.hasNext()) {
 				char[] characters = scanner.next().toLowerCase().toCharArray();
-				
+
 				for (char character: characters) {
-					fourthgram = thirdgram;
-					thirdgram = secondgram;
-					secondgram = firstgram;
-					firstgram = character;
-					
-					database.addUnigram(String.valueOf(firstgram));
-					
-					if (secondgram != '\0') {
-						String phrase = "" + secondgram + firstgram;
+					if (Character.isAlphabetic(character)) {	// Skip punctuation.
+						fourthgram = thirdgram;
+						thirdgram = secondgram;
+						secondgram = firstgram;
+						firstgram = character;
 						
-						database.addBigram(phrase);
+						database.addUnigram(String.valueOf(firstgram));
 						
-						if (thirdgram != '\0') {
-							phrase = "" + thirdgram + secondgram + firstgram;
+						if (secondgram != '\0') {
+							String phrase = "" + secondgram + firstgram;
 							
-							database.addTrigram(phrase);
+							database.addBigram(phrase);
 							
-							if (fourthgram != '\0') {
-								phrase = "" + fourthgram + thirdgram + secondgram + firstgram;
+							if (thirdgram != '\0') {
+								phrase = "" + thirdgram + secondgram + firstgram;
 								
-								database.addQuadgram(phrase);
-							}
-						}
-					}
-				}
-				
-				
-				
+								database.addTrigram(phrase);
+								
+								if (fourthgram != '\0') {
+									phrase = "" + fourthgram + thirdgram + secondgram + firstgram;
+									
+									database.addQuadgram(phrase);
+								} // End quadgram if
+							} // End trigram if
+						} // End bigram if
+					} // End punctuation if
+				} // End for
 			} // End while
 			
 			scanner.close();
