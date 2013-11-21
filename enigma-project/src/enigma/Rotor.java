@@ -29,8 +29,23 @@ public class Rotor {
 
 	public char[] getNotchPosition() {
 		char[] temp = new char[2];
-			temp[0] = (char)(notchPositions[0] - 1);
-			temp[1] = (char)(notchPositions[1] - 1);
+			// Walter Adolph - There were some issues here; the character math is not indexed to a, and there was no wrap-around. Fixed 11/21/2013.
+			if (notchPositions[0] != '!') {
+				int offset = (notchPositions[0] - 'A' - 1) % size;
+				temp[0] = (char)(offset + 'A');
+			}
+			else {
+				temp[0] = '!';	// Preserve no notch indication.
+			}
+			
+			if (notchPositions[1] != '!') {
+				int offset = (notchPositions[1] - 'A' - 1) % size;
+				temp[1] = (char)(offset + 'A');
+			}
+			else {
+				temp[1] = '!';	// Preserve no notch indication.
+			}
+
 		return temp;
 	}
 	
