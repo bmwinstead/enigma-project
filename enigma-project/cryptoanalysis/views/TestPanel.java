@@ -23,8 +23,8 @@ import decoders.CribDetector;
 
 import machine.CA_Rotor;
 import machine.Encryptor;
+import nlp.CharacterParser;
 import nlp.Corpus;
-import nlp.TextParser;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -49,6 +49,7 @@ public class TestPanel extends JFrame {
 	private JTextArea inputTextArea;
 	private JTextArea encryptedTextArea;
 	private JTextArea decryptedTextArea;
+	private JLabel quadgramCountLabel;
 	
 	public TestPanel() {
 		database = new Corpus();
@@ -87,16 +88,19 @@ public class TestPanel extends JFrame {
 		
 		JButton parseButton = new JButton("Parse");
 		buttonPanel.add(parseButton);
+		
+		// Parser a text file and display results..
 		parseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(fileTextField.getText());
 				
-				TextParser parser = new TextParser(database);
+				CharacterParser parser = new CharacterParser(database);
 				parser.parseFile(file);
 				
 				unigramCountLabel.setText(database.getUnigramCount() + "");
 				bigramCountLabel.setText(database.getBigramCount() + "");
 				trigramCountLabel.setText(database.getTrigramCount() + "");
+				quadgramCountLabel.setText(database.getQuadgramCount() + "");
 			}
 		});
 		browseButton.addActionListener(new ActionListener() {
@@ -133,6 +137,12 @@ public class TestPanel extends JFrame {
 		
 		trigramCountLabel = new JLabel("0");
 		gridPanel.add(trigramCountLabel);
+		
+		JLabel lblQuadgramCount = new JLabel("Quadgram Count:");
+		gridPanel.add(lblQuadgramCount);
+		
+		quadgramCountLabel = new JLabel("0");
+		gridPanel.add(quadgramCountLabel);
 		
 		JPanel centerPanel = new JPanel();
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
