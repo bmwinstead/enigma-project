@@ -17,25 +17,30 @@ public class Corpus {
 	private Map<String, Integer> unigramTable;
 	private Map<String, Integer> bigramTable;
 	private Map<String, Integer> trigramTable;
+	private Map<String, Integer> quadgramTable;
 	
 	// Sorted databases.
 	private PriorityQueue<String> unigramQueue;
 	private PriorityQueue<String> bigramQueue;
 	private PriorityQueue<String> trigramQueue;
+	private PriorityQueue<String> quadgramQueue;
 	
 	private int unigramCount;
 	private int bigramCount;
 	private int trigramCount;
+	private int quadgramCount;
 	
 	// Constructor.
 	public Corpus() {
 		unigramTable = new HashMap<String, Integer>();
 		bigramTable = new HashMap<String, Integer>();
 		trigramTable = new HashMap<String, Integer>();
+		quadgramTable = new HashMap<String, Integer>();
 		
 		unigramQueue = new PriorityQueue<String>(11, new GramComparator(unigramTable));
 		bigramQueue = new PriorityQueue<String>(11, new GramComparator(bigramTable));
 		trigramQueue = new PriorityQueue<String>(11, new GramComparator(trigramTable));
+		quadgramQueue = new PriorityQueue<String>(11, new GramComparator(trigramTable));
 	}
 	
 	public int getUnigramCount() {
@@ -48,6 +53,10 @@ public class Corpus {
 	
 	public int getTrigramCount() {
 		return trigramCount;
+	}
+	
+	public int getQuadgramCount() {
+		return quadgramCount;
 	}
 	
 	// Returns shallow copy of test queue.
@@ -74,40 +83,60 @@ public class Corpus {
 		return result;
 	}
 	
-	public void addUnigram(String word) {
-		if (unigramTable.containsKey(word)) {
-			int count = unigramTable.get(word);
-			unigramTable.put(word, count + 1);
+	// Returns shallow copy of test queue.
+	public PriorityQueue<String> getQuadgramTestQueue() {
+		PriorityQueue<String> result = new PriorityQueue<String>(quadgramTable.size(), new GramComparator(quadgramTable));
+		result.addAll(quadgramTable.keySet());
+		
+		return result;
+	}
+	
+	public void addUnigram(String gram) {
+		if (unigramTable.containsKey(gram)) {
+			int count = unigramTable.get(gram);
+			unigramTable.put(gram, count + 1);
 		}
 		else {
-			unigramTable.put(word, 1);
+			unigramTable.put(gram, 1);
 		}
 		
 		unigramCount++;
 	}
 	
-	public void addBigram(String phrase) {
-		if (bigramTable.containsKey(phrase)) {
-			int count = bigramTable.get(phrase);
-			bigramTable.put(phrase, count + 1);
+	public void addBigram(String gram) {
+		if (bigramTable.containsKey(gram)) {
+			int count = bigramTable.get(gram);
+			bigramTable.put(gram, count + 1);
 		}
 		else {
-			bigramTable.put(phrase, 1);
+			bigramTable.put(gram, 1);
 		}
 		
 		bigramCount++;
 	}
 
-	public void addTrigram(String phrase) {
-		if (trigramTable.containsKey(phrase)) {
-			int count = trigramTable.get(phrase);
-			trigramTable.put(phrase, count + 1);
+	public void addTrigram(String gram) {
+		if (trigramTable.containsKey(gram)) {
+			int count = trigramTable.get(gram);
+			trigramTable.put(gram, count + 1);
 		}
 		else {
-			trigramTable.put(phrase, 1);
+			trigramTable.put(gram, 1);
 		}
 		
 		trigramCount++;
+	}
+	
+	public void addQuadgram(String gram) {
+		if (quadgramTable.containsKey(gram)) {
+			int count = quadgramTable.get(gram);
+			quadgramTable.put(gram, count + 1);
+		}
+		else {
+			quadgramTable.put(gram, 1);
+		}
+		
+		quadgramCount++;
 	}
 	
 	// This method is intended to be called after all words are sorted.
@@ -115,6 +144,7 @@ public class Corpus {
 		unigramQueue.clear();
 		bigramQueue.clear();
 		trigramQueue.clear();
+		quadgramQueue.clear();
 		
 		for (String unigram : unigramTable.keySet()) {
 			unigramQueue.add(unigram);
@@ -126,6 +156,10 @@ public class Corpus {
 		
 		for (String trigram : trigramTable.keySet()) {
 			trigramQueue.add(trigram);
+		}
+		
+		for (String quadgram : quadgramTable.keySet()) {
+			quadgramQueue.add(quadgram);
 		}
 	}
 	
