@@ -149,7 +149,7 @@ public class EnigmaMachineTest {
 			char[] outArray = new char[inputArray.length];
 			
 			for (int j = 0; j < inputArray.length; j++) {
-				outArray[j] = enigmaMachines[i].encryptChar(inputArray[i]);
+				outArray[j] = enigmaMachines[i].encryptChar(inputArray[j]);
 			}
 			
 			String actual = String.valueOf(outArray);
