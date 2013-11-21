@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-// This class represents a corpus (word database) containing unigram, bigram, and trigram words.
+// This class represents a corpus (word database) containing unigram, bigram, trigram, and quadgram words.
 // Counts of each type of gram are kept for future statistical use.
 // PriorityQueues are also provided with sorts by word count.
 // It is intended that all words are first loaded into HashMaps (fast lookup with counts),
@@ -24,7 +24,7 @@ public class Corpus {
 	private PriorityQueue<String> bigramQueue;
 	private PriorityQueue<String> trigramQueue;
 	private PriorityQueue<String> quadgramQueue;
-	
+
 	private int unigramCount;
 	private int bigramCount;
 	private int trigramCount;
@@ -40,7 +40,7 @@ public class Corpus {
 		unigramQueue = new PriorityQueue<String>(11, new GramComparator(unigramTable));
 		bigramQueue = new PriorityQueue<String>(11, new GramComparator(bigramTable));
 		trigramQueue = new PriorityQueue<String>(11, new GramComparator(trigramTable));
-		quadgramQueue = new PriorityQueue<String>(11, new GramComparator(trigramTable));
+		quadgramQueue = new PriorityQueue<String>(11, new GramComparator(quadgramTable));
 	}
 	
 	public int getUnigramCount() {
@@ -91,49 +91,49 @@ public class Corpus {
 		return result;
 	}
 	
-	public void addUnigram(String gram) {
-		if (unigramTable.containsKey(gram)) {
-			int count = unigramTable.get(gram);
-			unigramTable.put(gram, count + 1);
+	public void addUnigram(String word) {
+		if (unigramTable.containsKey(word)) {
+			int count = unigramTable.get(word);
+			unigramTable.put(word, count + 1);
 		}
 		else {
-			unigramTable.put(gram, 1);
+			unigramTable.put(word, 1);
 		}
 		
 		unigramCount++;
 	}
 	
-	public void addBigram(String gram) {
-		if (bigramTable.containsKey(gram)) {
-			int count = bigramTable.get(gram);
-			bigramTable.put(gram, count + 1);
+	public void addBigram(String phrase) {
+		if (bigramTable.containsKey(phrase)) {
+			int count = bigramTable.get(phrase);
+			bigramTable.put(phrase, count + 1);
 		}
 		else {
-			bigramTable.put(gram, 1);
+			bigramTable.put(phrase, 1);
 		}
 		
 		bigramCount++;
 	}
 
-	public void addTrigram(String gram) {
-		if (trigramTable.containsKey(gram)) {
-			int count = trigramTable.get(gram);
-			trigramTable.put(gram, count + 1);
+	public void addTrigram(String phrase) {
+		if (trigramTable.containsKey(phrase)) {
+			int count = trigramTable.get(phrase);
+			trigramTable.put(phrase, count + 1);
 		}
 		else {
-			trigramTable.put(gram, 1);
+			trigramTable.put(phrase, 1);
 		}
 		
 		trigramCount++;
 	}
 	
-	public void addQuadgram(String gram) {
-		if (quadgramTable.containsKey(gram)) {
-			int count = quadgramTable.get(gram);
-			quadgramTable.put(gram, count + 1);
+	public void addQuadgram(String phrase) {
+		if (quadgramTable.containsKey(phrase)) {
+			int count = quadgramTable.get(phrase);
+			quadgramTable.put(phrase, count + 1);
 		}
 		else {
-			quadgramTable.put(gram, 1);
+			quadgramTable.put(phrase, 1);
 		}
 		
 		quadgramCount++;
@@ -173,59 +173,6 @@ public class Corpus {
 		}
 		
 		return true;
-	}
-	
-	// Debug method to show statistics.
-	public String printTestStatistics() {
-		String result = "";
-		String[] buffer = new String[10];
-		
-		result = result + "\nTop Ten Unigrams:\n";
-		
-		for (int index = 0; index < 10; index++) {
-			String word = unigramQueue.remove();
-			buffer[index] = word;
-			
-			double percent = (double)(unigramTable.get(word)) / unigramCount * 100.0;
-			
-			result = result + "#" + (index + 1) + ": " + word + " - " + percent + "%\n";
-		}
-		
-		for (int index = 0; index < 10; index++) {
-			unigramQueue.add(buffer[index]);
-		}
-		
-		result = result + "\nTop Ten Bigrams:\n";
-
-		for (int index = 0; index < 10; index++) {
-			String word = bigramQueue.remove();
-			buffer[index] = word;
-			
-			double percent = (double)(bigramTable.get(word)) / bigramCount * 100.0;
-			
-			result = result + "#" + (index + 1) + ": " + word + " - " + percent + "%\n";
-		}
-		
-		for (int index = 0; index < 10; index++) {
-			bigramQueue.add(buffer[index]);
-		}
-		
-		result = result + "\nTop Ten Trigrams:\n";
-		
-		for (int index = 0; index < 10; index++) {
-			String word = trigramQueue.remove();
-			buffer[index] = word;
-			
-			double percent = (double)(trigramTable.get(word)) / trigramCount * 100.0;
-			
-			result = result + "#" + (index + 1) + ": " + word + " - " + percent + "%\n";
-		}
-		
-		for (int index = 0; index < 10; index++) {
-			trigramQueue.add(buffer[index]);
-		}
-		
-		return result;
 	}
 	
 	// Inner class to sort database words in descending count order.
