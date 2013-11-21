@@ -25,8 +25,8 @@ public class EnigmaMachineTest {
 			"AAAAAIKLEY",
 			"AAAAAMONTANEZ",
 			"aaaaalyn",
-			// "aaaaamatthew",
-			// "TESTTOCHECKTHREEROTORSTURNATONCE",
+			"aaaaamatthew",
+			"TESTTOCHECKTHREEROTORSTURNATONCE",
 			"AAAAAOHLMACHER",
 			"AAAAAWINSTEAD",
 			"AAAAAGENEG",
@@ -44,8 +44,8 @@ public class EnigmaMachineTest {
 			"GJUBBPFPRS",
 			"MWMJLCFGQEEQF",
 			"UQOFXMBD",
-			// "FJBWZCCJFNOS",
-			// "LLXIXPACYICPKVSLPURSFBSKPPJKCZBJ",
+			"FJBWZCCJFNOS",
+			"LLXIXPACYICPKVSLPURSFBSKPPJKCZBJ",
 			"BDZGOKTGOTWOLM",
 			"VFITYYAYYWCZO",
 			"DCTVGJVFUL",
@@ -63,8 +63,8 @@ public class EnigmaMachineTest {
 			{5, 6, 7},
 			{5, 6, 7},
 			{0, 1, 2},
-			// {0, 1, 2},
-			// {0, 1, 2},
+			{0, 1, 2},
+			{0, 1, 2},
 			{8, 0, 1, 2},
 			{9, 7, 6, 5},
 			{9, 7, 5, 6},
@@ -74,8 +74,7 @@ public class EnigmaMachineTest {
 			{0, 1, 2}, 
 	};
 	
-	// int[] nonPBReflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 2, 3};
-	int[] nonPBReflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2, 2, 3};
+	int[] nonPBReflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 2, 3};
 	int[] pbReflectorChoices = {0};
 	
 	char[][] nonPBRingSettings = {
@@ -89,8 +88,8 @@ public class EnigmaMachineTest {
 			{'A', 'A', 'A'},
 			{'A', 'A', 'A'},
 			{'A', 'A', 'A'},
-			// {'A', 'A', 'A'},
-			// {'A', 'A', 'A'},
+			{'A', 'A', 'A'},
+			{'A', 'A', 'A'},
 			{'A', 'A', 'A', 'A'},
 			{'A', 'A', 'A', 'A'},
 			{'A', 'A', 'A', 'A'},
@@ -111,8 +110,8 @@ public class EnigmaMachineTest {
 			{'A', 'A', 'A'},
 			{'A', 'A', 'A'},
 			{'A', 'A', 'V'},
-			// {'A', 'E', 'A'},
-			// {'A', 'E', 'A'},
+			{'A', 'E', 'A'},
+			{'A', 'E', 'A'},
 			{'A', 'A', 'A', 'A'},
 			{'A', 'A', 'A', 'A'},
 			{'A', 'A', 'A', 'A'},				

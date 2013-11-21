@@ -73,7 +73,6 @@ public class RotorsTest {
 		
 		// Walter Adolph - These were misaligned; the top init. was missing a zero. Fixed 11/21/2013.
 		int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 2, 3};
-		//int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 2, 2, 3};
 		
 		char[][] positions = {
 				{'A', 'A', 'A'},
