@@ -57,6 +57,9 @@ public class TestPanel extends JFrame {
 	
 	private String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private JTextField plugboardTextField;
+	private JTextField leftWheelTextField;
+	private JTextField middleWheelTextField;
+	private JTextField rightWheelTextField;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
@@ -105,6 +108,14 @@ public class TestPanel extends JFrame {
 		
 		JButton parseButton = new JButton("Parse");
 		buttonPanel.add(parseButton);
+		
+		JButton dumpTextFileButton = new JButton("Dump to Text File...");
+		dumpTextFileButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				database.dumpDatabaseToText();
+			}
+		});
+		buttonPanel.add(dumpTextFileButton);
 		
 		// Parse a text file and display results..
 		parseButton.addActionListener(new ActionListener() {
@@ -208,7 +219,7 @@ public class TestPanel extends JFrame {
 					letters[rightLetter - 'a'] = leftLetter;
 				}
 				
-				int[] rotors = {0, 1, 2};
+				int[] rotors = {1, 4, 3};
 				int reflector = 'B' - 'B';
 				char[] ringSettings = {leftRingSetting, middleRingSetting, rightRingSetting};
 				char[] rotorSettings = {leftRotorSetting, middleRotorSetting, rightRotorSetting};
@@ -294,13 +305,18 @@ public class TestPanel extends JFrame {
 					}
 					
 					QuadgramStatAnalyzer analyzer = new QuadgramStatAnalyzer(database);
-					String result = analyzer.decryptMessage(cipher);
+					analyzer.decryptMessage(cipher);
 					
+					String result = analyzer.getDecryptedMessage();
+					int[] wheel = analyzer.getRotorOrder();
 					char[] ring = analyzer.getRingSettings();
 					char[] rotor = analyzer.getRotorSettings();
 					
 					outputTextField.setText(result);
 					
+					leftWheelTextField.setText("" + (wheel[0] + 1));
+					middleWheelTextField.setText("" + (wheel[1] + 1));
+					rightWheelTextField.setText("" + (wheel[2] + 1));
 					leftRingTextField.setText("" + ring[0]);
 					middleRingTextField.setText("" + ring[1]);
 					rightRingTextField.setText("" + ring[2]);
@@ -322,14 +338,17 @@ public class TestPanel extends JFrame {
 		JPanel settingsPanel = new JPanel();
 		outputPanel.add(settingsPanel);
 		
-		leftRotorTextField = new JTextField(2);
-		settingsPanel.add(leftRotorTextField);
+		leftWheelTextField = new JTextField();
+		settingsPanel.add(leftWheelTextField);
+		leftWheelTextField.setColumns(2);
 		
-		middleRotorTextField = new JTextField(2);
-		settingsPanel.add(middleRotorTextField);
+		middleWheelTextField = new JTextField();
+		settingsPanel.add(middleWheelTextField);
+		middleWheelTextField.setColumns(2);
 		
-		rightRotorTextField = new JTextField(2);
-		settingsPanel.add(rightRotorTextField);
+		rightWheelTextField = new JTextField();
+		settingsPanel.add(rightWheelTextField);
+		rightWheelTextField.setColumns(2);
 		
 		leftRingTextField = new JTextField();
 		settingsPanel.add(leftRingTextField);
@@ -342,6 +361,15 @@ public class TestPanel extends JFrame {
 		rightRingTextField = new JTextField();
 		settingsPanel.add(rightRingTextField);
 		rightRingTextField.setColumns(2);
+		
+		leftRotorTextField = new JTextField(2);
+		settingsPanel.add(leftRotorTextField);
+		
+		middleRotorTextField = new JTextField(2);
+		settingsPanel.add(middleRotorTextField);
+		
+		rightRotorTextField = new JTextField(2);
+		settingsPanel.add(rightRotorTextField);
 		
 		plugboardPairsTextField = new JTextField();
 		settingsPanel.add(plugboardPairsTextField);

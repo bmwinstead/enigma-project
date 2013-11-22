@@ -1,5 +1,9 @@
 package nlp;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,6 +196,21 @@ public class Corpus {
 		
 		for (String quadgram : quadgramTable.keySet()) {
 			quadgramQueue.add(quadgram);
+		}
+	}
+	
+	public void dumpDatabaseToText() {
+		try {
+			PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("quadgrams.txt", true)));
+			
+			for (String gram: quadgramTable.keySet()) {
+				output.append(gram + "\t" + quadgramTable.get(gram) + "\r\n");
+			}
+			
+			output.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
