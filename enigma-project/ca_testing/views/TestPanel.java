@@ -26,6 +26,7 @@ import misc.Logger;
 import nlp.CharacterParser;
 import nlp.Corpus;
 import enigma.EnigmaMachine;
+import javax.swing.SpinnerNumberModel;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -41,9 +42,9 @@ public class TestPanel extends JFrame {
 	private JTextField leftRotorTextField;
 	private JTextField middleRotorTextField;
 	private JTextField rightRotorTextField;
-	private JSpinner leftRotorSpinner;
-	private JSpinner middleRotorSpinner;
-	private JSpinner rightRotorSpinner;
+	private JSpinner leftRotorSelectionSpinner;
+	private JSpinner middleRotorSelectionSpinner;
+	private JSpinner rightRotorSelectionSpinner;
 	private JTextArea inputTextArea;
 	private JTextArea encryptedTextArea;
 	private JTextArea decryptedTextArea;
@@ -167,32 +168,47 @@ public class TestPanel extends JFrame {
 		inputTextArea.setColumns(20);
 		textEntryPanel.add(inputTextArea);
 		
+		JPanel rotorSelectionPanel = new JPanel();
+		centerPanel.add(rotorSelectionPanel);
+		
+		JSpinner leftRotorSpinner = new JSpinner();
+		leftRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
+		rotorSelectionPanel.add(leftRotorSpinner);
+		
+		JSpinner centerRotorSpinner = new JSpinner();
+		centerRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
+		rotorSelectionPanel.add(centerRotorSpinner);
+		
+		JSpinner rightRotorSpinner = new JSpinner();
+		rightRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
+		rotorSelectionPanel.add(rightRotorSpinner);
+		
 		JPanel rotorSettingPanel = new JPanel();
 		centerPanel.add(rotorSettingPanel);
 		
 		JLabel lblNewLabel_4 = new JLabel("Rotor Settings:");
 		rotorSettingPanel.add(lblNewLabel_4);
 		
-		leftRotorSpinner = new JSpinner();
-		leftRotorSpinner.setModel(new SpinnerListModel(alphabet));
-		rotorSettingPanel.add(leftRotorSpinner);
+		leftRotorSelectionSpinner = new JSpinner();
+		leftRotorSelectionSpinner.setModel(new SpinnerListModel(alphabet));
+		rotorSettingPanel.add(leftRotorSelectionSpinner);
 		
-		middleRotorSpinner = new JSpinner();
-		middleRotorSpinner.setModel(new SpinnerListModel(alphabet));
-		rotorSettingPanel.add(middleRotorSpinner);
+		middleRotorSelectionSpinner = new JSpinner();
+		middleRotorSelectionSpinner.setModel(new SpinnerListModel(alphabet));
+		rotorSettingPanel.add(middleRotorSelectionSpinner);
 		
-		rightRotorSpinner = new JSpinner();
-		rightRotorSpinner.setModel(new SpinnerListModel(alphabet));
-		rotorSettingPanel.add(rightRotorSpinner);
+		rightRotorSelectionSpinner = new JSpinner();
+		rightRotorSelectionSpinner.setModel(new SpinnerListModel(alphabet));
+		rotorSettingPanel.add(rightRotorSelectionSpinner);
 		
 		JButton encryptButton = new JButton("Encrypt");
 		
 		// Encrypt a text string.
 		encryptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				char leftRotorSetting = ((String)(leftRotorSpinner.getValue())).toCharArray()[0];
-				char middleRotorSetting = ((String)(middleRotorSpinner.getValue())).toCharArray()[0];
-				char rightRotorSetting = ((String)(rightRotorSpinner.getValue())).toCharArray()[0];
+				char leftRotorSetting = ((String)(leftRotorSelectionSpinner.getValue())).toCharArray()[0];
+				char middleRotorSetting = ((String)(middleRotorSelectionSpinner.getValue())).toCharArray()[0];
+				char rightRotorSetting = ((String)(rightRotorSelectionSpinner.getValue())).toCharArray()[0];
 				char leftRingSetting = ((String)(leftRingSpinner.getValue())).toCharArray()[0];
 				char middleRingSetting = ((String)(middleRingSpinner.getValue())).toCharArray()[0];
 				char rightRingSetting = ((String)(rightRingSpinner.getValue())).toCharArray()[0];

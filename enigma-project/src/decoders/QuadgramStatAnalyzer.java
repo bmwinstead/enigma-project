@@ -14,8 +14,6 @@
  */
 package decoders;
 
-import java.util.Random;
-
 import misc.Logger;
 import nlp.Corpus;
 import enigma.EnigmaMachine;
@@ -59,25 +57,6 @@ public class QuadgramStatAnalyzer {
 		// Initial try.
 		determineRotorOrder(message);
 		determineRingSettings(message);
-		
-		Random rng = new Random();
-		
-		// Attempt simulated annealing.
-		for (int i = 1; i < 10; i++) {
-			for (int j = 0; j < 3; j++) {
-				int offset = rng.nextInt(i) - i / 2;
-				rotorOffsetResults[j] = (char) ((rotorOffsetResults[j] + offset + 26 - 'A') % 26 + 'A');
-			}
-			
-			for (int j = 0; j < 3; j++) {
-				int offset = rng.nextInt(i) - i / 2;
-				ringSettingResults[j] = (char) ((ringSettingResults[j] + offset + 26 - 'A') % 26 + 'A');
-			}
-			
-			determineIndicatorSettings(message, rotorTypeResults);
-			
-			determineRingSettings(message);
-		}
 		
 		Logger.makeEntry("Quadgram analysis complete.", true);
 		Logger.makeEntry("Results:", true);
