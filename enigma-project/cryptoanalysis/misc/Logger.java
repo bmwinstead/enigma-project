@@ -18,7 +18,8 @@ public class Logger {
 	// Create a new text file if one does not exist.
 	public static void createFile() {
 		try {
-			output = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Walter\\Documents\\Enigma Text Files\\enigma-debug.txt", true)));
+			//output = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Walter\\Documents\\Enigma Text Files\\enigma-debug.txt", true))); // Testing.
+			output = new PrintWriter(new BufferedWriter(new FileWriter("enigma-debug.txt", true))); // To keep everyone's file system clean.
 			makeEntry("Logger initialized.", true);
 		} catch (IOException e) {
 			if (output != null) {
@@ -31,8 +32,10 @@ public class Logger {
 	
 	// Close a file.
 	public static void closeFile() {
-		makeEntry("Logger closed.\r\n", true);	// Double spacing to separate logger instances.
-		output.close();
+		if (output != null) {
+			makeEntry("Logger closed.\r\n", true);	// Double spacing to separate logger instances.
+			output.close();
+		}
 	}
 	
 	// Adds a new time-stamped entry to the log, with an option to print to console.
@@ -41,7 +44,9 @@ public class Logger {
 		
 		String entry = "[" + timestamp + "] - " + phrase + "\r\n";	// Windows text editors require a carriage return, should be fine also on other systems.
 		
-		output.append(entry);
+		if (output != null) {
+			output.append(entry);
+		}
 		
 		if (outputConsole) {
 			System.out.print(entry);

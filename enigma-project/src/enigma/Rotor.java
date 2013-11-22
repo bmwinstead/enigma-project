@@ -62,7 +62,7 @@ public class Rotor {
 	}
 	
 	public boolean cycleRotor() {
-		stepOffset = (stepOffset + 1) % forwardWiring.length;	// Allows wrap-around.
+		stepOffset = (stepOffset + 1) % size;	// Allows wrap-around.
 		
 		if(((notchPositions[0] - 'A') == stepOffset) || (notchPositions[1] - 'A') == stepOffset)
 			return true;

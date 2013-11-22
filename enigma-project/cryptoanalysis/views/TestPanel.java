@@ -1,11 +1,12 @@
 package views;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.PriorityQueue;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,16 +20,12 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
-import decoders.CribDetector;
+import decoders.QuadgramStatAnalyzer;
 
-import machine.CA_Rotor;
-import machine.Encryptor;
 import misc.Logger;
 import nlp.CharacterParser;
 import nlp.Corpus;
-import java.awt.Font;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import enigma.EnigmaMachine;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -59,6 +56,7 @@ public class TestPanel extends JFrame {
 	private JSpinner rightRingSpinner;
 	
 	private String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+	private JTextField plugboardTextField;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
@@ -122,10 +120,10 @@ public class TestPanel extends JFrame {
 				long endTime = System.currentTimeMillis();
 				
 				Logger.makeEntry("Parsing completed in " + (endTime - startTime) + " milliseconds.", true);
-				Logger.makeEntry("Corpus now has " + database.getUnigramCount() + " unigrams.", true);
-				Logger.makeEntry("Corpus now has " + database.getBigramCount() + " bigrams.", true);
-				Logger.makeEntry("Corpus now has " + database.getTrigramCount() + " trigrams.", true);
-				Logger.makeEntry("Corpus now has " + database.getQuadgramCount() + " quadgrams.", true);
+				Logger.makeEntry("Corpus now has " + database.getTotalUnigramCount() + " unigrams.", true);
+				Logger.makeEntry("Corpus now has " + database.getTotalBigramCount() + " bigrams.", true);
+				Logger.makeEntry("Corpus now has " + database.getTotalTrigramCount() + " trigrams.", true);
+				Logger.makeEntry("Corpus now has " + database.getTotalQuadgramCount() + " quadgrams.", true);
 			}
 		});
 		browseButton.addActionListener(new ActionListener() {
@@ -194,34 +192,36 @@ public class TestPanel extends JFrame {
 				Logger.makeEntry("Ring Settings - " + leftRingSetting  + middleRingSetting + rightRingSetting, true);
 				Logger.makeEntry("Rotor Settings - " + leftRotorSetting  + middleRotorSetting + rightRotorSetting, true);
 				
-				String text = inputTextArea.getText();
+				String text = inputTextArea.getText().toUpperCase();
 				
-				// Init. rotors.
-				CA_Rotor rotorI = CA_Rotor.getNewRotor('1');
-				CA_Rotor rotorII = CA_Rotor.getNewRotor('2');
-				CA_Rotor rotorIII = CA_Rotor.getNewRotor('3');
-				CA_Rotor reflectorB = CA_Rotor.getNewRotor('B');
+				// Init. plugboard.
+				char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 				
-				// Set ring settings.
-				rotorI.setRingPosition(leftRingSetting);
-				rotorII.setRingPosition(middleRingSetting);
-				rotorIII.setRingPosition(rightRingSetting);
+				String plugboardMap = plugboardTextField.getText();
+				char[] mappings = plugboardMap.toCharArray();
 				
-				Encryptor machine = new Encryptor(
-						rotorI,
-						rotorII,
-						rotorIII,
-						reflectorB);
+				for (int index = 0; index < plugboardMap.length() - 1; index += 2) {
+					char leftLetter = mappings[index];
+					char rightLetter = mappings[index + 1];
+					
+					letters[leftLetter - 'a'] = rightLetter;
+					letters[rightLetter - 'a'] = leftLetter;
+				}
 				
-				machine.setRotorPositions(leftRotorSetting, middleRotorSetting, rightRotorSetting);
+				int[] rotors = {0, 1, 2};
+				int reflector = 'B' - 'B';
+				char[] ringSettings = {leftRingSetting, middleRingSetting, rightRingSetting};
+				char[] rotorSettings = {leftRotorSetting, middleRotorSetting, rightRotorSetting};
 				
-				String cipher = machine.encrypt(text);
+				EnigmaMachine machine = new EnigmaMachine(rotors, reflector, ringSettings, rotorSettings, String.valueOf(mappings));
+
+				String cipher = machine.encryptString(text);
 				Logger.makeEntry("Encryption Complete.\r\n", true);
 		
 				encryptedTextArea.setText(cipher);
 				
-				machine.setRotorPositions(leftRotorSetting, middleRotorSetting, rightRotorSetting);
-				decryptedTextArea.setText(machine.encrypt(cipher));
+				machine.reset();
+				decryptedTextArea.setText(machine.encryptString(cipher));
 				Logger.makeEntry("Decryption Complete.\r\n", true);
 			}
 		});
@@ -243,6 +243,16 @@ public class TestPanel extends JFrame {
 		rightRingSpinner = new JSpinner();
 		rightRingSpinner.setModel(new SpinnerListModel(alphabet));
 		ringSettingPanel.add(rightRingSpinner);
+		
+		JPanel plugboardPanel = new JPanel();
+		centerPanel.add(plugboardPanel);
+		
+		JLabel lblPlugboardSettings = new JLabel("Plugboard Settings:");
+		plugboardPanel.add(lblPlugboardSettings);
+		
+		plugboardTextField = new JTextField();
+		plugboardPanel.add(plugboardTextField);
+		plugboardTextField.setColumns(20);
 		
 		centerPanel.add(encryptButton);
 		
@@ -271,48 +281,32 @@ public class TestPanel extends JFrame {
 		
 		JButton breakCodeButton = new JButton("Decrypt...");
 		
-		// Decrypt an encrypted message by brute force using cribs.
+		// Decrypt an encrypted message.
 		breakCodeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PriorityQueue<String> unigramQueue = database.getUnigramTestQueue();
-				
-				while (!unigramQueue.isEmpty()) {
-					CribDetector detector = new CribDetector(encryptedTextArea.getText());
+				if (database.getTotalQuadgramCount() > 0) {
+					String[] ciphers = encryptedTextArea.getText().split("\\s");	// Split on whitespace.
+					String cipher = "";
 					
-					String settings = detector.testCrib(unigramQueue.remove());
-					
-					// Init. rotors.
-					CA_Rotor rotorI = CA_Rotor.getNewRotor('1');
-					CA_Rotor rotorII = CA_Rotor.getNewRotor('2');
-					CA_Rotor rotorIII = CA_Rotor.getNewRotor('3');
-					CA_Rotor reflectorB = CA_Rotor.getNewRotor('B');
-					
-					// Set ring settings.
-					rotorI.setRingPosition((char)leftRingSpinner.getValue());
-					rotorII.setRingPosition((char)leftRingSpinner.getValue());
-					rotorIII.setRingPosition((char)leftRingSpinner.getValue());
-					
-					if (settings != "") {
-						Encryptor machine = new Encryptor(
-								rotorI,
-								rotorII,
-								rotorIII,
-								reflectorB);
-						
-						machine.setRotorPositions(settings.charAt(0), settings.charAt(1), settings.charAt(2));
-						
-						String result = machine.encrypt(encryptedTextArea.getText());
-						
-						if (database.testString(result)) {
-							outputTextField.setText(result);
-							
-							leftRotorTextField.setText("" + settings.charAt(0));
-							middleRotorTextField.setText("" + settings.charAt(1));
-							rightRotorTextField.setText("" + settings.charAt(2));
-							
-							break;
-						}
+					// Remove whitespace.
+					for (String word: ciphers) {
+						cipher += word;
 					}
+					
+					QuadgramStatAnalyzer analyzer = new QuadgramStatAnalyzer(database);
+					String result = analyzer.decryptMessage(cipher);
+					
+					char[] ring = analyzer.getRingSettings();
+					char[] rotor = analyzer.getRotorSettings();
+					
+					outputTextField.setText(result);
+					
+					leftRingTextField.setText("" + ring[0]);
+					middleRingTextField.setText("" + ring[1]);
+					rightRingTextField.setText("" + ring[2]);
+					leftRotorTextField.setText("" + rotor[0]);
+					middleRotorTextField.setText("" + rotor[1]);
+					rightRotorTextField.setText("" + rotor[2]);
 				}
 			}
 		});

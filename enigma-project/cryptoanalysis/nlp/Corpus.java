@@ -43,20 +43,52 @@ public class Corpus {
 		quadgramQueue = new PriorityQueue<String>(11, new GramComparator(quadgramTable));
 	}
 	
-	public int getUnigramCount() {
+	public int getTotalUnigramCount() {
 		return unigramCount;
 	}
 	
-	public int getBigramCount() {
+	public int getTotalBigramCount() {
 		return bigramCount;
 	}
 	
-	public int getTrigramCount() {
+	public int getTotalTrigramCount() {
 		return trigramCount;
 	}
 	
-	public int getQuadgramCount() {
+	public int getTotalQuadgramCount() {
 		return quadgramCount;
+	}
+	
+	public int getUnigramCount(String gram) {
+		if (unigramTable.containsKey(gram.toLowerCase())) {
+			return unigramTable.get(gram.toLowerCase());
+		}
+		
+		return 0;
+	}
+	
+	public int getBigramCount(String gram) {
+		if (bigramTable.containsKey(gram.toLowerCase())) {
+			return bigramTable.get(gram.toLowerCase());
+		}
+		
+		return 0;
+	}
+	
+	public int getTrigramCount(String gram) {
+		if (trigramTable.containsKey(gram.toLowerCase())) {
+			return trigramTable.get(gram.toLowerCase());
+		}
+		
+		return 0;
+	}
+	
+	public int getQuadgramCount(String gram) {
+		if (quadgramTable.containsKey(gram.toLowerCase())) {
+			return quadgramTable.get(gram.toLowerCase());
+		}
+		
+		return 0;
 	}
 	
 	// Returns shallow copy of test queue.
