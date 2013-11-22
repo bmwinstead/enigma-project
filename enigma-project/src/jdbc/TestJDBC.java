@@ -12,6 +12,7 @@ public class TestJDBC {
 		jdbc.initializeConnection();
 		jdbc.createTables();
 		jdbc.processAndBatchInsert("Hello, I am a dog and I like to play outside in the summer the the the the a a a a a a a a the the summer",10);
+		jdbc.setAutoCommit(true);
 		System.out.println("Frequency of the: " + jdbc.getFrequency("the"));
 		System.out.println("Frequency of a: " + jdbc.getFrequency("a"));
 		System.out.println("Frequency of summer: " + jdbc.getFrequency("summer"));

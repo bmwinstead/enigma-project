@@ -64,6 +64,7 @@ public class JDBC {
 		System.out.println("Creating table ngram_node and ngram_blackhole");
 		long st = System.currentTimeMillis();
 		try (Statement stmt = sqlConnection.createStatement()) {
+			sqlConnection.setAutoCommit(false);
 			String s = "CREATE TABLE IF NOT EXISTS ngram_node "
 					+ "(NGRAM_KEY CHAR(32) NOT NULL, "
 					+ "NGRAM VARCHAR(255) NOT NULL,"
