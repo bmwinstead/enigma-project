@@ -14,6 +14,8 @@
  */
 package decoders;
 
+import java.util.Random;
+
 import misc.Logger;
 import nlp.Corpus;
 import enigma.EnigmaMachine;
@@ -54,8 +56,28 @@ public class QuadgramStatAnalyzer {
 		Logger.makeEntry("Starting quadgram analysis...", true);
 		long startTime = System.currentTimeMillis();
 		
+		// Initial try.
 		determineRotorOrder(message);
 		determineRingSettings(message);
+		
+		Random rng = new Random();
+		
+		// Attempt simulated annealing.
+		for (int i = 1; i < 10; i++) {
+			for (int j = 0; j < 3; j++) {
+				int offset = rng.nextInt(i) - i / 2;
+				rotorOffsetResults[j] = (char) ((rotorOffsetResults[j] + offset + 26 - 'A') % 26 + 'A');
+			}
+			
+			for (int j = 0; j < 3; j++) {
+				int offset = rng.nextInt(i) - i / 2;
+				ringSettingResults[j] = (char) ((ringSettingResults[j] + offset + 26 - 'A') % 26 + 'A');
+			}
+			
+			determineIndicatorSettings(message, rotorTypeResults);
+			
+			determineRingSettings(message);
+		}
 		
 		Logger.makeEntry("Quadgram analysis complete.", true);
 		Logger.makeEntry("Results:", true);
@@ -95,10 +117,11 @@ public class QuadgramStatAnalyzer {
 	}
 	
 	// Step 1: Find best indicator settings.
-	public void determineIndicatorSettings(String message, int[] rotors) {
+	public boolean determineIndicatorSettings(String message, int[] rotors) {
 		Logger.makeEntry("Determining ring settings...", false);
 		long startTime = System.currentTimeMillis();
 		
+		boolean result = false;
 		char[] rotorTestSettings = new char[3];
 		
 		// Cycle through rotor indicator combinations.
@@ -116,6 +139,7 @@ public class QuadgramStatAnalyzer {
 					double testValue = computeProbability(cipher);
 					
 					if (testValue > bestValue) {
+						result = true;
 						bestValue = testValue;
 						
 						rotorTypeResults[0] = rotors[0];
@@ -139,12 +163,16 @@ public class QuadgramStatAnalyzer {
 		Logger.makeEntry("Completed rotor indicator search.", false);
 		long endTime = System.currentTimeMillis();
 		Logger.makeEntry("Search took " + (endTime - startTime) + " milliseconds to complete.", false);
+		
+		return result;
 	}
 	
 	// Step 2: Determine best ring setting.
-	public void determineRingSettings(String message) {
+	public boolean determineRingSettings(String message) {
 		Logger.makeEntry("Determining ring settings...", false);
 		long startTime = System.currentTimeMillis();
+		
+		boolean result = false;
 		
 		char[] ringTestSettings = new char[3];
 		char[] rotorTestSettings = new char[3];
@@ -177,10 +205,12 @@ public class QuadgramStatAnalyzer {
 					
 					EnigmaMachine bomb = new EnigmaMachine(rotorTypeResults, 0, ringTestSettings, rotorTestSettings);
 					
-					String result = bomb.encryptString(message);
-					double testValue = computeProbability(result);
+					String cipher = bomb.encryptString(message);
+					double testValue = computeProbability(cipher);
 					
 					if (testValue > bestValue) {
+						result = true;
+						
 						bestValue = testValue;
 						
 						ringSettingResults[0] = ringTestSettings[0];
@@ -191,7 +221,7 @@ public class QuadgramStatAnalyzer {
 						rotorOffsetResults[1] = rotorTestSettings[1];
 						rotorOffsetResults[2] = rotorTestSettings[2];
 						
-						messageResult = result;
+						messageResult = cipher;
 						
 						Logger.makeEntry("Best ring setting fit value: " + bestValue, true);
 						Logger.makeEntry("Best ring settings: " + ringSettingResults[0] + ringSettingResults[1] + ringSettingResults[2], true);
@@ -203,12 +233,17 @@ public class QuadgramStatAnalyzer {
 		Logger.makeEntry("Completed ring setting search.", false);
 		long endTime = System.currentTimeMillis();
 		Logger.makeEntry("Search took " + (endTime - startTime) + " milliseconds to complete.", false);
+		
+		return result;
 	}
 	
 	// Compute log probability of a message compared to a corpus.
 	public double computeProbability(String message) {
 		double result = 0.0;
-		double floorLog = -3.0 + Math.log10(1.0 / database.getTotalQuadgramCount());	// Floor value for no match. See above references.
+		
+		// Set floor value to 1 / 1000 of single instance of gram. See above references.
+		double floorLog = -3.0 + Math.log10(1.0 / database.getTotalQuadgramCount());
+		
 		int totalCount = database.getTotalQuadgramCount();
 		char[] characters = message.toCharArray();
 		
