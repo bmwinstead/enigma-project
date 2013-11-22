@@ -447,7 +447,9 @@ public class EnigmaGUI extends JFrame{
                     }
                 }
                 else { //All 4 Rotors selected
-                    fourRotorChoices[0] = fourthRotorChoice.getSelectedIndex();
+                	// JLI fourthRotorChoice receives an adjustment due to
+                	//     fewer number of rotors in that drop-down. 
+                    fourRotorChoices[0] = fourthRotorChoice.getSelectedIndex() + 7; 
                     fourRotorChoices[1] = leftRotorChoice.getSelectedIndex();
                     fourRotorChoices[2] = middleRotorChoice.getSelectedIndex();
                     fourRotorChoices[3] = rightRotorChoice.getSelectedIndex();
