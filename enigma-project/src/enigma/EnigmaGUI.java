@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -55,6 +59,10 @@ public class EnigmaGUI extends JFrame{
     char[] threeInitialPositions = new char[3];
     char[] fourInitialPositions = new char[4];
     int finalReflectorChoice;
+    String fileString; //For file decryption
+    boolean[] plugSettingUsed = {false, false, false, false, false, false, 
+        false, false, false, false, false, false, false, false, false, false, 
+        false, false, false, false, false, false, false, false, false, false};
     
     //Plugboard Mapping
     String[] plugMap = {"A", "B", "C", "D", "E", "F", "G", "H", "I", 
@@ -375,11 +383,24 @@ public class EnigmaGUI extends JFrame{
         buttonPanel.add(encryptButton);
         
         encryptButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                @SuppressWarnings("unused")
-				File file = new File(fileTextField.getText()); //Add later
+            private Scanner scanner;
 
+			@Override
+            public void actionPerformed(ActionEvent e) {
+		File file = new File(fileTextField.getText());
                 String text = inputTextArea.getText();
+                
+                //Set plugboard map to string
+                StringBuilder newBuilder = new StringBuilder();
+                for(int i = 0; i < 26; i++){
+                    if((letterChoices[i] != comboMap[i].getSelectedItem()) &&
+                           plugSettingUsed[i] == false){
+                               newBuilder.append(letterChoices[i]).append
+                                       (comboMap[i].getSelectedItem());
+                        plugSettingUsed[comboMap[i].getSelectedIndex()] = true;
+                    }
+                }
+                plugboardMap = newBuilder.toString();
                 
                 if (fourthRotorChoice.getSelectedIndex() == 0){ //Check for #
                     threeRotorChoices[0] = leftRotorChoice.getSelectedIndex();
@@ -398,16 +419,32 @@ public class EnigmaGUI extends JFrame{
                     threeInitialPositions[2] = ((String)(rightRotorPosition.
                             getValue())).toCharArray()[0];
                     
-                    plugboardMap = ""; //Add later
-                    
                     finalReflectorChoice = reflectorChoice.getSelectedIndex();
-                    
+
                     EnigmaMachine newMachine = 
                             new EnigmaMachine(threeRotorChoices, 
                             finalReflectorChoice, threeRingSettings, 
                             threeInitialPositions, plugboardMap);
                     
-                    outputTextArea.setText(newMachine.encryptString(text));
+                    //Check if text box is used
+                    if (fileTextField.getText().length() > 0){
+                        try {
+                            scanner = new Scanner(file);
+                            while (scanner.hasNext()) {
+                                        fileString = scanner.next();
+                            }
+                            
+                            outputTextArea.setText(newMachine.encryptString
+                                    (fileString));
+                        } 
+                        catch (FileNotFoundException ex) {
+                            Logger.getLogger(EnigmaGUI.class.getName()).log
+                                    (Level.SEVERE, null, ex);
+                        }
+                    }
+                    else{
+                        outputTextArea.setText(newMachine.encryptString(text));
+                    }
                 }
                 else { //All 4 Rotors selected
                     fourRotorChoices[0] = fourthRotorChoice.getSelectedIndex();
@@ -431,15 +468,31 @@ public class EnigmaGUI extends JFrame{
                     fourInitialPositions[3] = ((String)(rightRotorPosition.
                             getValue())).toCharArray()[0];
                     
-                    plugboardMap = ""; //Add later
-                    
                     finalReflectorChoice = reflectorChoice.getSelectedIndex();
-                    EnigmaMachine newMachine = 
+                    EnigmaMachine newFourMachine = 
                             new EnigmaMachine(fourRotorChoices, 
                             finalReflectorChoice, fourRingSettings, 
                             fourInitialPositions, plugboardMap);
                     
-                    outputTextArea.setText(newMachine.encryptString(text));
+                    //Check if text box is used
+                    if (fileTextField.getText().length() > 0){
+                        try {
+                            scanner = new Scanner(file);
+                            while (scanner.hasNext()) {
+                                        fileString = scanner.next();
+                            }
+                            
+                            outputTextArea.setText(newFourMachine.encryptString
+                                    (fileString));
+                        } 
+                        catch (FileNotFoundException ex) {
+                            Logger.getLogger(EnigmaGUI.class.getName()).log
+                                    (Level.SEVERE, null, ex);
+                        }
+                    }
+                    else{
+                        outputTextArea.setText(newFourMachine.encryptString(text));
+                    }
                 }
             }
         });
@@ -625,6 +678,16 @@ public class EnigmaGUI extends JFrame{
             @Override
             public void stateChanged(ChangeEvent arg0) {
                 if (fourthRotorChoice.getSelectedIndex() == 0){
+                    fourthRotorPosition.setValue("");
+                }
+            }
+        });
+        //Action Listeners for Rotor Selections
+        fourthRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fourthRotorChoice.getSelectedIndex() == 0){
+                    fourthRotorRingSetting.setSelectedIndex(0);
                     fourthRotorPosition.setValue("");
                 }
             }
