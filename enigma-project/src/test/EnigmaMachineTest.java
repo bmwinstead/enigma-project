@@ -15,6 +15,7 @@ import enigma.EnigmaMachine;
  */
 public class EnigmaMachineTest {
 	String[] inputString = { 
+			"INTELLIGENCEPOINTSTOATTACKONTHEEASTWALLOFTHECASTLEATDAWN",
 			"AAAAA",
 			"AAAAA",
 			"ELLEN",
@@ -34,6 +35,7 @@ public class EnigmaMachineTest {
 	};
 	
 	String[] expectedResults = {
+			"NPNKANVHWKPXORCDDTRJRXSJFLCIUAIIBUNQIUQFTHLOZOIMENDNGPCB",
 			"BDZGO",
 			"EWTYX",
 			"VONDB",
@@ -53,6 +55,7 @@ public class EnigmaMachineTest {
 	};
 	
 	int[][] nonPBRotorChoices = {
+			{1, 4, 3},
 			{0, 1, 2},
 			{0, 1, 2},
 			{2, 1, 0},
@@ -74,10 +77,11 @@ public class EnigmaMachineTest {
 			{0, 1, 2}, 
 	};
 	
-	int[] nonPBReflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 2, 3};
+	int[] nonPBReflectorChoices = {0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 2, 3};
 	int[] pbReflectorChoices = {0};
 	
 	char[][] nonPBRingSettings = {
+			{'P', 'M', 'P'},
 			{'A', 'A', 'A'},
 			{'B', 'B', 'B'},
 			{'A', 'A', 'A'},
@@ -100,6 +104,7 @@ public class EnigmaMachineTest {
 	};
 	
 	char[][] nonPBPositions = {
+			{'S', 'I', 'G'},
 			{'A', 'A', 'A'},
 			{'A', 'A', 'A'},
 			{'A', 'A', 'A'},
