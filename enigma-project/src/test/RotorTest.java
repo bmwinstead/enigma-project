@@ -14,6 +14,7 @@ import enigma.Rotor;
  */
 public class RotorTest {
 	
+	// The actual rotors will be used as the test cases. 
 	private final char[][] rotorNotches = {
 			 {'R','!'}, //I
 			 {'F','!'}, //II
@@ -40,6 +41,9 @@ public class RotorTest {
 		 "FSOKANUERHMBTIYCWLQPZXVGJD"  //GAMMA 4 Only   9
 	}; 
 	
+	/**
+	 * Verifies the getNotchPosition method. 
+	 */
 	@Test
 	public void testGetNotchPosition() {
 
@@ -48,10 +52,12 @@ public class RotorTest {
 
 		Rotor[] rotors = new Rotor[rotorNotches.length];
 
+		// Create all rotors
 		for (int i = 0; i < rotors.length; i++) {
 			rotors[i] = new Rotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ", rotorNotches[i]);
 		}
 
+		// Get rotor notches, check against expected
 		for (int i = 0; i < rotors.length; i++) {
 			String loopName = "getNotch Results " + String.valueOf(i);
 			String actual = String.valueOf(rotors[i].getNotchPosition());
@@ -60,17 +66,24 @@ public class RotorTest {
 		}
 	} // end testGetNotchPosition
 	
+	/**
+	 * Verifies the getPosition method
+	 */
 	@Test
 	public void testGetPosition(){
 		Rotor[] rotors = new Rotor[rotorNotches.length];
 		
+		// Create all rotors
 		for (int i = 0; i < rotors.length; i++) {
 			rotors[i] = new Rotor(rotorWirings[i], rotorNotches[i]);
 			rotors[i].setRingPosition('A');
 			rotors[i].setStartPosition('A');
 		}
 		
+		// For each rotor, compare the actual position against the
+		// expected position, then cycle the rotor. 
 		for (int i = 0; i < rotors.length; i++) {
+			// Index goes above 26 to verify rotor wraparound. 
 			for (int j = 0; j < 29; j++) {
 				assertTrue((char) ('A' + (j % 26)) == 
 						rotors[i].getPosition());
@@ -80,22 +93,30 @@ public class RotorTest {
 		} // end all-rotors check
 	} // end testGetPosition
 
+	/**
+	 * Verifies cycleRotor method. 
+	 */
 	@Test
 	public void testCycleRotor() {
+		// Create rotor
 		Rotor rotor = new Rotor(rotorWirings[0], rotorNotches[0]);
 		rotor.setRingPosition('A');
 		rotor.setStartPosition('A');
 		
+		// Cycle rotor through all positions, make sure it does so. 
 		for (int i = 1; i <= 26; i++) {
 			if (rotor.getPosition() == 'Q') {
-				assertTrue(rotor.cycleRotor());
+				assertTrue(rotor.cycleRotor()); // This rotor's carry notch is Q
 			}
 			else {
-				assertFalse(rotor.cycleRotor());
+				assertFalse(rotor.cycleRotor()); // No carry-notch at non-Q
 			}
-		}
+		} // end test loop
 	} // end testCycleRotor
 	
+	/**
+	 * Verify forwardEncrypt method. 
+	 */
 	@Test
 	public void testForwardEncrypt() {
 		char[] toEncrypt = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -114,10 +135,12 @@ public class RotorTest {
 		rotor.setRingPosition('A');
 		rotor.setStartPosition('A');
 		
+		// Check all possible letter substitutions
 		for (int i = 0; i < toEncrypt.length; i++) {
 			assertTrue(rotor.forwardEncrypt(toEncrypt[i]) == expected1[i]);
 		}
 		
+		// Cycle rotor once, then check again. 
 		rotor.cycleRotor();
 		
 		for (int i = 0; i < toEncrypt.length; i++) {
@@ -125,6 +148,9 @@ public class RotorTest {
 		}
 	}  // end testForwardEncrypt
 	
+	/**
+	 * Verify reverseEncrypt method
+	 */
 	@Test
 	public void testReverseEncrypt() {
 		char[] encrypt1 = { 'E', 'K', 'M', 'F', 'L', 'G', 'D', 'Q', 'V', 'Z',
@@ -143,14 +169,16 @@ public class RotorTest {
 		rotor.setRingPosition('A');
 		rotor.setStartPosition('A');
 		
+		// reverseEncrypt should always be the reverse of forwardEncrypt
 		for (int i = 0; i < encrypt1.length; i++) {
 			assertTrue(rotor.reverseEncrypt(encrypt1[i]) == expected[i]);
 		}
 		
+		// Cycle rotor, then test again. 
 		rotor.cycleRotor();
 		
 		for (int i = 0; i < encrypt2.length; i++) {
 			assertTrue(rotor.reverseEncrypt(encrypt2[i]) == expected[i]);
 		}
-	}
-}
+	} // end reverseEncrypt method
+} //end RotorTest class

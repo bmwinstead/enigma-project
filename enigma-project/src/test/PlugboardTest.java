@@ -14,8 +14,12 @@ import enigma.Plugboard;
  */
 public class PlugboardTest {
 
+	/**
+	 * Verifies operation of the matchChar method. 
+	 */
 	@Test
 	public void testMatchChar(){
+		// Strings for testing string-based Plugboard constructor
 		String[] pInitStrings = { 
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZ", // AB CD EF GH IJ KL MN OP QR ST UV WX YZ 
 				"TVEQSJPX",                   // TV EQ SJ PX
@@ -26,6 +30,7 @@ public class PlugboardTest {
 				"A,B.C*D ",                   // A, B. C* D
 		};
 		
+		// Arrays for testing array-based Plugboard constructor
 		char[][] pInitArray1 = {
 				{'G', 'H'},
 				{'P', 'D'},
@@ -36,8 +41,11 @@ public class PlugboardTest {
 				{'P', 'D', 'Q'},
 				{'W', 'B', 'T'}};
 		
+		// Input for all test cases
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		
+		// Expected output of the different Plugboards when given the same
+		// input. 
 		String[] expectedResult = {
 				"BADCFEHGJILKNMPORQTSVUXWZY",
 				"ABCDQFGHISKLMNOXERJVUTWPYZ",
@@ -61,9 +69,10 @@ public class PlugboardTest {
 		plugboard[7] = new Plugboard(pInitArray1);
 		plugboard[8] = new Plugboard(pInitArray2);
 		
-		// Plugboard works on a character basis
+		// matchChar takes character input
 		char[] alphaArray = alphabet.toCharArray();
 		
+		// Loop through all test cases. 
 		for (int i = 0; i < expectedResult.length; i++) {
 			char[] outArray = new char[alphaArray.length];
 			
@@ -75,7 +84,6 @@ public class PlugboardTest {
 			String plugName = "Plug Results " + String.valueOf(i);
 			
 			assertEquals(plugName, expectedResult[i], actualResult);			
-		}
-	}
-
-}
+		} // end testcase loop
+	} // end testMatchChar method
+} // end Plugboard Test class. 
