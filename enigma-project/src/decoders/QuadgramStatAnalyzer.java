@@ -6,45 +6,44 @@
  * http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/
  * http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/
  * 
- * Step 1: Determine best rotor wheel order and indicator settings.
- * Step 2: Determine best ring setting.
+ * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
+ * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
  * 
  * Limitations:
- * 
+ * This method does not guarantee a correct result. Essentially, this algorithm is equivalent to a local maxima search in that it
+ * first searches the wheel order and indicator settings and saves consecutive best matches. Once that search is exhausted, 
+ * then it searches for the best ring setting using the list of best rotor settings previously constructed. This search is limited in that the 
+ * ring search is restricted to the candidate rotor settings. It is possible that the correct result is a combination of suboptimal
+ * rotor and ring settings, and these cases the algorithm is expected to fail.
  */
 package decoders;
+
+import java.util.Deque;
+import java.util.LinkedList;
 
 import misc.Logger;
 import nlp.Corpus;
 import enigma.EnigmaMachine;
-import enigma.Plugboard;
+import enigma.EnigmaSettings;
 import enigma.Rotor;
 import enigma.Rotors;
 
 public class QuadgramStatAnalyzer {
-	private Corpus database;
-	private int[] rotorTypeResults;
-	private char[] ringSettingResults;
-	private char[] rotorOffsetResults;
-	private Plugboard plugboardResults = null;
+	private Corpus database;						// Gram database to get gram counts.
+	private EnigmaSettings bestResult;				// Best total result.
 	
-	private double bestValue;
-	private String messageResult;
+	private Deque<EnigmaSettings> resultsList;		// Used to hold list of best results.
+	
+	private double bestValue;						// Best fitness score.
+	private String messageResult;					// Best message.
 	
 	public QuadgramStatAnalyzer(Corpus corpus) {
 		database = corpus;
 		
-		rotorTypeResults = new int[3];
-		ringSettingResults = new char[3];
-		rotorOffsetResults = new char[3];
+		// Init. default result.
+		bestResult = new EnigmaSettings();
 		
-		ringSettingResults[0] = 'A';
-		ringSettingResults[1] = 'A';
-		ringSettingResults[2] = 'A';
-		
-		rotorOffsetResults[0] = 'A';
-		rotorOffsetResults[1] = 'A';
-		rotorOffsetResults[2] = 'A';
+		resultsList = new LinkedList<EnigmaSettings>();
 		
 		bestValue = Double.NEGATIVE_INFINITY;
 	}
@@ -56,14 +55,19 @@ public class QuadgramStatAnalyzer {
 		
 		// Initial try.
 		determineRotorOrder(message);
-		determineRingSettings(message);
+		
+		while (!resultsList.isEmpty()) {
+			determineRingSettings(resultsList.pollLast(), message);
+		}
+		
 		
 		Logger.makeEntry("Quadgram analysis complete.", true);
 		Logger.makeEntry("Results:", true);
 		Logger.makeEntry("Decrypted message: " + messageResult, true);
-		Logger.makeEntry("Wheel order: " + rotorTypeResults[0] + rotorTypeResults[1] + rotorTypeResults[2], true);
-		Logger.makeEntry("Ring settings: " + ringSettingResults[0] + ringSettingResults[1] + ringSettingResults[2], true);
-		Logger.makeEntry("Rotor indicators: " + rotorOffsetResults[0] + rotorOffsetResults[1] + rotorOffsetResults[2], true);
+		
+		Logger.makeEntry("Wheel order: " + bestResult.printWheelOrder(), true);
+		Logger.makeEntry("Ring settings: " + bestResult.printRingSettings(), true);
+		Logger.makeEntry("Rotor indicators: " + bestResult.printIndicators(), true);
 		Logger.makeEntry("Quadgram fitness score: " + bestValue, true);
 		
 		long endTime = System.currentTimeMillis();
@@ -97,7 +101,7 @@ public class QuadgramStatAnalyzer {
 	
 	// Step 1: Find best indicator settings.
 	public boolean determineIndicatorSettings(String message, int[] rotors) {
-		Logger.makeEntry("Determining ring settings...", false);
+		Logger.makeEntry("Determining indicator settings...", false);
 		long startTime = System.currentTimeMillis();
 		
 		boolean result = false;
@@ -112,7 +116,7 @@ public class QuadgramStatAnalyzer {
 					rotorTestSettings[1] = (char) ('A' + j);
 					rotorTestSettings[2] = (char) ('A' + k);
 					
-					EnigmaMachine bomb = new EnigmaMachine(rotors, 0, ringSettingResults, rotorTestSettings);
+					EnigmaMachine bomb = new EnigmaMachine(rotors, 0, bestResult.getRingSettings(), rotorTestSettings);
 					
 					String cipher = bomb.encryptString(message);
 					double testValue = computeProbability(cipher);
@@ -121,19 +125,16 @@ public class QuadgramStatAnalyzer {
 						result = true;
 						bestValue = testValue;
 						
-						rotorTypeResults[0] = rotors[0];
-						rotorTypeResults[1] = rotors[1];
-						rotorTypeResults[2] = rotors[2];
+						resultsList.add(new EnigmaSettings(rotors, rotorTestSettings, 0));
 						
-						rotorOffsetResults[0] = rotorTestSettings[0];
-						rotorOffsetResults[1] = rotorTestSettings[1];
-						rotorOffsetResults[2] = rotorTestSettings[2];
+						bestResult.setRotors(rotors);
+						bestResult.setIndicatorSettings(rotorTestSettings);
 						
 						messageResult = cipher;
 						
 						Logger.makeEntry("Best rotor and indicator fit value: " + bestValue, true);
-						Logger.makeEntry("Best wheel order: " + rotorTypeResults[0] + rotorTypeResults[1] + rotorTypeResults[2], true);
-						Logger.makeEntry("Best rotor indicators: " + rotorOffsetResults[0] + rotorOffsetResults[1] + rotorOffsetResults[2], true);
+						Logger.makeEntry("Best wheel order: " + bestResult.printWheelOrder(), true);
+						Logger.makeEntry("Best rotor indicators: " + bestResult.printIndicators(), true);
 					} // End best result if
 				} // End right indicator for
 			} // End middle indicator for
@@ -147,7 +148,7 @@ public class QuadgramStatAnalyzer {
 	}
 	
 	// Step 2: Determine best ring setting.
-	public boolean determineRingSettings(String message) {
+	public boolean determineRingSettings(EnigmaSettings settings, String message) {
 		Logger.makeEntry("Determining ring settings...", false);
 		long startTime = System.currentTimeMillis();
 		
@@ -155,11 +156,7 @@ public class QuadgramStatAnalyzer {
 		
 		char[] ringTestSettings = new char[3];
 		char[] rotorTestSettings = new char[3];
-		char[] baseRotorSettings = new char[3];
-		
-		baseRotorSettings[0] = rotorOffsetResults[0];
-		baseRotorSettings[1] = rotorOffsetResults[1];
-		baseRotorSettings[2] = rotorOffsetResults[2];
+		char[] baseRotorSettings = settings.getIndicatorSettings();
 		
 		// Cycle through rotor indicator combinations.
 		for (int i = 0; i < 26; i++) {
@@ -182,7 +179,7 @@ public class QuadgramStatAnalyzer {
 					rotorTestSettings[1] = middle;
 					rotorTestSettings[2] = right;
 					
-					EnigmaMachine bomb = new EnigmaMachine(rotorTypeResults, 0, ringTestSettings, rotorTestSettings);
+					EnigmaMachine bomb = new EnigmaMachine(settings.getRotors(), 0, ringTestSettings, rotorTestSettings);
 					
 					String cipher = bomb.encryptString(message);
 					double testValue = computeProbability(cipher);
@@ -192,18 +189,14 @@ public class QuadgramStatAnalyzer {
 						
 						bestValue = testValue;
 						
-						ringSettingResults[0] = ringTestSettings[0];
-						ringSettingResults[1] = ringTestSettings[1];
-						ringSettingResults[2] = ringTestSettings[2];
-						
-						rotorOffsetResults[0] = rotorTestSettings[0];
-						rotorOffsetResults[1] = rotorTestSettings[1];
-						rotorOffsetResults[2] = rotorTestSettings[2];
+						bestResult.setRingSettings(ringTestSettings);
+						bestResult.setIndicatorSettings(rotorTestSettings);
 						
 						messageResult = cipher;
 						
 						Logger.makeEntry("Best ring setting fit value: " + bestValue, true);
-						Logger.makeEntry("Best ring settings: " + ringSettingResults[0] + ringSettingResults[1] + ringSettingResults[2], true);
+						Logger.makeEntry("Best ring settings: " + bestResult.printRingSettings(), true);
+						Logger.makeEntry("Best rotor indicators: " + bestResult.printIndicators(), true);
 					} // End best result if
 				} // End right ring for
 			} // End middle ring for
@@ -243,15 +236,15 @@ public class QuadgramStatAnalyzer {
 	}
 	
 	public int[] getRotorOrder() {
-		return rotorTypeResults;
+		return bestResult.getRotors();
 	}
 	
 	public char[] getRingSettings() {
-		return ringSettingResults;
+		return bestResult.getRingSettings();
 	}
 	
 	public char[] getRotorSettings() {
-		return rotorOffsetResults;
+		return bestResult.getIndicatorSettings();
 	}
 	
 	public String getDecryptedMessage() {

@@ -61,6 +61,9 @@ public class TestPanel extends JFrame {
 	private JTextField leftWheelTextField;
 	private JTextField middleWheelTextField;
 	private JTextField rightWheelTextField;
+	private JSpinner leftRotorSpinner;
+	private JSpinner middleRotorSpinner;
+	private JSpinner rightRotorSpinner;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
@@ -76,7 +79,7 @@ public class TestPanel extends JFrame {
 		
 		// Frame init. setup.
 		setTitle("Word Database Generator");
-		setSize(700, 700);
+		setSize(1000, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -165,21 +168,24 @@ public class TestPanel extends JFrame {
 		inputTextArea.setLineWrap(true);
 		inputTextArea.setWrapStyleWord(true);
 		inputTextArea.setRows(5);
-		inputTextArea.setColumns(20);
+		inputTextArea.setColumns(50);
 		textEntryPanel.add(inputTextArea);
 		
 		JPanel rotorSelectionPanel = new JPanel();
 		centerPanel.add(rotorSelectionPanel);
 		
-		JSpinner leftRotorSpinner = new JSpinner();
+		JLabel lblNewLabel_1 = new JLabel("Rotor Selection:");
+		rotorSelectionPanel.add(lblNewLabel_1);
+		
+		leftRotorSpinner = new JSpinner();
 		leftRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
 		rotorSelectionPanel.add(leftRotorSpinner);
 		
-		JSpinner centerRotorSpinner = new JSpinner();
-		centerRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
-		rotorSelectionPanel.add(centerRotorSpinner);
+		middleRotorSpinner = new JSpinner();
+		middleRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
+		rotorSelectionPanel.add(middleRotorSpinner);
 		
-		JSpinner rightRotorSpinner = new JSpinner();
+		rightRotorSpinner = new JSpinner();
 		rightRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
 		rotorSelectionPanel.add(rightRotorSpinner);
 		
@@ -206,6 +212,9 @@ public class TestPanel extends JFrame {
 		// Encrypt a text string.
 		encryptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int leftRotorSelection = (int)(leftRotorSpinner.getValue()) - 1;
+				int middleRotorSelection = (int)(middleRotorSpinner.getValue()) - 1;
+				int rightRotorSelection = (int)(rightRotorSpinner.getValue()) - 1;
 				char leftRotorSetting = ((String)(leftRotorSelectionSpinner.getValue())).toCharArray()[0];
 				char middleRotorSetting = ((String)(middleRotorSelectionSpinner.getValue())).toCharArray()[0];
 				char rightRotorSetting = ((String)(rightRotorSelectionSpinner.getValue())).toCharArray()[0];
@@ -214,7 +223,7 @@ public class TestPanel extends JFrame {
 				char rightRingSetting = ((String)(rightRingSpinner.getValue())).toCharArray()[0];
 				
 				Logger.makeEntry("Starting encryption...", true);
-				Logger.makeEntry("Rotors - 123", true);
+				Logger.makeEntry("Rotors - " + leftRotorSelection + middleRotorSelection + rightRotorSelection, true);
 				Logger.makeEntry("Reflector - B", true);
 				Logger.makeEntry("Ring Settings - " + leftRingSetting  + middleRingSetting + rightRingSetting, true);
 				Logger.makeEntry("Rotor Settings - " + leftRotorSetting  + middleRotorSetting + rightRotorSetting, true);
@@ -235,7 +244,7 @@ public class TestPanel extends JFrame {
 					letters[rightLetter - 'a'] = leftLetter;
 				}
 				
-				int[] rotors = {1, 4, 3};
+				int[] rotors = {leftRotorSelection, middleRotorSelection, rightRotorSelection};
 				int reflector = 'B' - 'B';
 				char[] ringSettings = {leftRingSetting, middleRingSetting, rightRingSetting};
 				char[] rotorSettings = {leftRotorSetting, middleRotorSetting, rightRotorSetting};
@@ -285,6 +294,7 @@ public class TestPanel extends JFrame {
 		
 		JPanel enceryptedPanel = new JPanel();
 		centerPanel.add(enceryptedPanel);
+		enceryptedPanel.setLayout(new BoxLayout(enceryptedPanel, BoxLayout.X_AXIS));
 		
 		JLabel lblNewLabel_3 = new JLabel("Encrypted Output:");
 		enceryptedPanel.add(lblNewLabel_3);
@@ -292,7 +302,7 @@ public class TestPanel extends JFrame {
 		encryptedTextArea = new JTextArea();
 		encryptedTextArea.setWrapStyleWord(true);
 		encryptedTextArea.setLineWrap(true);
-		encryptedTextArea.setColumns(20);
+		encryptedTextArea.setColumns(40);
 		encryptedTextArea.setRows(5);
 		enceryptedPanel.add(encryptedTextArea);
 		
@@ -303,7 +313,7 @@ public class TestPanel extends JFrame {
 		decryptedTextArea.setLineWrap(true);
 		decryptedTextArea.setWrapStyleWord(true);
 		decryptedTextArea.setRows(5);
-		decryptedTextArea.setColumns(20);
+		decryptedTextArea.setColumns(40);
 		enceryptedPanel.add(decryptedTextArea);
 		
 		JButton breakCodeButton = new JButton("Decrypt...");
@@ -347,8 +357,9 @@ public class TestPanel extends JFrame {
 		
 		JPanel outputPanel = new JPanel();
 		centerPanel.add(outputPanel);
+		outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.Y_AXIS));
 		
-		outputTextField = new JTextField(40);
+		outputTextField = new JTextField(80);
 		outputPanel.add(outputTextField);
 		
 		JPanel settingsPanel = new JPanel();
