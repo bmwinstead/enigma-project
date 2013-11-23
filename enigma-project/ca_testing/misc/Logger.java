@@ -13,13 +13,11 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 public class Logger {
-	private static PrintWriter output;
+	private PrintWriter output;
 	
-	// Create a new text file if one does not exist.
-	public static void createFile() {
+	public Logger(String fileName) {
 		try {
-			//output = new PrintWriter(new BufferedWriter(new FileWriter("C:\\Users\\Walter\\Documents\\Enigma Text Files\\enigma-debug.txt", true))); // Testing.
-			output = new PrintWriter(new BufferedWriter(new FileWriter("enigma-debug.txt", true))); // To keep everyone's file system clean.
+			output = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true))); // Saves into project folder.
 			makeEntry("Logger initialized.", true);
 		} catch (IOException e) {
 			if (output != null) {
@@ -31,15 +29,15 @@ public class Logger {
 	}
 	
 	// Close a file.
-	public static void closeFile() {
+	public void closeFile() {
 		if (output != null) {
-			makeEntry("Logger closed.\r\n", true);	// Double spacing to separate logger instances.
+			makeEntry("Logger closed.", true);
 			output.close();
 		}
 	}
 	
 	// Adds a new time-stamped entry to the log, with an option to print to console.
-	public static void makeEntry(String phrase, boolean outputConsole) {
+	public void makeEntry(String phrase, boolean outputConsole) {
 		Date timestamp = new Date(); // Init. to current time and date.
 		
 		String entry = "[" + timestamp + "] - " + phrase + "\r\n";	// Windows text editors require a carriage return, should be fine also on other systems.
