@@ -28,6 +28,24 @@ import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * 
+ * @author Ellen Ohlmacher
+ * @author Team Enigma
+ * @version 0.7
+ * @date - Nov 22, 2013
+ * 
+ * The GUI for interfacing with the Enigma. Currently allows the user to 
+ * configure the Enigma as they desire, choosing 3-4 rotors, their ring
+ * settings, and their starting position, along with any plugboard swaps.
+ * At this time, text input into the input field will only be processed when
+ * the "Process" button is selected, and the lightboard is not operational.
+ * Although the upload file button allows for file selection, encryption
+ * currently only works on the last word of an uploaded file. This is a known
+ * issue that will be addressed next week. 
+ *
+ */
+
 @SuppressWarnings("serial")
 public class EnigmaGUI extends JFrame{
     //GUI Elements
