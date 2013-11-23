@@ -27,6 +27,7 @@ import nlp.CharacterParser;
 import nlp.Corpus;
 import enigma.EnigmaMachine;
 import javax.swing.SpinnerNumberModel;
+import java.awt.Dimension;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -64,18 +65,22 @@ public class TestPanel extends JFrame {
 	private JSpinner leftRotorSpinner;
 	private JSpinner middleRotorSpinner;
 	private JSpinner rightRotorSpinner;
+	private JSpinner reflectorSpinner;
+	private JTextField reflectorTextField;
+	
+	private Logger log;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				Logger.makeEntry("TestPanel closed.", true);
-				Logger.closeFile();
+				log.makeEntry("TestPanel closed.", true);
+				log.closeFile();
 			}
 		});
 		
 		database = new Corpus();
-		Logger.createFile();
+		log = new Logger("TestPanel log.txt");
 		
 		// Frame init. setup.
 		setTitle("Word Database Generator");
@@ -125,7 +130,8 @@ public class TestPanel extends JFrame {
 		parseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(fileTextField.getText());
-				Logger.makeEntry("Started parsing file " + file.getPath() + " ...", true);
+
+				log.makeEntry("Parsing " + file.getAbsolutePath() + "...", true);
 				
 				long startTime = System.currentTimeMillis();
 				
@@ -134,11 +140,13 @@ public class TestPanel extends JFrame {
 				
 				long endTime = System.currentTimeMillis();
 				
-				Logger.makeEntry("Parsing completed in " + (endTime - startTime) + " milliseconds.", true);
-				Logger.makeEntry("Corpus now has " + database.getTotalUnigramCount() + " unigrams.", true);
-				Logger.makeEntry("Corpus now has " + database.getTotalBigramCount() + " bigrams.", true);
-				Logger.makeEntry("Corpus now has " + database.getTotalTrigramCount() + " trigrams.", true);
-				Logger.makeEntry("Corpus now has " + database.getTotalQuadgramCount() + " quadgrams.", true);
+				log.makeEntry("Parsing complete.", true);
+				log.makeEntry("Parsing took " + (endTime - startTime) + " milliseconds.", true);
+				log.makeEntry("Corpus now contains:", true);
+				log.makeEntry(database.getTotalUnigramCount() + " unigrams.", true);
+				log.makeEntry(database.getTotalBigramCount() + " bigrams.", true);
+				log.makeEntry(database.getTotalTrigramCount() + " trigrams.", true);
+				log.makeEntry(database.getTotalQuadgramCount() + " quadgrams.", true);
 			}
 		});
 		browseButton.addActionListener(new ActionListener() {
@@ -178,16 +186,27 @@ public class TestPanel extends JFrame {
 		rotorSelectionPanel.add(lblNewLabel_1);
 		
 		leftRotorSpinner = new JSpinner();
+		leftRotorSpinner.setPreferredSize(new Dimension(35, 20));
 		leftRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
 		rotorSelectionPanel.add(leftRotorSpinner);
 		
 		middleRotorSpinner = new JSpinner();
+		middleRotorSpinner.setPreferredSize(new Dimension(35, 20));
 		middleRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
 		rotorSelectionPanel.add(middleRotorSpinner);
 		
 		rightRotorSpinner = new JSpinner();
+		rightRotorSpinner.setPreferredSize(new Dimension(35, 20));
 		rightRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 5, 1));
 		rotorSelectionPanel.add(rightRotorSpinner);
+		
+		JLabel reflectorLabel = new JLabel("Reflector:");
+		rotorSelectionPanel.add(reflectorLabel);
+		
+		reflectorSpinner = new JSpinner();
+		reflectorSpinner.setPreferredSize(new Dimension(60, 20));
+		reflectorSpinner.setModel(new SpinnerListModel(new String[] {"B", "C", "B Thin", "C Thin"}));
+		rotorSelectionPanel.add(reflectorSpinner);
 		
 		JPanel rotorSettingPanel = new JPanel();
 		centerPanel.add(rotorSettingPanel);
@@ -196,14 +215,17 @@ public class TestPanel extends JFrame {
 		rotorSettingPanel.add(lblNewLabel_4);
 		
 		leftRotorSelectionSpinner = new JSpinner();
+		leftRotorSelectionSpinner.setPreferredSize(new Dimension(35, 20));
 		leftRotorSelectionSpinner.setModel(new SpinnerListModel(alphabet));
 		rotorSettingPanel.add(leftRotorSelectionSpinner);
 		
 		middleRotorSelectionSpinner = new JSpinner();
+		middleRotorSelectionSpinner.setPreferredSize(new Dimension(35, 20));
 		middleRotorSelectionSpinner.setModel(new SpinnerListModel(alphabet));
 		rotorSettingPanel.add(middleRotorSelectionSpinner);
 		
 		rightRotorSelectionSpinner = new JSpinner();
+		rightRotorSelectionSpinner.setPreferredSize(new Dimension(35, 20));
 		rightRotorSelectionSpinner.setModel(new SpinnerListModel(alphabet));
 		rotorSettingPanel.add(rightRotorSelectionSpinner);
 		
@@ -222,11 +244,11 @@ public class TestPanel extends JFrame {
 				char middleRingSetting = ((String)(middleRingSpinner.getValue())).toCharArray()[0];
 				char rightRingSetting = ((String)(rightRingSpinner.getValue())).toCharArray()[0];
 				
-				Logger.makeEntry("Starting encryption...", true);
-				Logger.makeEntry("Rotors - " + leftRotorSelection + middleRotorSelection + rightRotorSelection, true);
-				Logger.makeEntry("Reflector - B", true);
-				Logger.makeEntry("Ring Settings - " + leftRingSetting  + middleRingSetting + rightRingSetting, true);
-				Logger.makeEntry("Rotor Settings - " + leftRotorSetting  + middleRotorSetting + rightRotorSetting, true);
+				log.makeEntry("Starting encryption...", true);
+				log.makeEntry("Rotors - " + leftRotorSelection + middleRotorSelection + rightRotorSelection, true);
+				log.makeEntry("Reflector - " + reflectorSpinner.getValue(), true);
+				log.makeEntry("Ring Settings - " + leftRingSetting  + middleRingSetting + rightRingSetting, true);
+				log.makeEntry("Rotor Settings - " + leftRotorSetting  + middleRotorSetting + rightRotorSetting, true);
 				
 				String text = inputTextArea.getText().toUpperCase();
 				
@@ -245,20 +267,21 @@ public class TestPanel extends JFrame {
 				}
 				
 				int[] rotors = {leftRotorSelection, middleRotorSelection, rightRotorSelection};
-				int reflector = 'B' - 'B';
+				int reflector = getReflectorIndex((String)(reflectorSpinner.getValue()));
+				
 				char[] ringSettings = {leftRingSetting, middleRingSetting, rightRingSetting};
 				char[] rotorSettings = {leftRotorSetting, middleRotorSetting, rightRotorSetting};
 				
 				EnigmaMachine machine = new EnigmaMachine(rotors, reflector, ringSettings, rotorSettings, String.valueOf(mappings));
 
 				String cipher = machine.encryptString(text);
-				Logger.makeEntry("Encryption Complete.\r\n", true);
+				log.makeEntry("Encryption Complete.\r\n", true);
 		
 				encryptedTextArea.setText(cipher);
 				
 				machine.reset();
 				decryptedTextArea.setText(machine.encryptString(cipher));
-				Logger.makeEntry("Decryption Complete.\r\n", true);
+				log.makeEntry("Decryption Complete.\r\n", true);
 			}
 		});
 		
@@ -269,14 +292,17 @@ public class TestPanel extends JFrame {
 		ringSettingPanel.add(lblNewLabel);
 		
 		leftRingSpinner = new JSpinner();
+		leftRingSpinner.setPreferredSize(new Dimension(35, 20));
 		leftRingSpinner.setModel(new SpinnerListModel(alphabet));
 		ringSettingPanel.add(leftRingSpinner);
 		
 		middleRingSpinner = new JSpinner();
+		middleRingSpinner.setPreferredSize(new Dimension(35, 20));
 		middleRingSpinner.setModel(new SpinnerListModel(alphabet));
 		ringSettingPanel.add(middleRingSpinner);
 		
 		rightRingSpinner = new JSpinner();
+		rightRingSpinner.setPreferredSize(new Dimension(35, 20));
 		rightRingSpinner.setModel(new SpinnerListModel(alphabet));
 		ringSettingPanel.add(rightRingSpinner);
 		
@@ -330,8 +356,13 @@ public class TestPanel extends JFrame {
 						cipher += word;
 					}
 					
+					// Init. log file for decryption attempt.
+					log.makeEntry("Starting quadgram analyser...", true);
+					
 					QuadgramStatAnalyzer analyzer = new QuadgramStatAnalyzer(database);
 					analyzer.decryptMessage(cipher);
+					
+					log.makeEntry("Quadgram analyser finished.", true);
 					
 					String result = analyzer.getDecryptedMessage();
 					int[] wheel = analyzer.getRotorOrder();
@@ -343,6 +374,7 @@ public class TestPanel extends JFrame {
 					leftWheelTextField.setText("" + (wheel[0] + 1));
 					middleWheelTextField.setText("" + (wheel[1] + 1));
 					rightWheelTextField.setText("" + (wheel[2] + 1));
+					reflectorTextField.setText("" + analyzer.getReflector());
 					leftRingTextField.setText("" + ring[0]);
 					middleRingTextField.setText("" + ring[1]);
 					rightRingTextField.setText("" + ring[2]);
@@ -356,7 +388,7 @@ public class TestPanel extends JFrame {
 		centerPanel.add(breakCodeButton);
 		
 		JPanel outputPanel = new JPanel();
-		centerPanel.add(outputPanel);
+		getContentPane().add(outputPanel, BorderLayout.SOUTH);
 		outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.Y_AXIS));
 		
 		outputTextField = new JTextField(80);
@@ -364,6 +396,9 @@ public class TestPanel extends JFrame {
 		
 		JPanel settingsPanel = new JPanel();
 		outputPanel.add(settingsPanel);
+		
+		JLabel lblNewLabel_2 = new JLabel("rotors:");
+		settingsPanel.add(lblNewLabel_2);
 		
 		leftWheelTextField = new JTextField();
 		settingsPanel.add(leftWheelTextField);
@@ -377,6 +412,16 @@ public class TestPanel extends JFrame {
 		settingsPanel.add(rightWheelTextField);
 		rightWheelTextField.setColumns(2);
 		
+		JLabel lblNewLabel_6 = new JLabel("reflector:");
+		settingsPanel.add(lblNewLabel_6);
+		
+		reflectorTextField = new JTextField();
+		settingsPanel.add(reflectorTextField);
+		reflectorTextField.setColumns(2);
+		
+		JLabel lblNewLabel_7 = new JLabel("rings:");
+		settingsPanel.add(lblNewLabel_7);
+		
 		leftRingTextField = new JTextField();
 		settingsPanel.add(leftRingTextField);
 		leftRingTextField.setColumns(2);
@@ -389,6 +434,9 @@ public class TestPanel extends JFrame {
 		settingsPanel.add(rightRingTextField);
 		rightRingTextField.setColumns(2);
 		
+		JLabel lblNewLabel_8 = new JLabel("indicators:");
+		settingsPanel.add(lblNewLabel_8);
+		
 		leftRotorTextField = new JTextField(2);
 		settingsPanel.add(leftRotorTextField);
 		
@@ -398,11 +446,28 @@ public class TestPanel extends JFrame {
 		rightRotorTextField = new JTextField(2);
 		settingsPanel.add(rightRotorTextField);
 		
+		JLabel lblNewLabel_9 = new JLabel("plugboard:");
+		settingsPanel.add(lblNewLabel_9);
+		
 		plugboardPairsTextField = new JTextField();
 		settingsPanel.add(plugboardPairsTextField);
 		plugboardPairsTextField.setColumns(30);
 		
-		Logger.makeEntry("TestPanel initialized.", true);
+		log.makeEntry("TestPanel initialized.", true);
 	}
 	
+	public int getReflectorIndex(String reflector) {
+		switch(reflector) {
+		case "B":
+			return 0;
+		case "C":
+			return 1;
+		case "B Thin":
+			return 2;
+		case "C Thin":
+			return 3;
+		default:
+			return -1; // Error.
+		}
+	}
 }
