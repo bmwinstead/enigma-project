@@ -63,6 +63,20 @@ public class EnigmaSettings {
 	}
 
 	/**
+	 * @return the reflector
+	 */
+	public int getReflector() {
+		return reflector;
+	}
+
+	/**
+	 * @param reflector the reflector to set
+	 */
+	public void setReflector(int reflector) {
+		this.reflector = reflector;
+	}
+
+	/**
 	 * @return the rotors
 	 */
 	public int[] getRotors() {
@@ -136,5 +150,20 @@ public class EnigmaSettings {
 	// Prints out the rotor indicator offset in a String.
 	public String printIndicators() {
 		return "" + indicatorSettings[0] + indicatorSettings[1] + indicatorSettings[2];
+	}
+	
+	public String printReflector() {
+		switch(reflector) {
+		case 0:
+			return "B";
+		case 1:
+			return "C";
+		case 2:
+			return "B Thin";
+		case 3:
+			return "C Thin";
+		default:
+			return "";
+		}
 	}
 }
