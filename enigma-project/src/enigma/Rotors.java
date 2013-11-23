@@ -5,6 +5,7 @@ package enigma;
  * @author Bryan Matthew Winstead
  * @author Team Enigma
  * @version 0.9
+ * @date - Nov 22, 2013
  * 
  * Contains 3-4 instances of the Rotor class. Also acts as the reflector in an
  * Enigma machine. Fully encrypts a character (except for Plugboard

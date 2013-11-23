@@ -4,6 +4,8 @@
  * @author - Team Enigma
  * @version - 0.9
  * @date - Nov 22, 2013
+ * 
+ * Stores an Enigma's full settings. 
  */
 package enigma;
 
