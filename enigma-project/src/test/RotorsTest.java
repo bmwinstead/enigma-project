@@ -17,6 +17,14 @@ public class RotorsTest {
 	
 	@Test
 	public void testEncrypt() {
+		// Test cases include most final system test cases that do
+		// not involve a plugboard. The expected results were created
+		// using either hand-encryption with a spreadsheet or Enigma
+		// simulators available online, and in all cases the output was 
+		// verified against multiple existent Enigma Simulators, due
+		// to the unlikelihood that multiple simulators "get it wrong" in the
+		// exact same way. The arrays are parallel and are intended to make
+		// adding new test cases easier. 
 		String[] inputString = { 
 				"AAAAA",
 				"AAAAA",
@@ -72,7 +80,24 @@ public class RotorsTest {
 		};
 		
 		// Walter Adolph - These were misaligned; the top init. was missing a zero. Fixed 11/21/2013.
-		int[] reflectorChoices = {0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 2, 3};
+		// JLI - Now aligned vertically to make commenting out a single case easier
+		int[] reflectorChoices = {
+				0, 
+				0, 
+				0, 
+				0, 
+				0, 
+				0, 
+				1, 
+				0, 
+				1, 
+				0, 
+				0, 
+				0, 
+				2, 
+				2, 
+				3
+		};
 		
 		char[][] positions = {
 				{'A', 'A', 'A'},
@@ -112,12 +137,16 @@ public class RotorsTest {
 		
 		Rotors[] rotors = new Rotors[reflectorChoices.length];
 		
+		// Create all Rotors instances.
 		for (int i = 0; i < rotors.length; i++) {
 			rotors[i] = new Rotors(rotorChoices[i], reflectorChoices[i]);
 			rotors[i].setPositions(positions[i]);
 			rotors[i].setRingSettings(ringSettings[i]);
 		}
 		
+		// Cycle through all test cases. Turn each input string into a
+		// character array to feed it to its corresponding Rotors. Turn the
+		// results back into a String to compare it with expected results. 
 		for (int i = 0; i < rotors.length; i++) {
 			char[] inputArray = inputString[i].toCharArray();
 			char[] outArray = new char[inputArray.length];
@@ -130,8 +159,8 @@ public class RotorsTest {
 			String loopName = "Loop " + String.valueOf(i);
 			
 			assertEquals(loopName, expectedResults[i], actual);
-		}
+		} // end loop-check
 		
-	}
+	} // end testEncrypt method
 
-}
+} // end RotorsTest class
