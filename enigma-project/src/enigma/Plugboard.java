@@ -1,5 +1,18 @@
 package enigma;
 
+/**
+ * 
+ * @author Brian Matthew Winstead
+ * @author Team Enigma
+ * @version 0.9
+ * 
+ * This class simulates the plugboard in the Enigma encryption machine. The
+ * plugboard was a simple two-way replacement cipher that was available
+ * on some Enigmas. The substitions were performed both during initial
+ * letter input (before processing by rotors and reflectors) and output (after
+ * processing). 
+ *
+ */
 public class Plugboard {
 
 	private char[][] plugboard;
