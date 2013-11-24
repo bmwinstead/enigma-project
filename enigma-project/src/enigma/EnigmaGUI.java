@@ -397,7 +397,7 @@ public class EnigmaGUI extends JFrame{
         JButton browseButton = new JButton("Browse...");
         buttonPanel.add(browseButton);
 
-        JButton encryptButton = new JButton("Encrypt");
+        JButton encryptButton = new JButton("Process");
         buttonPanel.add(encryptButton);
         
         encryptButton.addActionListener(new ActionListener() {
