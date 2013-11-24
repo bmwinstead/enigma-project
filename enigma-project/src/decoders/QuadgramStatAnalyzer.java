@@ -37,7 +37,7 @@ public class QuadgramStatAnalyzer {
 	
 	private Deque<EnigmaSettings> resultsList;		// Used to hold list of best results.
 	
-	private double bestValue;						// Best fitness score.
+	private double bestScore;						// Best fitness score.
 	private String messageResult;					// Best message.
 	
 	private Logger log;								// Log decryption attempt.
@@ -55,7 +55,7 @@ public class QuadgramStatAnalyzer {
 		bestResult = new EnigmaSettings();
 		resultsList = new LinkedList<EnigmaSettings>();
 		
-		bestValue = Double.NEGATIVE_INFINITY;
+		bestScore = Double.NEGATIVE_INFINITY;
 	}
 	
 	// Decrypt message.
@@ -87,7 +87,7 @@ public class QuadgramStatAnalyzer {
 		log.makeEntry("Best reflector: " + bestResult.printReflector(), true);
 		log.makeEntry("Ring settings: " + bestResult.printRingSettings(), true);
 		log.makeEntry("Rotor indicators: " + bestResult.printIndicators(), true);
-		log.makeEntry("Quadgram fitness score: " + bestValue, true);
+		log.makeEntry("Quadgram fitness score: " + bestScore, true);
 		
 		long endTime = System.currentTimeMillis();
 		log.makeEntry("Analysis took " + (endTime - startTime) + " milliseconds to complete.", true);
@@ -101,6 +101,8 @@ public class QuadgramStatAnalyzer {
 		for (int reflector = 0; reflector < 4; reflector++) {
 			log.makeEntry("Testing Reflector: " + reflector, true);
 			
+			// Reset best score to catch more candidates for each reflector.
+			bestScore = Double.NEGATIVE_INFINITY;
 			for (int i = 0; i < 5; i++) { // Left rotor.
 				for (int j = 0; j < 5; j++) { // Middle rotor.
 					if (i != j) { // Skip equal rotor selections.
@@ -144,9 +146,9 @@ public class QuadgramStatAnalyzer {
 					String cipher = bomb.encryptString(message);
 					double testValue = computeProbability(cipher);
 					
-					if (testValue > bestValue) {
+					if (testValue > bestScore) {
 						result = true;
-						bestValue = testValue;
+						bestScore = testValue;
 						
 						resultsList.add(new EnigmaSettings(rotors, rotorTestSettings, reflector));
 						
@@ -155,7 +157,7 @@ public class QuadgramStatAnalyzer {
 						bestResult.setReflector(reflector);
 						messageResult = cipher;
 						
-						log.makeEntry("Best rotor, reflector, and indicator fit value: " + bestValue, true);
+						log.makeEntry("Best rotor, reflector, and indicator fit value: " + bestScore, true);
 						log.makeEntry("Best wheel order: " + bestResult.printWheelOrder(), true);
 						log.makeEntry("Best reflector: " + bestResult.printReflector(), true);
 						log.makeEntry("Best rotor indicators: " + bestResult.printIndicators(), true);
@@ -208,17 +210,18 @@ public class QuadgramStatAnalyzer {
 					String cipher = bomb.encryptString(message);
 					double testValue = computeProbability(cipher);
 					
-					if (testValue > bestValue) {
+					if (testValue > bestScore) {
 						result = true;
 						
-						bestValue = testValue;
+						bestScore = testValue;
 						
+						bestResult.setRotors(settings.getRotors());
 						bestResult.setRingSettings(ringTestSettings);
 						bestResult.setIndicatorSettings(rotorTestSettings);
 						bestResult.setReflector(settings.getReflector());
 						messageResult = cipher;
 						
-						log.makeEntry("Best ring setting fit value: " + bestValue, true);
+						log.makeEntry("Best ring setting fit value: " + bestScore, true);
 						log.makeEntry("Best ring settings: " + bestResult.printRingSettings(), true);
 						log.makeEntry("Best rotor indicators: " + bestResult.printIndicators(), true);
 					} // End best result if
