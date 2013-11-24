@@ -2,7 +2,7 @@
  * QuadgramStatAnalyzer.java
  * @author - Walter Adolph
  * @date - Nov 21, 2013
- * This attempts to decrypt an Enigma message using quadgram statistics as described at the below websites:
+ * This attempts to decrypt an Enigma message using quadgram statistics algorithm as described at the below websites:
  * 
  * References:
  * http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/
@@ -10,6 +10,9 @@
  * 
  * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
  * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
+ * 
+ * Improvements:
+ * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
  * 
  * Limitations:
  * This method does not guarantee a correct result. Essentially, this algorithm is equivalent to a local maxima search in that it
