@@ -447,11 +447,10 @@ public class EnigmaGUI extends JFrame{
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
                         try {
-                            scanner = new Scanner(file);
+                            scanner = new Scanner(file).useDelimiter("\\Z");
                             while (scanner.hasNext()) {
                                         fileString = scanner.next();
                             }
-                            
                             outputTextArea.setText(newMachine.encryptString
                                     (fileString));
                         } 
