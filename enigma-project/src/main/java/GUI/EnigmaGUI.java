@@ -448,7 +448,7 @@ public class EnigmaGUI extends JFrame{
                         try {
                             scanner = new Scanner(file);
                             while (scanner.hasNext()) {
-                                        fileString += scanner.next();
+                                        fileString += scanner.next() + " ";
                             }
                             outputTextArea.setText(newMachine.encryptString
                                     (fileString));
