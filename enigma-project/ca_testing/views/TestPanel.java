@@ -262,8 +262,8 @@ public class TestPanel extends JFrame {
 					char leftLetter = mappings[index];
 					char rightLetter = mappings[index + 1];
 					
-					letters[leftLetter - 'a'] = rightLetter;
-					letters[rightLetter - 'a'] = leftLetter;
+					letters[leftLetter - 'A'] = rightLetter;
+					letters[rightLetter - 'A'] = leftLetter;
 				}
 				
 				int[] rotors = {leftRotorSelection, middleRotorSelection, rightRotorSelection};
@@ -381,6 +381,7 @@ public class TestPanel extends JFrame {
 					leftRotorTextField.setText("" + rotor[0]);
 					middleRotorTextField.setText("" + rotor[1]);
 					rightRotorTextField.setText("" + rotor[2]);
+					plugboardPairsTextField.setText(analyzer.getPlugboard());
 				}
 			}
 		});
