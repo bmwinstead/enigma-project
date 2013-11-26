@@ -1,4 +1,4 @@
-package nlp;
+package main.java.cryptanalysis.nlp;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

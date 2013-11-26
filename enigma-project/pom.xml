@@ -4,17 +4,6 @@
   <artifactId>enigma</artifactId>
   <version>1</version>
   <build>
-    <sourceDirectory>
-      ${basedir}/src
-    </sourceDirectory>
-    <testSourceDirectory>
-      ${basedir}/src/test
-    </testSourceDirectory>
-    <resources>
-     <resource>
-       <directory>${basedir}/src/images</directory>
-     </resource>
-   </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -32,7 +21,7 @@
       	<configuration>
           <archive>
             <manifest>
-              <mainClass>enigma.Enigma</mainClass>
+              <mainClass>main.java.gui.Enigma</mainClass>
             </manifest>
           </archive>
         </configuration>

@@ -20,14 +20,21 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
-import decoders.QuadgramStatAnalyzer;
-
+import main.java.cryptanalysis.nlp.CharacterParser;
+import main.java.cryptanalysis.nlp.Corpus;
+import main.java.enigma.EnigmaMachine;
 import misc.Logger;
-import nlp.CharacterParser;
-import nlp.Corpus;
-import enigma.EnigmaMachine;
+
 import javax.swing.SpinnerNumberModel;
+
 import java.awt.Dimension;
+import javax.swing.JProgressBar;
+
+import main.java.cryptanalysis.quadbomb.QuadbombManager;
+
+import java.awt.FlowLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -39,36 +46,28 @@ public class TestPanel extends JFrame {
 	private JTextField fileTextField;
 	
 	private Corpus database;
-	private JTextField outputTextField;
-	private JTextField leftRotorTextField;
-	private JTextField middleRotorTextField;
-	private JTextField rightRotorTextField;
 	private JSpinner leftRotorSelectionSpinner;
 	private JSpinner middleRotorSelectionSpinner;
 	private JSpinner rightRotorSelectionSpinner;
 	private JTextArea inputTextArea;
 	private JTextArea encryptedTextArea;
 	private JTextArea decryptedTextArea;
-	private JTextField leftRingTextField;
-	private JTextField middleRingTextField;
-	private JTextField rightRingTextField;
-	private JTextField plugboardPairsTextField;
 	private JSpinner leftRingSpinner;
 	private JSpinner middleRingSpinner;
 	private JSpinner rightRingSpinner;
 	
 	private String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private JTextField plugboardTextField;
-	private JTextField leftWheelTextField;
-	private JTextField middleWheelTextField;
-	private JTextField rightWheelTextField;
 	private JSpinner leftRotorSpinner;
 	private JSpinner middleRotorSpinner;
 	private JSpinner rightRotorSpinner;
 	private JSpinner reflectorSpinner;
-	private JTextField reflectorTextField;
 	
 	private Logger log;
+	private JSpinner threadCountSpinner;
+	private ResultsPanel resultsPanel;
+	private JProgressBar decryptProgressBar;
+	private JButton breakCodeButton;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
@@ -84,7 +83,7 @@ public class TestPanel extends JFrame {
 		
 		// Frame init. setup.
 		setTitle("Word Database Generator");
-		setSize(1000, 600);
+		setSize(895, 757);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -262,8 +261,8 @@ public class TestPanel extends JFrame {
 					char leftLetter = mappings[index];
 					char rightLetter = mappings[index + 1];
 					
-					letters[leftLetter - 'a'] = rightLetter;
-					letters[rightLetter - 'a'] = leftLetter;
+					letters[leftLetter - 'A'] = rightLetter;
+					letters[rightLetter - 'A'] = leftLetter;
 				}
 				
 				int[] rotors = {leftRotorSelection, middleRotorSelection, rightRotorSelection};
@@ -318,31 +317,48 @@ public class TestPanel extends JFrame {
 		
 		centerPanel.add(encryptButton);
 		
-		JPanel enceryptedPanel = new JPanel();
-		centerPanel.add(enceryptedPanel);
-		enceryptedPanel.setLayout(new BoxLayout(enceryptedPanel, BoxLayout.X_AXIS));
+		JPanel encryptedPanel = new JPanel();
+		centerPanel.add(encryptedPanel);
+		encryptedPanel.setLayout(new BoxLayout(encryptedPanel, BoxLayout.X_AXIS));
 		
 		JLabel lblNewLabel_3 = new JLabel("Encrypted Output:");
-		enceryptedPanel.add(lblNewLabel_3);
+		encryptedPanel.add(lblNewLabel_3);
 		
 		encryptedTextArea = new JTextArea();
 		encryptedTextArea.setWrapStyleWord(true);
 		encryptedTextArea.setLineWrap(true);
 		encryptedTextArea.setColumns(40);
 		encryptedTextArea.setRows(5);
-		enceryptedPanel.add(encryptedTextArea);
+		encryptedPanel.add(encryptedTextArea);
 		
 		JLabel lblNewLabel_5 = new JLabel("Decrypted Output:");
-		enceryptedPanel.add(lblNewLabel_5);
+		encryptedPanel.add(lblNewLabel_5);
 		
 		decryptedTextArea = new JTextArea();
 		decryptedTextArea.setLineWrap(true);
 		decryptedTextArea.setWrapStyleWord(true);
 		decryptedTextArea.setRows(5);
 		decryptedTextArea.setColumns(40);
-		enceryptedPanel.add(decryptedTextArea);
+		encryptedPanel.add(decryptedTextArea);
 		
-		JButton breakCodeButton = new JButton("Decrypt...");
+		JPanel decryptPanel = new JPanel();
+		centerPanel.add(decryptPanel);
+		
+		breakCodeButton = new JButton("Decrypt...");
+		decryptPanel.add(breakCodeButton);
+		
+		JLabel lblNewLabel_10 = new JLabel("Thread Limit:");
+		decryptPanel.add(lblNewLabel_10);
+		
+		threadCountSpinner = new JSpinner();
+		threadCountSpinner.setModel(new SpinnerNumberModel(2, 1, 16, 1));
+		decryptPanel.add(threadCountSpinner);
+		
+		JLabel lblNewLabel_11 = new JLabel("Progress:");
+		decryptPanel.add(lblNewLabel_11);
+		
+		decryptProgressBar = new JProgressBar();
+		decryptPanel.add(decryptProgressBar);
 		
 		// Decrypt an encrypted message.
 		breakCodeButton.addActionListener(new ActionListener() {
@@ -359,99 +375,33 @@ public class TestPanel extends JFrame {
 					// Init. log file for decryption attempt.
 					log.makeEntry("Starting quadgram analyser...", true);
 					
-					QuadgramStatAnalyzer analyzer = new QuadgramStatAnalyzer(database);
-					analyzer.decryptMessage(cipher);
+					//QuadgramStatAnalyzer analyzer = new QuadgramStatAnalyzer(database);
+					//analyzer.decryptMessage(cipher);
+					
+					int threadLimit = (int)(threadCountSpinner.getValue());
+					QuadbombManager analyzer = new QuadbombManager(database, cipher, threadLimit, resultsPanel);
+					
+					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent event) {
+							if (event.getPropertyName().equals("progress")) {
+								decryptProgressBar.setValue((Integer)event.getNewValue());
+							}
+						}
+					});
+					
+					analyzer.execute();
 					
 					log.makeEntry("Quadgram analyser finished.", true);
-					
-					String result = analyzer.getDecryptedMessage();
-					int[] wheel = analyzer.getRotorOrder();
-					char[] ring = analyzer.getRingSettings();
-					char[] rotor = analyzer.getRotorSettings();
-					
-					outputTextField.setText(result);
-					
-					leftWheelTextField.setText("" + (wheel[0] + 1));
-					middleWheelTextField.setText("" + (wheel[1] + 1));
-					rightWheelTextField.setText("" + (wheel[2] + 1));
-					reflectorTextField.setText("" + analyzer.getReflector());
-					leftRingTextField.setText("" + ring[0]);
-					middleRingTextField.setText("" + ring[1]);
-					rightRingTextField.setText("" + ring[2]);
-					leftRotorTextField.setText("" + rotor[0]);
-					middleRotorTextField.setText("" + rotor[1]);
-					rightRotorTextField.setText("" + rotor[2]);
 				}
 			}
 		});
 		
-		centerPanel.add(breakCodeButton);
-		
 		JPanel outputPanel = new JPanel();
 		getContentPane().add(outputPanel, BorderLayout.SOUTH);
-		outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.Y_AXIS));
+		outputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		outputTextField = new JTextField(80);
-		outputPanel.add(outputTextField);
-		
-		JPanel settingsPanel = new JPanel();
-		outputPanel.add(settingsPanel);
-		
-		JLabel lblNewLabel_2 = new JLabel("rotors:");
-		settingsPanel.add(lblNewLabel_2);
-		
-		leftWheelTextField = new JTextField();
-		settingsPanel.add(leftWheelTextField);
-		leftWheelTextField.setColumns(2);
-		
-		middleWheelTextField = new JTextField();
-		settingsPanel.add(middleWheelTextField);
-		middleWheelTextField.setColumns(2);
-		
-		rightWheelTextField = new JTextField();
-		settingsPanel.add(rightWheelTextField);
-		rightWheelTextField.setColumns(2);
-		
-		JLabel lblNewLabel_6 = new JLabel("reflector:");
-		settingsPanel.add(lblNewLabel_6);
-		
-		reflectorTextField = new JTextField();
-		settingsPanel.add(reflectorTextField);
-		reflectorTextField.setColumns(2);
-		
-		JLabel lblNewLabel_7 = new JLabel("rings:");
-		settingsPanel.add(lblNewLabel_7);
-		
-		leftRingTextField = new JTextField();
-		settingsPanel.add(leftRingTextField);
-		leftRingTextField.setColumns(2);
-		
-		middleRingTextField = new JTextField();
-		settingsPanel.add(middleRingTextField);
-		middleRingTextField.setColumns(2);
-		
-		rightRingTextField = new JTextField();
-		settingsPanel.add(rightRingTextField);
-		rightRingTextField.setColumns(2);
-		
-		JLabel lblNewLabel_8 = new JLabel("indicators:");
-		settingsPanel.add(lblNewLabel_8);
-		
-		leftRotorTextField = new JTextField(2);
-		settingsPanel.add(leftRotorTextField);
-		
-		middleRotorTextField = new JTextField(2);
-		settingsPanel.add(middleRotorTextField);
-		
-		rightRotorTextField = new JTextField(2);
-		settingsPanel.add(rightRotorTextField);
-		
-		JLabel lblNewLabel_9 = new JLabel("plugboard:");
-		settingsPanel.add(lblNewLabel_9);
-		
-		plugboardPairsTextField = new JTextField();
-		settingsPanel.add(plugboardPairsTextField);
-		plugboardPairsTextField.setColumns(30);
+		resultsPanel = new ResultsPanel();
+		outputPanel.add(resultsPanel);
 		
 		log.makeEntry("TestPanel initialized.", true);
 	}

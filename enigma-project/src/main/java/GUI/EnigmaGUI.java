@@ -1,4 +1,4 @@
-package enigma;
+package main.java.GUI;
 
 //This is currently block-out UI Design. 
 
@@ -27,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import main.java.enigma.EnigmaMachine;
 
 /**
  * 
@@ -117,13 +119,9 @@ public class EnigmaGUI extends JFrame{
         
         //Background Image
         ImageIcon bgImage;
-        try{
-        	bgImage = (new javax.swing.ImageIcon
-                (getClass().getResource("/images/backgroundImage.jpg")));
-        } catch(NullPointerException e){
-            bgImage = (new javax.swing.ImageIcon
-                    (getClass().getResource("backgroundImage.jpg")));
-        }
+        bgImage = (new javax.swing.ImageIcon
+                (getClass().getResource("/main/resources/images/backgroundImage.jpg")));
+
         JLabel backgroundImage = new JLabel(bgImage);
         backgroundImage.setBounds(0, 0, 700, 700);
         backgroundImage.setBorder(null);
@@ -446,10 +444,11 @@ public class EnigmaGUI extends JFrame{
                     
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
+                    	fileString = "";
                         try {
-                            scanner = new Scanner(file).useDelimiter("\\Z");
+                            scanner = new Scanner(file);
                             while (scanner.hasNext()) {
-                                        fileString = scanner.next();
+                                        fileString += scanner.next() + " ";
                             }
                             outputTextArea.setText(newMachine.encryptString
                                     (fileString));
@@ -495,10 +494,11 @@ public class EnigmaGUI extends JFrame{
                     
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
+                    	fileString = "";
                         try {
                             scanner = new Scanner(file);
                             while (scanner.hasNext()) {
-                                        fileString = scanner.next();
+                                        fileString += scanner.next() + " ";
                             }
                             
                             outputTextArea.setText(newFourMachine.encryptString

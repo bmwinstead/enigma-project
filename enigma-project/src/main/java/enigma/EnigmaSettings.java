@@ -5,16 +5,20 @@
  * @version - 0.9
  * @date - Nov 22, 2013
  * 
- * Stores an Enigma's full settings. 
+ * Wrapper class to store an Enigma machine's full settings.
+ * Also, this can be used to capture a candidate state for cryptanalysis testing.
  */
-package enigma;
+package main.java.enigma;
 
-public class EnigmaSettings {
+
+public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	private int[] rotors;
 	private int reflector;
 	private char[] ringSettings;
 	private char[] indicatorSettings;
 	private String plugboardMap;
+	
+	private double fitnessScore;
 	
 	// Constructor with all settings.
 	public EnigmaSettings(int[] newRotors, char[] newRingSettings, char[] newIndicatorSettings, int reflectorIndex, String newMap) {
@@ -23,6 +27,8 @@ public class EnigmaSettings {
 		indicatorSettings = newIndicatorSettings.clone();
 		reflector = reflectorIndex;
 		plugboardMap = newMap;
+		
+		fitnessScore = Double.NEGATIVE_INFINITY;
 	}
 	
 	// Constructor with no plugboard.
@@ -62,6 +68,28 @@ public class EnigmaSettings {
 		indicatorSettings = defaultSettings.clone();
 		reflector = 0;
 		plugboardMap = "";
+	}
+	
+	// Performs a deep copy of this object.
+	public EnigmaSettings copy() {
+		EnigmaSettings result = new EnigmaSettings(rotors, ringSettings, indicatorSettings, reflector, plugboardMap);
+		result.setFitnessScore(fitnessScore);
+		
+		return result;
+	}
+
+	/**
+	 * @return the fitnessScore
+	 */
+	public double getFitnessScore() {
+		return fitnessScore;
+	}
+
+	/**
+	 * @param fitnessScore the fitnessScore to set
+	 */
+	public void setFitnessScore(double fitnessScore) {
+		this.fitnessScore = fitnessScore;
 	}
 
 	/**
@@ -136,7 +164,7 @@ public class EnigmaSettings {
 
 	// Creates a new EnigmaMachine from the saved settings.
 	public EnigmaMachine createEnigmaMachine() {
-		return new EnigmaMachine(rotors.clone(), reflector, ringSettings.clone(), indicatorSettings.clone());
+		return new EnigmaMachine(rotors.clone(), reflector, ringSettings.clone(), indicatorSettings.clone(), plugboardMap);
 	}
 	
 	// Prints out the rotor order in a String.
@@ -167,5 +195,30 @@ public class EnigmaSettings {
 		default:
 			return "";
 		}
+	}
+	
+	public String printPlugboard() {
+		String result = "";
+		char[] value = plugboardMap.toCharArray();
+		
+		for (int index = 0; index < plugboardMap.length(); index++) {
+			result += "" + value[index];
+			
+			if (index % 2 != 0) {
+				result += " ";
+			}
+		}
+		
+		return result;
+	}
+
+	// Allows sorting by fitness score.
+	public int compareTo(EnigmaSettings settings) {
+		if (fitnessScore > settings.getFitnessScore())
+			return 1;
+		else if (fitnessScore < settings.getFitnessScore())
+			return -1;
+		else
+			return 0;
 	}
 }

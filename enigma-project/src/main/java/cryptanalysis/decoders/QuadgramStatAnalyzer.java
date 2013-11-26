@@ -10,6 +10,7 @@
  * 
  * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
  * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
+ * Step 3: Determine plugboard connections by brute force.
  * 
  * Improvements:
  * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
@@ -21,18 +22,20 @@
  * ring search is restricted to the candidate rotor settings. It is possible that the correct result is a combination of suboptimal
  * rotor and ring settings, and in these cases the algorithm is expected to fail.
  */
-package decoders;
+package main.java.cryptanalysis.decoders;
 
 import java.util.Calendar;
 import java.util.Deque;
 import java.util.LinkedList;
 
+
+import main.java.cryptanalysis.nlp.Corpus;
+import main.java.enigma.EnigmaMachine;
+import main.java.enigma.EnigmaSettings;
+import main.java.enigma.Plugboard;
+import main.java.enigma.Rotor;
+import main.java.enigma.Rotors;
 import misc.Logger;
-import nlp.Corpus;
-import enigma.EnigmaMachine;
-import enigma.EnigmaSettings;
-import enigma.Rotor;
-import enigma.Rotors;
 
 public class QuadgramStatAnalyzer {
 	private Corpus database;						// Gram database to get gram counts.
@@ -80,6 +83,7 @@ public class QuadgramStatAnalyzer {
 			log.makeEntry("Rotor indicators: " + candidate.printIndicators(), true);
 			
 			determineRingSettings(candidate, message);
+			//determinePlugboardSettings(candidate, message); Disabled pending testing.
 		}
 		
 		log.makeEntry("Quadgram analysis complete.", true);
@@ -90,10 +94,12 @@ public class QuadgramStatAnalyzer {
 		log.makeEntry("Best reflector: " + bestResult.printReflector(), true);
 		log.makeEntry("Ring settings: " + bestResult.printRingSettings(), true);
 		log.makeEntry("Rotor indicators: " + bestResult.printIndicators(), true);
+		log.makeEntry("Plugboard settings: " + bestResult.printPlugboard(), true);
 		log.makeEntry("Quadgram fitness score: " + bestScore, true);
 		
 		long endTime = System.currentTimeMillis();
 		log.makeEntry("Analysis took " + (endTime - startTime) + " milliseconds to complete.", true);
+		log.closeFile();
 	}
 	
 	// Step 1: Determine best possible rotor and reflector order.
@@ -101,7 +107,8 @@ public class QuadgramStatAnalyzer {
 		log.makeEntry("Determining rotor order...", false);
 		long startTime = System.currentTimeMillis();
 		
-		for (int reflector = 0; reflector < 4; reflector++) {
+		// TODO: Chenge reflector counts back once complete with plugboard testing.
+		for (int reflector = 0; reflector < 1; reflector++) {
 			log.makeEntry("Testing Reflector: " + reflector, true);
 			
 			// Reset best score to catch more candidates for each reflector.
@@ -158,6 +165,8 @@ public class QuadgramStatAnalyzer {
 						bestResult.setRotors(rotors);
 						bestResult.setIndicatorSettings(rotorTestSettings);
 						bestResult.setReflector(reflector);
+						//bestResult.setPlugboardMap(settings.getPlugboardMap());
+						
 						messageResult = cipher;
 						
 						log.makeEntry("Best rotor, reflector, and indicator fit value: " + bestScore, true);
@@ -217,12 +226,17 @@ public class QuadgramStatAnalyzer {
 						result = true;
 						
 						bestScore = testValue;
-						
+					
 						bestResult.setRotors(settings.getRotors());
 						bestResult.setRingSettings(ringTestSettings);
 						bestResult.setIndicatorSettings(rotorTestSettings);
 						bestResult.setReflector(settings.getReflector());
+						bestResult.setPlugboardMap(settings.getPlugboardMap());
+						
 						messageResult = cipher;
+						
+						settings.setRingSettings(ringTestSettings);
+						settings.setIndicatorSettings(rotorTestSettings);
 						
 						log.makeEntry("Best ring setting fit value: " + bestScore, true);
 						log.makeEntry("Best ring settings: " + bestResult.printRingSettings(), true);
@@ -235,9 +249,94 @@ public class QuadgramStatAnalyzer {
 		log.makeEntry("Completed ring setting search.", true);
 		long endTime = System.currentTimeMillis();
 		log.makeEntry("Search took " + (endTime - startTime) + " milliseconds to complete.", false);
-		log.closeFile();
 		
 		return result;
+	}
+	
+	// Step 3: Determine plugboard settings.
+	public void determinePlugboardSettings(EnigmaSettings settings, String message) {
+		String result = "";
+		char[] candidates = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+		
+		char bestLeft;
+		char bestRight;
+		double controlValue;
+		
+		EnigmaMachine bomb = settings.createEnigmaMachine();
+		
+		log.makeEntry("Determining plugboard settings...", true);
+		
+		do { // while there are improvements to be found.
+			bestLeft = '!';
+			bestRight = '!';
+
+			// Compute control probability.
+			controlValue = computeProbability(bomb.encryptString(message));
+			bomb.reset();	// Reset for subsequent encryption.
+			
+			for (int left = 0; left < 26; left++) {
+				for (int right = 0; right < 26; right++) {
+					if (left != right && candidates[left] != '!' && candidates[right] != '!') {	// Ignore same letter combinations, and previously found steckers.
+						char testLeft = (char) ('A' + left);
+						char testRight = (char) ('A' + right);
+						
+						Plugboard testBoard = new Plugboard("" + testLeft + testRight);
+						
+						// Implement test plugboard pair.
+						String testMessage = "";
+						
+						for (char character: message.toCharArray()) {
+							testMessage += testBoard.matchChar(character);
+						}
+						
+						String cipher = bomb.encryptString(testMessage);
+						bomb.reset();
+						testMessage = "";
+						
+						// Reverse test plugboard pair.
+						for (char character: cipher.toCharArray()) {
+							testMessage += testBoard.matchChar(character);
+						}
+						
+						// Compute test probability.
+						double testValue = computeProbability(testMessage);
+						
+						// Find best plugboard pair.
+						if (testValue > controlValue) {
+							controlValue = testValue;
+							bestLeft = testLeft;
+							bestRight = testRight;
+						} // End best value saving if
+					} // End invalid combination rejection if
+				} // End right letter for
+			} // End left letter for
+			
+			// If improvements are found over the original decryption save the best result of the pass and remove the candidates.
+			if (bestLeft != '!' && bestRight != '!') {
+				log.makeEntry("Found plugboard pair: " + bestLeft + bestRight, true);
+				result += "" + bestLeft + bestRight;
+				candidates[bestLeft - 'A'] = '!';
+				candidates[bestRight - 'A'] = '!';
+				settings.setPlugboardMap(result);
+				
+				bomb = settings.createEnigmaMachine();
+			}
+		} while (bestLeft != '!' && bestRight != '!'); // Continue until no further gain in fitness can be achieved.
+		
+		if (controlValue > bestScore) {
+			bestScore = controlValue;
+		
+			bestResult.setRotors(settings.getRotors());
+			bestResult.setRingSettings(settings.getRingSettings());
+			bestResult.setIndicatorSettings(settings.getIndicatorSettings());
+			bestResult.setReflector(settings.getReflector());
+			bestResult.setPlugboardMap(settings.getPlugboardMap());
+			
+			messageResult = bomb.encryptString(message);
+			
+			log.makeEntry("Best plugboard setting fit value: " + bestScore, true);
+			log.makeEntry("Best plugboard settings: " + bestResult.getPlugboardMap(), true);
+		} // End best result if
 	}
 	
 	// Compute log probability of a message compared to a corpus.
@@ -280,6 +379,10 @@ public class QuadgramStatAnalyzer {
 	
 	public char[] getRotorSettings() {
 		return bestResult.getIndicatorSettings();
+	}
+	
+	public String getPlugboard() {
+		return bestResult.getPlugboardMap();
 	}
 	
 	public String getDecryptedMessage() {

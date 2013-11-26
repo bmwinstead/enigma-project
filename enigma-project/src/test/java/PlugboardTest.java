@@ -1,8 +1,9 @@
-package test;
+package test.java;
 
 import static org.junit.Assert.*;
+import main.java.enigma.Plugboard;
+
 import org.junit.Test;
-import enigma.Plugboard;
 
 /**
  * Plugboard test. Verifies all methods in the Plugboard class work and behave

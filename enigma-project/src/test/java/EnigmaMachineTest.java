@@ -1,9 +1,9 @@
-package test;
+package test.java;
 
 import static org.junit.Assert.*;
+import main.java.enigma.EnigmaMachine;
 
 import org.junit.Test;
-import enigma.EnigmaMachine;
 
 /**
  * EnigmaMachine test. Verifies all methods in the EnigmaMachine class work 

@@ -6,7 +6,7 @@
  * 1, 2, and 3 word grams are analyzed, with numerals handled individually on a separate case.
  * Punctuation is currently ignored.
  */
-package nlp;
+package main.java.cryptanalysis.nlp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
