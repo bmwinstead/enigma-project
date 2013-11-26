@@ -136,7 +136,7 @@ public class EnigmaSettings {
 
 	// Creates a new EnigmaMachine from the saved settings.
 	public EnigmaMachine createEnigmaMachine() {
-		return new EnigmaMachine(rotors.clone(), reflector, ringSettings.clone(), indicatorSettings.clone());
+		return new EnigmaMachine(rotors.clone(), reflector, ringSettings.clone(), indicatorSettings.clone(), plugboardMap);
 	}
 	
 	// Prints out the rotor order in a String.
@@ -167,5 +167,20 @@ public class EnigmaSettings {
 		default:
 			return "";
 		}
+	}
+	
+	public String printPlugboard() {
+		String result = "";
+		char[] value = plugboardMap.toCharArray();
+		
+		for (int index = 0; index < plugboardMap.length(); index++) {
+			result += "" + value[index];
+			
+			if (index % 2 != 0) {
+				result += " ";
+			}
+		}
+		
+		return result;
 	}
 }
