@@ -7,7 +7,7 @@
  * 
  * Stores an Enigma's full settings. 
  */
-package enigma;
+package main.java.enigma;
 
 public class EnigmaSettings {
 	private int[] rotors;

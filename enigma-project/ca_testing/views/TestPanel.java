@@ -20,13 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.UIManager;
 
-import decoders.QuadgramStatAnalyzer;
-
+import main.java.cryptanalysis.decoders.QuadgramStatAnalyzer;
+import main.java.cryptanalysis.nlp.CharacterParser;
+import main.java.cryptanalysis.nlp.Corpus;
+import main.java.enigma.EnigmaMachine;
 import misc.Logger;
-import nlp.CharacterParser;
-import nlp.Corpus;
-import enigma.EnigmaMachine;
+
 import javax.swing.SpinnerNumberModel;
+
 import java.awt.Dimension;
 
 // Testing GUI interface for word demonstration.

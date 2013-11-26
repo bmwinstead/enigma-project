@@ -1,8 +1,9 @@
-package test;
+package test.java;
 
 import static org.junit.Assert.*;
+import main.java.enigma.Rotors;
+
 import org.junit.Test;
-import enigma.Rotors;
 
 /**
  * Rotors test. Verifies all methods in the Rotors class work and behave

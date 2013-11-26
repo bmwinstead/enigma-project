@@ -6,7 +6,7 @@
  * 1, 2, 3 and 4 character grams are analyzed.
  * Punctuation is ignored.
  */
-package nlp;
+package main.java.cryptanalysis.nlp;
 
 import java.io.File;
 import java.io.FileNotFoundException;

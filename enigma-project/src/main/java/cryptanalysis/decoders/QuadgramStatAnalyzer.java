@@ -22,19 +22,19 @@
  * ring search is restricted to the candidate rotor settings. It is possible that the correct result is a combination of suboptimal
  * rotor and ring settings, and in these cases the algorithm is expected to fail.
  */
-package decoders;
+package main.java.cryptanalysis.decoders;
 
 import java.util.Calendar;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import main.java.cryptanalysis.nlp.Corpus;
+import main.java.enigma.EnigmaMachine;
+import main.java.enigma.EnigmaSettings;
+import main.java.enigma.Plugboard;
+import main.java.enigma.Rotor;
+import main.java.enigma.Rotors;
 import misc.Logger;
-import nlp.Corpus;
-import enigma.EnigmaMachine;
-import enigma.EnigmaSettings;
-import enigma.Plugboard;
-import enigma.Rotor;
-import enigma.Rotors;
 
 public class QuadgramStatAnalyzer {
 	private Corpus database;						// Gram database to get gram counts.
