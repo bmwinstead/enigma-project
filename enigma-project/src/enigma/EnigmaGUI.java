@@ -1,5 +1,7 @@
 package enigma;
 
+//This is currently block-out UI Design. 
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -445,12 +447,12 @@ public class EnigmaGUI extends JFrame{
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
                         try {
-                            scanner = new Scanner(file).useDelimiter("\\z");
+                            scanner = new Scanner(file).useDelimiter("\\Z");
                             while (scanner.hasNext()) {
-                            	fileString = scanner.next();
+                                        fileString = scanner.next();
                             }
                             outputTextArea.setText(newMachine.encryptString
-                                    (fileString.toUpperCase()));
+                                    (fileString));
                         } 
                         catch (FileNotFoundException ex) {
                             Logger.getLogger(EnigmaGUI.class.getName()).log
@@ -458,8 +460,7 @@ public class EnigmaGUI extends JFrame{
                         }
                     }
                     else{
-                        outputTextArea.setText(newMachine.encryptString
-                        		(text.toUpperCase()));
+                        outputTextArea.setText(newMachine.encryptString(text));
                     }
                 }
                 else { //All 4 Rotors selected
@@ -495,13 +496,13 @@ public class EnigmaGUI extends JFrame{
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
                         try {
-                            scanner = new Scanner(file).useDelimiter("\\z");
+                            scanner = new Scanner(file);
                             while (scanner.hasNext()) {
-                            	fileString = scanner.next();
+                                        fileString = scanner.next();
                             }
                             
                             outputTextArea.setText(newFourMachine.encryptString
-                                    (fileString.toUpperCase()));
+                                    (fileString));
                         } 
                         catch (FileNotFoundException ex) {
                             Logger.getLogger(EnigmaGUI.class.getName()).log
@@ -509,8 +510,7 @@ public class EnigmaGUI extends JFrame{
                         }
                     }
                     else{
-                        outputTextArea.setText(newFourMachine.encryptString
-                        		(text.toUpperCase()));
+                        outputTextArea.setText(newFourMachine.encryptString(text));
                     }
                 }
             }
@@ -755,4 +755,5 @@ public class EnigmaGUI extends JFrame{
             }
         }
     }
+
 }
