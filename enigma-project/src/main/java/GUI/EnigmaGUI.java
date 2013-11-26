@@ -444,10 +444,11 @@ public class EnigmaGUI extends JFrame{
                     
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
+                    	fileString = "";
                         try {
-                            scanner = new Scanner(file).useDelimiter("\\Z");
+                            scanner = new Scanner(file);
                             while (scanner.hasNext()) {
-                                        fileString = scanner.next();
+                                        fileString += scanner.next();
                             }
                             outputTextArea.setText(newMachine.encryptString
                                     (fileString));
@@ -493,10 +494,11 @@ public class EnigmaGUI extends JFrame{
                     
                     //Check if text box is used
                     if (fileTextField.getText().length() > 0){
+                    	fileString = "";
                         try {
                             scanner = new Scanner(file);
                             while (scanner.hasNext()) {
-                                        fileString = scanner.next();
+                                        fileString += scanner.next() + " ";
                             }
                             
                             outputTextArea.setText(newFourMachine.encryptString
