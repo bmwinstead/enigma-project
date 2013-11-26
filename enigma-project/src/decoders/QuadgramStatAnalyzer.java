@@ -10,6 +10,7 @@
  * 
  * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
  * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
+ * Step 3: Determine plugboard connections by brute force.
  * 
  * Improvements:
  * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
@@ -158,6 +159,8 @@ public class QuadgramStatAnalyzer {
 						bestResult.setRotors(rotors);
 						bestResult.setIndicatorSettings(rotorTestSettings);
 						bestResult.setReflector(reflector);
+						//bestResult.setPlugboardMap(settings.getPlugboardMap());
+						
 						messageResult = cipher;
 						
 						log.makeEntry("Best rotor, reflector, and indicator fit value: " + bestScore, true);
@@ -217,11 +220,13 @@ public class QuadgramStatAnalyzer {
 						result = true;
 						
 						bestScore = testValue;
-						
+					
 						bestResult.setRotors(settings.getRotors());
 						bestResult.setRingSettings(ringTestSettings);
 						bestResult.setIndicatorSettings(rotorTestSettings);
 						bestResult.setReflector(settings.getReflector());
+						bestResult.setPlugboardMap(settings.getPlugboardMap());
+						
 						messageResult = cipher;
 						
 						log.makeEntry("Best ring setting fit value: " + bestScore, true);
@@ -238,6 +243,70 @@ public class QuadgramStatAnalyzer {
 		log.closeFile();
 		
 		return result;
+	}
+	
+	// Step 3: Determine plugboard settings.
+	public void determinePlugboardSettings(EnigmaSettings settings, String message) {
+		String result = "";
+		char[] candidates = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+		
+		char bestLeft;
+		char bestRight;
+		double bestValue = Double.NEGATIVE_INFINITY;
+		
+		EnigmaMachine bomb = settings.createEnigmaMachine();
+		
+		do { // while there are improvements to be found.
+			bestLeft = '!';
+			bestRight = '!';
+			bestValue = Double.NEGATIVE_INFINITY;
+			
+			for (int left = 0; left < 26; left++) {
+				for (int right = 0; right < 26; left++) {
+					if (left != right && candidates[left] != '!' && candidates[right] != '!') {	// Ignore same letter combinations, and previously found steckers.
+						char testLeft = (char) ('A' + left);
+						char testRight = (char) ('A' + right);
+						
+						String testMessage = message.replace(testLeft, testRight);
+						String cipher = bomb.encryptString(testMessage);
+						
+						double testValue = computeProbability(cipher);
+						
+						if (testValue > bestValue) {
+							bestValue = testValue;
+							bestLeft = testLeft;
+							bestRight = testRight;
+						} // End best value saving if
+					} // End invalid combination rejection if
+				} // End right letter for
+			} // End left letter for
+			
+			// If improvements are found save the best result of the pass and remove the candidates.
+			if (bestLeft != '!' && bestRight != '!') {
+				result += bestLeft + bestRight;
+				candidates[bestLeft - 'A'] = '!';
+				candidates[bestRight - 'A'] = '!';
+				settings.setPlugboardMap(result);
+				
+				bomb = settings.createEnigmaMachine();
+			}
+		} while (bestLeft != '!' && bestRight != '!');
+		
+		if (bestValue > bestScore) {
+			bestScore = bestValue;
+		
+			bestResult.setRotors(settings.getRotors());
+			bestResult.setRingSettings(settings.getRingSettings());
+			bestResult.setIndicatorSettings(settings.getIndicatorSettings());
+			bestResult.setReflector(settings.getReflector());
+			bestResult.setPlugboardMap(settings.getPlugboardMap());
+			
+			messageResult = bomb.encryptString(message);
+			
+			log.makeEntry("Best ring setting fit value: " + bestScore, true);
+			log.makeEntry("Best ring settings: " + bestResult.printRingSettings(), true);
+			log.makeEntry("Best rotor indicators: " + bestResult.printIndicators(), true);
+		} // End best result if
 	}
 	
 	// Compute log probability of a message compared to a corpus.
