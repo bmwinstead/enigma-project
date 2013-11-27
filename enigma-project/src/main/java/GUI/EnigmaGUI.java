@@ -73,7 +73,7 @@ public class EnigmaGUI extends JFrame{
     JLayeredPane layeredPane = new JLayeredPane(); //Layering Magic
     private JLabel lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
     		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
-    		lightR, lightS, lightT,lightU, lightV, lightW, lightX, LightY, LightZ;
+    		lightR, lightS, lightT,lightU, lightV, lightW, lightX, lightY, lightZ;
     
     //Machine Options
     int[] threeRotorChoices = new int[3];
@@ -208,11 +208,114 @@ public class EnigmaGUI extends JFrame{
         lightK.setBorder(null);
         layeredPane.add(lightK, new Integer(0), 0);
         
-        //Insert L through Z here
+        ImageIcon plugLightL = (new javax.swing.ImageIcon //Light L
+                (getClass().getResource("/main/resources/images/l.jpg")));
+        lightL = new JLabel(plugLightL);
+        lightL.setBounds(312, 329, 342, 339);
+        lightL.setBorder(null);
+        layeredPane.add(lightL, new Integer(0), 0);
+        
+        ImageIcon plugLightM = (new javax.swing.ImageIcon //Light M
+                (getClass().getResource("/main/resources/images/m.jpg")));
+        lightM = new JLabel(plugLightM);
+        lightM.setBounds(289, 330, 319, 340);
+        lightM.setBorder(null);
+        layeredPane.add(lightM, new Integer(0), 0);
+        
+        ImageIcon plugLightN = (new javax.swing.ImageIcon //Light N
+                (getClass().getResource("/main/resources/images/n.jpg")));
+        lightN = new JLabel(plugLightN);
+        lightN.setBounds(265, 330, 295, 340);
+        lightN.setBorder(null);
+        layeredPane.add(lightN, new Integer(0), 0);
+        
+        ImageIcon plugLightO = (new javax.swing.ImageIcon //Light O
+                (getClass().getResource("/main/resources/images/o.jpg")));
+        lightO = new JLabel(plugLightO);
+        lightO.setBounds(316, 281, 336, 291);
+        lightO.setBorder(null);
+        layeredPane.add(lightO, new Integer(0), 0);
+        
+        ImageIcon plugLightP = (new javax.swing.ImageIcon //Light P
+                (getClass().getResource("/main/resources/images/p.jpg")));
+        lightP = new JLabel(plugLightP);
+        lightP.setBounds(131, 330, 141, 340);
+        lightP.setBorder(null);
+        layeredPane.add(lightP, new Integer(0), 0);
+        
+        ImageIcon plugLightQ = (new javax.swing.ImageIcon //Light Q
+                (getClass().getResource("/main/resources/images/q.jpg")));
+        lightQ = new JLabel(plugLightQ);
+        lightQ.setBounds(127, 281, 147, 291);
+        lightQ.setBorder(null);
+        layeredPane.add(lightQ, new Integer(0), 0);
+        
+        ImageIcon plugLightR = (new javax.swing.ImageIcon //Light R
+                (getClass().getResource("/main/resources/images/r.jpg")));
+        lightR = new JLabel(plugLightR);
+        lightR.setBounds(197, 281, 217, 291);
+        lightR.setBorder(null);
+        layeredPane.add(lightR, new Integer(0), 0);
+        
+        ImageIcon plugLightS = (new javax.swing.ImageIcon //Light S
+                (getClass().getResource("/main/resources/images/s.jpg")));
+        lightS = new JLabel(plugLightS);
+        lightS.setBounds(162, 304, 182, 315);
+        lightS.setBorder(null);
+        layeredPane.add(lightS, new Integer(0), 0);
+        
+        ImageIcon plugLightT = (new javax.swing.ImageIcon //Light T
+                (getClass().getResource("/main/resources/images/t.jpg")));
+        lightT = new JLabel(plugLightT);
+        lightT.setBounds(220, 281, 240, 291);
+        lightT.setBorder(null);
+        layeredPane.add(lightT, new Integer(0), 0);
+        
+        ImageIcon plugLightU = (new javax.swing.ImageIcon //Light U
+                (getClass().getResource("/main/resources/images/u.jpg")));
+        lightU = new JLabel(plugLightU);
+        lightU.setBounds(270, 281, 290, 291);
+        lightU.setBorder(null);
+        layeredPane.add(lightU, new Integer(0), 0);
+        
+        ImageIcon plugLightV = (new javax.swing.ImageIcon //Light V
+                (getClass().getResource("/main/resources/images/v.jpg")));
+        lightV = new JLabel(plugLightV);
+        lightV.setBounds(225, 330, 235, 340);
+        lightV.setBorder(null);
+        layeredPane.add(lightV, new Integer(0), 0);
+        
+        ImageIcon plugLightW = (new javax.swing.ImageIcon //Light W
+                (getClass().getResource("/main/resources/images/w.jpg")));
+        lightW = new JLabel(plugLightW);
+        lightW.setBounds(150, 281, 170, 291);
+        lightW.setBorder(null);
+        layeredPane.add(lightW, new Integer(0), 0);
+        
+        ImageIcon plugLightX = (new javax.swing.ImageIcon //Light X
+                (getClass().getResource("/main/resources/images/x.jpg")));
+        lightX = new JLabel(plugLightX);
+        lightX.setBounds(175, 330, 195, 340);
+        lightX.setBorder(null);
+        layeredPane.add(lightX, new Integer(0), 0);
+        
+        ImageIcon plugLightY = (new javax.swing.ImageIcon //Light Y
+                (getClass().getResource("/main/resources/images/y.jpg")));
+        lightY = new JLabel(plugLightY);
+        lightY.setBounds(150, 330, 170, 340);
+        lightY.setBorder(null);
+        layeredPane.add(lightY, new Integer(0), 0);
+        
+        ImageIcon plugLightZ = (new javax.swing.ImageIcon //Light Z
+                (getClass().getResource("/main/resources/images/z.jpg")));
+        lightZ = new JLabel(plugLightZ);
+        lightZ.setBounds(245, 281, 265, 291);
+        lightZ.setBorder(null);
+        layeredPane.add(lightZ, new Integer(0), 0);
         
         final JLabel[] lights = {lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
         		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
-        		lightR, lightS, lightT,lightU, lightV, lightW, lightX, LightY, LightZ};
+        		lightR, lightS, lightT,lightU, lightV, lightW, lightX, lightY, lightZ};
         
         //Rotor Boxes
         fourthRotorChoice = new JComboBox<String>(fourthRotorChoices);
@@ -548,15 +651,6 @@ public class EnigmaGUI extends JFrame{
                     }
                     else{
                         outputTextArea.setText(newMachine.encryptString(text));
-                        
-        				//Turn on the lights!
-                        int lightInt;
-                        lightInt = LightsOn(outputTextArea.getText());
-        				for(int i = 0; i < 2; i++){
-        		    		layeredPane.setLayer(lights[i], new Integer(0), 0);
-        		    	}
-        		    	layeredPane.setLayer(lights[lightInt], new Integer(3), 3);
-        		    	
                     }
                 }
                 else { //All 4 Rotors selected
@@ -610,6 +704,14 @@ public class EnigmaGUI extends JFrame{
                         outputTextArea.setText(newFourMachine.encryptString(text));
                     }
                 }
+                
+                //Turn on the lights!
+                int lightInt;
+                lightInt = LightsOn(outputTextArea.getText());
+				for(int i = 0; i < 26; i++){
+		    		layeredPane.setLayer(lights[i], new Integer(0), 0);
+		    	}
+		    	layeredPane.setLayer(lights[lightInt], new Integer(3), 3);
             }
         });
         browseButton.addActionListener(new ActionListener() {
