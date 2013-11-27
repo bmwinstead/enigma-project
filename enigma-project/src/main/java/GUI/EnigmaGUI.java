@@ -206,7 +206,7 @@ public class EnigmaGUI extends JFrame{
         lightK = new JLabel(plugLightK);
         lightK.setBounds(298, 304, 328, 315);
         lightK.setBorder(null);
-        layeredPane.add(lightK, new Integer(3), 3);
+        layeredPane.add(lightK, new Integer(0), 0);
         
         //Insert L through Z here
         
