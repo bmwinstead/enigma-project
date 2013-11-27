@@ -70,6 +70,10 @@ public class EnigmaGUI extends JFrame{
     private JTextArea inputTextArea;
     private JTextArea outputTextArea;
     private JTextField fileTextField;
+    JLayeredPane layeredPane = new JLayeredPane(); //Layering Magic
+    private JLabel lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
+    		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
+    		lightR, lightS, lightT,lightU, lightV, lightW, lightX, LightY, LightZ;
     
     //Machine Options
     int[] threeRotorChoices = new int[3];
@@ -112,8 +116,7 @@ public class EnigmaGUI extends JFrame{
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        //New Layered Pane (The art magic!)
-        JLayeredPane layeredPane = new JLayeredPane();
+        //Layered Pane (The art magic!)
         layeredPane.setPreferredSize(new Dimension(700, 700));
         add(layeredPane, BorderLayout.CENTER);
         
@@ -121,12 +124,93 @@ public class EnigmaGUI extends JFrame{
         ImageIcon bgImage;
         bgImage = (new javax.swing.ImageIcon
                 (getClass().getResource("/main/resources/images/backgroundImage.jpg")));
-
         JLabel backgroundImage = new JLabel(bgImage);
         backgroundImage.setBounds(0, 0, 700, 700);
         backgroundImage.setBorder(null);
         backgroundImage.setOpaque(true);
         layeredPane.add(backgroundImage, new Integer(1), 1);
+        
+        //Light board Icons for "lit up" design
+        ImageIcon plugLightA = (new javax.swing.ImageIcon //Light A
+                (getClass().getResource("/main/resources/images/a.jpg")));
+        lightA = new JLabel(plugLightA);
+        lightA.setBounds(140, 305, 160, 316);
+        lightA.setBorder(null);
+        layeredPane.add(lightA, new Integer(0), 0);
+        
+        ImageIcon plugLightB = (new javax.swing.ImageIcon //Light B
+                (getClass().getResource("/main/resources/images/b.jpg")));
+        lightB = new JLabel(plugLightB);
+        lightB.setBounds(245, 330, 265, 340);
+        lightB.setBorder(null);
+        layeredPane.add(lightB, new Integer(0), 0);
+        
+        ImageIcon plugLightC = (new javax.swing.ImageIcon //Light C
+                (getClass().getResource("/main/resources/images/c.jpg")));
+        lightC = new JLabel(plugLightC);
+        lightC.setBounds(201, 330, 211, 340);
+        lightC.setBorder(null);
+        layeredPane.add(lightC, new Integer(0), 0);
+        
+        ImageIcon plugLightD = (new javax.swing.ImageIcon //Light D
+                (getClass().getResource("/main/resources/images/d.jpg")));
+        lightD = new JLabel(plugLightD);
+        lightD.setBounds(185, 305, 205, 316);
+        lightD.setBorder(null);
+        layeredPane.add(lightD, new Integer(0), 0);
+        
+        ImageIcon plugLightE = (new javax.swing.ImageIcon //Light E
+                (getClass().getResource("/main/resources/images/e.jpg")));
+        lightE = new JLabel(plugLightE);
+        lightE.setBounds(175, 281, 195, 291);
+        lightE.setBorder(null);
+        layeredPane.add(lightE, new Integer(0), 0);
+        
+        ImageIcon plugLightF = (new javax.swing.ImageIcon //Light F
+                (getClass().getResource("/main/resources/images/f.jpg")));
+        lightF = new JLabel(plugLightF);
+        lightF.setBounds(210, 305, 230, 316);
+        lightF.setBorder(null);
+        layeredPane.add(lightF, new Integer(0), 0);
+        
+        ImageIcon plugLightG = (new javax.swing.ImageIcon //Light G
+                (getClass().getResource("/main/resources/images/g.jpg")));
+        lightG = new JLabel(plugLightG);
+        lightG.setBounds(230, 305, 260, 316);
+        lightG.setBorder(null);
+        layeredPane.add(lightG, new Integer(0), 0);
+        
+        ImageIcon plugLightH = (new javax.swing.ImageIcon //Light H
+                (getClass().getResource("/main/resources/images/h.jpg")));
+        lightH = new JLabel(plugLightH);
+        lightH.setBounds(252, 304, 282, 315);
+        lightH.setBorder(null);
+        layeredPane.add(lightH, new Integer(0), 0);
+        
+        ImageIcon plugLightI = (new javax.swing.ImageIcon //Light I
+                (getClass().getResource("/main/resources/images/i.jpg")));
+        lightI = new JLabel(plugLightI);
+        lightI.setBounds(292, 281, 312, 291);
+        lightI.setBorder(null);
+        layeredPane.add(lightI, new Integer(0), 0);
+        
+        ImageIcon plugLightJ = (new javax.swing.ImageIcon //Light J
+                (getClass().getResource("/main/resources/images/j.jpg")));
+        lightJ = new JLabel(plugLightJ);
+        lightJ.setBounds(278, 304, 308, 315);
+        lightJ.setBorder(null);
+        layeredPane.add(lightJ, new Integer(0), 0);
+        
+        ImageIcon plugLightK = (new javax.swing.ImageIcon //Light K
+                (getClass().getResource("/main/resources/images/k.jpg")));
+        lightK = new JLabel(plugLightK);
+        lightK.setBounds(298, 304, 328, 315);
+        lightK.setBorder(null);
+        layeredPane.add(lightK, new Integer(3), 3);
+        
+        final JLabel[] lights = {lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
+        		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
+        		lightR, lightS, lightT,lightU, lightV, lightW, lightX, LightY, LightZ};
         
         //Rotor Boxes
         fourthRotorChoice = new JComboBox<String>(fourthRotorChoices);
@@ -398,12 +482,14 @@ public class EnigmaGUI extends JFrame{
         JButton encryptButton = new JButton("Process");
         buttonPanel.add(encryptButton);
         
+        //Action Listener for encrypt
         encryptButton.addActionListener(new ActionListener() {
             private Scanner scanner;
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-		File file = new File(fileTextField.getText());
+				
+				File file = new File(fileTextField.getText());
                 String text = inputTextArea.getText();
                 
                 //Set plugboard map to string
@@ -460,6 +546,15 @@ public class EnigmaGUI extends JFrame{
                     }
                     else{
                         outputTextArea.setText(newMachine.encryptString(text));
+                        
+        				//Turn on the lights!
+                        int lightInt;
+                        lightInt = LightsOn(outputTextArea.getText());
+        				for(int i = 0; i < 2; i++){
+        		    		layeredPane.setLayer(lights[i], new Integer(0), 0);
+        		    	}
+        		    	layeredPane.setLayer(lights[lightInt], new Integer(3), 3);
+        		    	
                     }
                 }
                 else { //All 4 Rotors selected
@@ -755,5 +850,14 @@ public class EnigmaGUI extends JFrame{
             }
         }
     }
-
+    //Set the lightboard lights
+    public int LightsOn(String lightString){
+    	int toReturn = 0;
+    	for (int i = 0; i < 26; i++){
+    		if (lightString.substring(lightString.length() - 1).equals(letterChoices[i])){
+    			toReturn = i;
+    		}
+    	}
+		return toReturn;
+    }
 }
