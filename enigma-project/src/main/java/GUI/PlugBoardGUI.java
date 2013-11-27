@@ -75,7 +75,8 @@ public class PlugBoardGUI extends JFrame
 			plugs[i] = plug;
         }
         
-        setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
+        // JLI Commented out so that we can close the extra window when creating encrypted messages, etc.
+        // setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
         pack();
         setLocationRelativeTo ( null );
         setVisible ( true );

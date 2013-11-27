@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,31 @@ import javax.swing.event.ChangeListener;
 import main.java.GUI.EnigmaGUI;
 import main.java.enigma.EnigmaMachine;
 
+/**
+ * This testing tool creates large numbers of messages as encrypted by an Enigma
+ * Machine. The "Input Text Box" now acts as an entry point for a filename.
+ * ".txt" will automatically be appended to the file name, and the file will be
+ * placed in the test directory. The default filename is "multiEncryptOut.txt".
+ * The "Browse..." button can be used to upload a text file. Each line of text
+ * is treated as a different message when encrypted. The "Output Text Box" has
+ * been replaced with a dropdown containing multiple rotor settings reset
+ * options. "Reset" will reset the Enigma to the indicator settings displayed on
+ * the GUI after each encrypted message. "Don't Reset" will use whatever
+ * indicator settings are in the machine after the encryption of the most recent
+ * message. "Random" will encrypt the first message using the letters shown on
+ * the GUI, and then will choose 3 or 4 random letters for each subsequent line.
+ * In this mode, the indicator letters will be printed on the start of each line
+ * of the output file, before the message itself. There is no space between the
+ * indicator letters and the message. "First Letters" will ignore the GUI
+ * settings entirely and use the first three or four letters of each line of
+ * text as the indicator settings. These letters will NOT be encrypted as part
+ * of the message. A file produced by the "Random" setting can be decrypted
+ * using the "First Letters" setting, provided the rest of the proper key is
+ * entered.
+ * 
+ * @author J.Ikley
+ * 
+ */
 public class MessageMakerPanel extends JFrame{
     //GUI Elements
     private JComboBox<String> fourthRotorChoice;
@@ -88,7 +114,8 @@ public class MessageMakerPanel extends JFrame{
     String[] fourthLetterChoices = {"", "A", "B", "C", "D", "E", "F", "G", 
         "H", "I", "J", "K", "L", "M", "N","O", "P", "Q", "R", "S", "T", "U", 
         "V","W", "X", "Y", "Z"};
-    String[] resetOptionsChoices = {"Reset", "Don't Reset"};
+	String[] resetOptionsChoices = { "Reset", "Don't Reset", "Random",
+			"First Letters" };
 
     public MessageMakerPanel() {
         //GUI Set-Up
@@ -400,13 +427,8 @@ public class MessageMakerPanel extends JFrame{
                 plugboardMap = newBuilder.toString();
                 
                 // Get your Reset Option
-                boolean resetBool;
-                if(resetCBox.getSelectedIndex() == 0) {
-                	resetBool = true;
-                }
-                else {
-                	resetBool = false;
-                }
+                int resetOption = resetCBox.getSelectedIndex();
+        		Random random = new Random();
                 
                 if (fourthRotorChoice.getSelectedIndex() == 0){ //Check for #
                     threeRotorChoices[0] = leftRotorChoice.getSelectedIndex();
@@ -447,13 +469,44 @@ public class MessageMakerPanel extends JFrame{
                         	output = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
 
                             while (scanner.hasNextLine()) {
-                            	String outString = newMachine.encryptString(scanner.nextLine());
+                            	String inString = scanner.nextLine();
+                            	
+                            	// Use first 3 letters of line in file
+                            	if (resetOption == 3) {
+                            		// Make sure line has enough characters.
+                            		if (inString.length() >= 3) {
+                            			for (int i = 0; i < 3; i++) {
+                            				threeInitialPositions[i] = inString.charAt(i);
+                            			}
+                            			newMachine.setPositions(threeInitialPositions);
+                            			inString = inString.substring(3);
+                            		} // end for (int i = 0; i < 3; i++)
+                            	} // end first-3 resetOption.
+                            	
+                            	String outString = "";
+                            	
+                            	// If random option is used, print indicator.
+                            	if (resetOption == 2) {
+                            		outString += String.valueOf(threeInitialPositions);
+                            	}
+                            	
+                            	outString += newMachine.encryptString(inString);
                             	outString += "\r\n";
                             	output.append(outString);
-                            	if (resetBool) {
+                            	
+                            	// Reset to rotors to GUI position
+                            	if (resetOption == 0) {
                             		newMachine.reset();
-                            	}
-                            }
+                            	} 
+                            	// Set rotors to 3 random characters
+                            	else if (resetOption == 2) {
+                   		
+                            		for (int i = 0; i < 3; i++) {
+                            			threeInitialPositions[i] = (char) ('A' + random.nextInt(26)); 
+                            		} // end for (int i = 0; i < 3; i++)
+                            		newMachine.setPositions(threeInitialPositions);
+                            	} // end else if (resetOption == 2)
+                            } // end while (scanner.hasNextLine())
                             output.close();
                          } 
                         catch (FileNotFoundException ex) {
@@ -514,14 +567,43 @@ public class MessageMakerPanel extends JFrame{
                         	output = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
 
                             while (scanner.hasNextLine()) {
-                            	String outString = newFourMachine.encryptString(scanner.nextLine());
+                            	String inString = scanner.nextLine();
+                            	
+                            	// Use first 3 letters of line in file
+                            	if (resetOption == 3) {
+                            		// Make sure line has enough characters.
+                            		if (inString.length() >= 4) {
+                            			for (int i = 0; i < 4; i++) {
+                            				fourInitialPositions[i] = inString.charAt(i);
+                            			}
+                            			newFourMachine.setPositions(fourInitialPositions);
+                            			inString = inString.substring(3);
+                            		} // end for (int i = 0; i < 3; i++)
+                            	} // end first-3 resetOption.
+                            	
+                            	String outString = "";
+                            	
+                            	// If random option is used, print indicator.
+                            	if (resetOption == 2) {
+                            		outString += String.valueOf(fourInitialPositions);
+                            	}
+                            	
+                            	outString += newFourMachine.encryptString(inString);
                             	outString += "\r\n";
                             	output.append(outString);
-                            	if (resetBool) {
+                            	
+                            	// Reset to rotors to GUI position
+                            	if (resetOption == 0) {
                             		newFourMachine.reset();
-                            	}
-                                        
-                            }
+                            	} 
+                            	// Set rotors to 3 random characters
+                            	else if (resetOption == 2) {
+                            		for (int i = 0; i < 3; i++) {
+                            			fourInitialPositions[i] = (char) ('A' + random.nextInt(26)); 
+                            		} // end for (int i = 0; i < 3; i++)
+                            		newFourMachine.setPositions(fourInitialPositions);
+                            	} // end else if (resetOption == 2)
+                            } // end while (scanner.hasNextLine())
                             output.close();
                          } 
                         catch (FileNotFoundException ex) {
