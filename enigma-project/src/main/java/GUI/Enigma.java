@@ -1,5 +1,7 @@
 package main.java.GUI;
 
+import javax.swing.JFrame;
+
 /**
  * 
  * @author Ellen Ohlmacher
@@ -14,6 +16,11 @@ public class Enigma {
 
     public static void main(String[] args) {
         new Enigma();
+		RotorPanel r = new RotorPanel();
+		JFrame frame = new JFrame();
+		frame.add(r);
+		frame.pack();
+		frame.setVisible(true);
     }
     
     public Enigma(){
