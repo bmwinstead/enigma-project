@@ -208,6 +208,8 @@ public class EnigmaGUI extends JFrame{
         lightK.setBorder(null);
         layeredPane.add(lightK, new Integer(3), 3);
         
+        //Insert L through Z here
+        
         final JLabel[] lights = {lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
         		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
         		lightR, lightS, lightT,lightU, lightV, lightW, lightX, LightY, LightZ};
