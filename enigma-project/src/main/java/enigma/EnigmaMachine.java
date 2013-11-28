@@ -110,4 +110,18 @@ public class EnigmaMachine {
 	public void reset(){
 		rotors.setPositions(initPositions);
 	} // end reset method
+	
+	/**
+	 * Changes the initPositions of the EnigmaMachine to the new positions
+	 * provided, then resets the EnigmaMachine to the new positions. Useful for
+	 * testing.
+	 * 
+	 * @param newPositions
+	 *            3-4 character array representing the new positions the rotors
+	 *            are to be set to.
+	 */
+	public void setPositions(char[] newPositions) {
+		initPositions = newPositions;
+		reset();
+	} // end setPositions method
 } // end EnigmaMachine class

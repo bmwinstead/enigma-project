@@ -24,8 +24,7 @@ public class Enigma {
 		frame.add(r);
 		frame.pack();
 		frame.setVisible(true);
-		new PlugBoardGUI(); //New PlugBoard GUI
-
+		new PlugBoardGUI().setLocation(0,200); //New PlugBoard GUI
     }
     
     public Enigma(){
