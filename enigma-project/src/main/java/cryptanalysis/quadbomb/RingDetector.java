@@ -37,6 +37,7 @@ public class RingDetector implements Runnable {
 		char[] rotorTestSettings = new char[3];
 		char[] baseRotorSettings = settings.getIndicatorSettings();
 		
+		EnigmaSettings candidate = settings.copy();
 		double bestScore = Double.NEGATIVE_INFINITY;
 		
 		// Cycle through ring setting combinations.
@@ -68,17 +69,16 @@ public class RingDetector implements Runnable {
 					if (testValue > bestScore) {
 						bestScore = testValue;
 						
-						EnigmaSettings candidate = settings.copy();
 						candidate.setRingSettings(ringTestSettings);
 						candidate.setIndicatorSettings(rotorTestSettings);
 						candidate.setFitnessScore(testValue);
-						
-						// Save best indicator result into list for further processing.
-						resultsList.add(candidate);
 					} // End best result if
 				} // End right ring for
 			} // End middle ring for
 		} // End left ring for
+		
+		// Save best indicator result into list for further processing.
+		resultsList.add(candidate);
 		
 		latch.countDown();
 	} // End run()

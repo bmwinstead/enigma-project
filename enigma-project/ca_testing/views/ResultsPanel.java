@@ -33,6 +33,8 @@ public class ResultsPanel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		outputTextArea = new JTextArea();
+		outputTextArea.setLineWrap(true);
+		outputTextArea.setWrapStyleWord(true);
 		outputTextArea.setColumns(50);
 		outputTextArea.setRows(10);
 		add(outputTextArea);

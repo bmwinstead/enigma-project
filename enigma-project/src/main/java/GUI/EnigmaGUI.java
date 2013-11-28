@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -71,6 +72,7 @@ public class EnigmaGUI extends JFrame{
     private JTextArea outputTextArea;
     private JTextField fileTextField;
     JLayeredPane layeredPane = new JLayeredPane(); //Layering Magic
+    JFrame tempFrame = new JFrame(); //Temp frame for errors
     private JLabel lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
     		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
     		lightR, lightS, lightT,lightU, lightV, lightW, lightX, lightY, lightZ;
@@ -99,6 +101,9 @@ public class EnigmaGUI extends JFrame{
     //Rotor, Ring, Plugboard, and Reflector Strings
     String[] rotorChoices = {"ROTOR I","ROTOR II","ROTOR III","ROTOR IV", 
         "ROTOR V", "ROTOR VI", "ROTOR VII", "ROTOR VIII"};
+    String tempLeft = "ROTOR I";
+    String tempMiddle = "ROTOR II"; 
+    String tempRight = "ROTOR III";
     String[] fourthRotorChoices = {"","BETA","GAMMA"};
     String[] reflectorChoices = {"REFLECTOR B","REFLECTOR C",
         "REFLECTOR B THIN", "REFLECTOR C THIN"};
@@ -596,6 +601,8 @@ public class EnigmaGUI extends JFrame{
 				
 				File file = new File(fileTextField.getText());
                 String text = inputTextArea.getText();
+                text = configureOutput(text); //Convert Chars
+                inputTextArea.setText(text); //Set Input to converted
                 
                 //Set plugboard map to string
                 StringBuilder newBuilder = new StringBuilder();
@@ -641,6 +648,8 @@ public class EnigmaGUI extends JFrame{
                             while (scanner.hasNext()) {
                                         fileString += scanner.next() + " ";
                             }
+                            fileString = configureOutput(fileString); //Convert chars
+                            inputTextArea.setText(fileString); //Set Input to converted
                             outputTextArea.setText(newMachine.encryptString
                                     (fileString));
                         } 
@@ -691,7 +700,8 @@ public class EnigmaGUI extends JFrame{
                             while (scanner.hasNext()) {
                                         fileString += scanner.next() + " ";
                             }
-                            
+                            fileString = configureOutput(fileString); //Convert chars
+                            inputTextArea.setText(fileString); //Set Input to converted
                             outputTextArea.setText(newFourMachine.encryptString
                                     (fileString));
                         } 
@@ -910,7 +920,48 @@ public class EnigmaGUI extends JFrame{
                 }
             }
         });
-
+        leftRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (leftRotorChoice.getSelectedItem().equals(tempMiddle) ||
+                		leftRotorChoice.getSelectedItem().equals(tempRight)){
+                    leftRotorChoice.setSelectedItem(tempLeft);
+                    JOptionPane.showMessageDialog(tempFrame,
+    						"You cannot reuse rotor choices");
+                }
+                else {
+                	tempLeft = leftRotorChoice.getSelectedItem().toString();
+                }
+            }
+        });
+        middleRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (middleRotorChoice.getSelectedItem().equals(tempLeft) ||
+                		middleRotorChoice.getSelectedItem().equals(tempRight)){
+                	middleRotorChoice.setSelectedItem(tempMiddle);
+                	JOptionPane.showMessageDialog(tempFrame,
+    						"You cannot reuse rotor choices");
+                }
+                else {
+                	tempMiddle = middleRotorChoice.getSelectedItem().toString();
+                }
+            }
+        });
+        rightRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rightRotorChoice.getSelectedItem().equals(tempLeft) ||
+                		rightRotorChoice.getSelectedItem().equals(tempMiddle)){
+                	rightRotorChoice.setSelectedItem(tempRight);
+                	JOptionPane.showMessageDialog(tempFrame,
+    						"You cannot reuse rotor choices");
+                }
+                else {
+                	tempRight = rightRotorChoice.getSelectedItem().toString();
+                }
+            }
+        });
     }
     
     //Swap the plug board settings
@@ -963,5 +1014,63 @@ public class EnigmaGUI extends JFrame{
     		}
     	}
 		return toReturn;
+    }
+    //Change input to correct case & remove special characters
+	public String configureOutput(String getString){
+    	String setString = "";
+    	char[] swapChar = getString.toCharArray();
+    	if (!getString.isEmpty()){
+    		for(int i = 0; i < getString.length(); i++){
+    			if (Character.isLetter(swapChar[i])){
+    				setString += swapChar[i];
+    			}
+    			else if(Character.isDigit(swapChar[i])){
+    				if(swapChar[i] == '0'){
+    					swapChar[i] = 'P';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '1'){
+    					swapChar[i] = 'Q';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '2'){
+    					swapChar[i] = 'W';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '3'){
+    					swapChar[i] = 'E';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '4'){
+    					swapChar[i] = 'R';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '5'){
+    					swapChar[i] = 'T';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '6'){
+    					swapChar[i] = 'Z';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '7'){
+    					swapChar[i] = 'U';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '8'){
+    					swapChar[i] = 'I';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '9'){
+    					swapChar[i] = 'O';
+    					setString += swapChar[i];
+    				}
+    			}
+    		}
+    		return setString.toUpperCase();
+        }
+        else{
+        	return getString;
+        }
     }
 }
