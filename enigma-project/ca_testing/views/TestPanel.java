@@ -68,6 +68,7 @@ public class TestPanel extends JFrame {
 	private ResultsPanel resultsPanel;
 	private JProgressBar decryptProgressBar;
 	private JButton breakCodeButton;
+	private JSpinner candidateSpinner;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
@@ -83,7 +84,7 @@ public class TestPanel extends JFrame {
 		
 		// Frame init. setup.
 		setTitle("Word Database Generator");
-		setSize(895, 757);
+		setSize(950, 757);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -252,18 +253,7 @@ public class TestPanel extends JFrame {
 				String text = inputTextArea.getText().toUpperCase();
 				
 				// Init. plugboard.
-				char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-				
 				String plugboardMap = plugboardTextField.getText();
-				char[] mappings = plugboardMap.toCharArray();
-				
-				for (int index = 0; index < plugboardMap.length() - 1; index += 2) {
-					char leftLetter = mappings[index];
-					char rightLetter = mappings[index + 1];
-					
-					letters[leftLetter - 'A'] = rightLetter;
-					letters[rightLetter - 'A'] = leftLetter;
-				}
 				
 				int[] rotors = {leftRotorSelection, middleRotorSelection, rightRotorSelection};
 				int reflector = getReflectorIndex((String)(reflectorSpinner.getValue()));
@@ -271,7 +261,7 @@ public class TestPanel extends JFrame {
 				char[] ringSettings = {leftRingSetting, middleRingSetting, rightRingSetting};
 				char[] rotorSettings = {leftRotorSetting, middleRotorSetting, rightRotorSetting};
 				
-				EnigmaMachine machine = new EnigmaMachine(rotors, reflector, ringSettings, rotorSettings, String.valueOf(mappings));
+				EnigmaMachine machine = new EnigmaMachine(rotors, reflector, ringSettings, rotorSettings, String.valueOf(plugboardMap));
 
 				String cipher = machine.encryptString(text);
 				log.makeEntry("Encryption Complete.\r\n", true);
@@ -354,6 +344,13 @@ public class TestPanel extends JFrame {
 		threadCountSpinner.setModel(new SpinnerNumberModel(2, 1, 16, 1));
 		decryptPanel.add(threadCountSpinner);
 		
+		JLabel lblCandidateSize = new JLabel("Candidate Size:");
+		decryptPanel.add(lblCandidateSize);
+		
+		candidateSpinner = new JSpinner();
+		candidateSpinner.setModel(new SpinnerNumberModel(100, 100, 5000, 100));
+		decryptPanel.add(candidateSpinner);
+		
 		JLabel lblNewLabel_11 = new JLabel("Progress:");
 		decryptPanel.add(lblNewLabel_11);
 		
@@ -379,7 +376,8 @@ public class TestPanel extends JFrame {
 					//analyzer.decryptMessage(cipher);
 					
 					int threadLimit = (int)(threadCountSpinner.getValue());
-					QuadbombManager analyzer = new QuadbombManager(database, cipher, threadLimit, resultsPanel);
+					int candidateSize = (int)(candidateSpinner.getValue());
+					QuadbombManager analyzer = new QuadbombManager(database, cipher, threadLimit, candidateSize, resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {

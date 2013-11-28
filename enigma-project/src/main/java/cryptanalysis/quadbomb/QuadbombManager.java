@@ -44,10 +44,7 @@ import misc.Logger;
 import views.ResultsPanel;
 
 public class QuadbombManager extends SwingWorker<Long, Void> {
-	private static int CANDIDATE_SIZE = 3000;
-	private static int NUM_REFLECTORS = 4;
-	
-	private static int TOTAL_OPERATIONS = CANDIDATE_SIZE + CANDIDATE_SIZE + NUM_REFLECTORS * 60;
+	private static int NUM_REFLECTORS = 1;
 	
 	private final Corpus database;
 	private final String message;
@@ -55,6 +52,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private EnigmaSettings result;
 	
 	private int threadSize;
+	private int candidateSize;
+	
 	private ResultsPanel resultsPanel;
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
@@ -64,11 +63,13 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private Logger log;
 	
 	// Constructor.
-	public QuadbombManager(Corpus database, String message, int size, ResultsPanel panel) {
+	public QuadbombManager(Corpus database, String message, int threadSize, int candidateSize, ResultsPanel panel) {
 		this.database = database;
 		this.message = message;
 		
-		threadSize = size;
+		this.threadSize = threadSize;
+		this.candidateSize = candidateSize;
+		
 		resultsPanel = panel;
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
@@ -156,7 +157,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
-		/*
+		
 		// Trim candidate list.
 		trimCandidateList();
 		
@@ -187,7 +188,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Find best result and post.
 		log.makeEntry("Finding best result...", true);
-		*/
+		
 		long startSearchTime = System.currentTimeMillis();
 		
 		double bestScore = Double.NEGATIVE_INFINITY;
@@ -226,6 +227,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
 		resultsPanel.printSettings(result, decryptedMessage);
+		
 	}
 	
 	public void trimCandidateList() {
@@ -236,7 +238,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		candidateList.clear();
 		candidateList.addAll(resultsList);	// Sorts on adding.
 		
-		while (candidateList.size() > CANDIDATE_SIZE) {
+		while (candidateList.size() > candidateSize) {
 			candidateList.pollFirst();
 		}
 		
@@ -273,7 +275,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	}
 	
 	public void updateProgress(int progress) {
-		double percent = 100.0 * progress / TOTAL_OPERATIONS;
-		setProgress((int)percent);
+		//double percent = 100.0 * progress / TOTAL_OPERATIONS;
+		//setProgress((int)percent);
 	}
 }
