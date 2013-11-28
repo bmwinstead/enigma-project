@@ -596,6 +596,8 @@ public class EnigmaGUI extends JFrame{
 				
 				File file = new File(fileTextField.getText());
                 String text = inputTextArea.getText();
+                text = configureOutput(text); //Convert Chars
+                inputTextArea.setText(text); //Set Input to converted
                 
                 //Set plugboard map to string
                 StringBuilder newBuilder = new StringBuilder();
@@ -641,6 +643,8 @@ public class EnigmaGUI extends JFrame{
                             while (scanner.hasNext()) {
                                         fileString += scanner.next() + " ";
                             }
+                            fileString = configureOutput(fileString); //Convert chars
+                            inputTextArea.setText(fileString); //Set Input to converted
                             outputTextArea.setText(newMachine.encryptString
                                     (fileString));
                         } 
@@ -691,7 +695,8 @@ public class EnigmaGUI extends JFrame{
                             while (scanner.hasNext()) {
                                         fileString += scanner.next() + " ";
                             }
-                            
+                            fileString = configureOutput(fileString); //Convert chars
+                            inputTextArea.setText(fileString); //Set Input to converted
                             outputTextArea.setText(newFourMachine.encryptString
                                     (fileString));
                         } 
@@ -963,5 +968,63 @@ public class EnigmaGUI extends JFrame{
     		}
     	}
 		return toReturn;
+    }
+    //Change input to correct case & remove special characters
+	public String configureOutput(String getString){
+    	String setString = "";
+    	char[] swapChar = getString.toCharArray();
+    	if (!getString.isEmpty()){
+    		for(int i = 0; i < getString.length(); i++){
+    			if (Character.isLetter(swapChar[i])){
+    				setString += swapChar[i];
+    			}
+    			else if(Character.isDigit(swapChar[i])){
+    				if(swapChar[i] == '0'){
+    					swapChar[i] = 'P';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '1'){
+    					swapChar[i] = 'Q';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '2'){
+    					swapChar[i] = 'W';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '3'){
+    					swapChar[i] = 'E';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '4'){
+    					swapChar[i] = 'R';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '5'){
+    					swapChar[i] = 'T';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '6'){
+    					swapChar[i] = 'Z';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '7'){
+    					swapChar[i] = 'U';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '8'){
+    					swapChar[i] = 'I';
+    					setString += swapChar[i];
+    				}
+    				else if(swapChar[i] == '9'){
+    					swapChar[i] = 'O';
+    					setString += swapChar[i];
+    				}
+    			}
+    		}
+    		return setString.toUpperCase();
+        }
+        else{
+        	return getString;
+        }
     }
 }
