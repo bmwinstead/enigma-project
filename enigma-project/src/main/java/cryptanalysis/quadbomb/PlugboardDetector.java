@@ -39,17 +39,23 @@ public class PlugboardDetector implements Runnable {
 		char bestLeft;
 		char bestRight;
 		double controlValue;
-		double bestScore = Double.NEGATIVE_INFINITY;
 		//EnigmaMachine bomb = settings.createEnigmaMachine();
+		
+		EnigmaSettings testSettings = settings.copy();
+		EnigmaSettings candidate = settings.copy();
+		
+		if (settings.getFitnessScore() > -1000)
+			testSettings = settings.copy();
 		
 		do { // while there are improvements to be found.
 			bestLeft = '!';
 			bestRight = '!';
 			
 			// Compute control probability.
-			EnigmaMachine bomb = settings.createEnigmaMachine();
+			EnigmaMachine bomb = testSettings.createEnigmaMachine();
 			controlValue = manager.computeQuadgramProbability(bomb.encryptString(message));
-			//bomb.reset();	// Reset for subsequent encryption.
+
+			String currentPlugboard = testSettings.getPlugboardMap();
 			
 			for (int left = 0; left < 26; left++) {
 				for (int right = 0; right < 26; right++) {
@@ -57,32 +63,19 @@ public class PlugboardDetector implements Runnable {
 						char testLeft = (char) ('A' + left);
 						char testRight = (char) ('A' + right);
 						
-						Plugboard testBoard = new Plugboard("" + testLeft + testRight);
-						
 						// Implement test plugboard pair.
-						String testMessage = "";
 						
-						for (char character: message.toCharArray()) {
-							testMessage += testBoard.matchChar(character);
-						}
+						testSettings.setPlugboardMap(currentPlugboard + testLeft + testRight);
 						
-						bomb = settings.createEnigmaMachine();
-						String cipher = bomb.encryptString(testMessage);
-						//bomb.reset();
-						testMessage = "";
-						
-						// Reverse test plugboard pair.
-						for (char character: cipher.toCharArray()) {
-							testMessage += testBoard.matchChar(character);
-						}
+						bomb = testSettings.createEnigmaMachine();
+						String cipher = bomb.encryptString(message);
 						
 						// Compute test probability.
-						double testValue = manager.computeQuadgramProbability(testMessage);
+						double testValue = manager.computeQuadgramProbability(cipher);
 						
 						// Find best plugboard pair.
 						if (testValue > controlValue) {
 							controlValue = testValue;
-							bestScore = testValue;
 							bestLeft = testLeft;
 							bestRight = testRight;
 						} // End best value saving if
@@ -95,14 +88,12 @@ public class PlugboardDetector implements Runnable {
 				result += "" + bestLeft + bestRight;
 				candidates[bestLeft - 'A'] = '!';
 				candidates[bestRight - 'A'] = '!';
-				settings.setPlugboardMap(result);
-				
-				//bomb = settings.createEnigmaMachine();
+				testSettings.setPlugboardMap(result);
 			}
 		} while (bestLeft != '!' && bestRight != '!'); // Continue until no further gain in fitness can be achieved.
 		
-		EnigmaSettings candidate = settings.copy();
-		candidate.setFitnessScore(bestScore);
+		candidate.setPlugboardMap(result);
+		candidate.setFitnessScore(controlValue);
 		
 		// Save best indicator result into list for further processing.
 		resultsList.add(candidate);
