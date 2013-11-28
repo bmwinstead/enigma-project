@@ -1,0 +1,20 @@
+[Wed Nov 27 22:14:41 EST 2013] - Logger initialized.
+[Wed Nov 27 22:14:41 EST 2013] - Starting quadgram analysis...
+[Wed Nov 27 22:14:41 EST 2013] - Determining rotors, reflectors, and indicator settings...
+[Wed Nov 27 22:25:25 EST 2013] - Process completed in 644569 milliseconds.
+[Wed Nov 27 22:25:25 EST 2013] - Sorting candidate list...
+[Wed Nov 27 22:25:25 EST 2013] - Sorting completed in 21 milliseconds.
+[Wed Nov 27 22:25:25 EST 2013] - Determining ring settings...
+[Thu Nov 28 00:10:17 EST 2013] - Process completed in 6291394 milliseconds.
+[Thu Nov 28 00:10:17 EST 2013] - Search completed in 7 milliseconds.
+[Thu Nov 28 00:10:17 EST 2013] - Quadgram analysis complete.
+[Thu Nov 28 00:10:17 EST 2013] - Results:
+[Thu Nov 28 00:10:17 EST 2013] - Decrypted message: main.java.enigma.EnigmaSettings@133b7b68
+[Thu Nov 28 00:10:17 EST 2013] - Wheel order: 402
+[Thu Nov 28 00:10:17 EST 2013] - Best reflector: C
+[Thu Nov 28 00:10:17 EST 2013] - Ring settings: ALU
+[Thu Nov 28 00:10:17 EST 2013] - Rotor indicators: HRK
+[Thu Nov 28 00:10:17 EST 2013] - Plugboard settings: 
+[Thu Nov 28 00:10:17 EST 2013] - Quadgram fitness score: -1166.017161457714
+[Thu Nov 28 00:10:17 EST 2013] - Analysis took 6935996 milliseconds to complete.
+[Thu Nov 28 00:10:17 EST 2013] - Logger closed.
