@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -71,6 +72,7 @@ public class EnigmaGUI extends JFrame{
     private JTextArea outputTextArea;
     private JTextField fileTextField;
     JLayeredPane layeredPane = new JLayeredPane(); //Layering Magic
+    JFrame tempFrame = new JFrame(); //Temp frame for errors
     private JLabel lightA, lightB, lightC, lightD, lightE, lightF, lightG, lightH,
     		lightI, lightJ, lightK, lightL, lightM, lightN, lightO, lightP, lightQ,
     		lightR, lightS, lightT,lightU, lightV, lightW, lightX, lightY, lightZ;
@@ -99,6 +101,9 @@ public class EnigmaGUI extends JFrame{
     //Rotor, Ring, Plugboard, and Reflector Strings
     String[] rotorChoices = {"ROTOR I","ROTOR II","ROTOR III","ROTOR IV", 
         "ROTOR V", "ROTOR VI", "ROTOR VII", "ROTOR VIII"};
+    String tempLeft = "ROTOR I";
+    String tempMiddle = "ROTOR II"; 
+    String tempRight = "ROTOR III";
     String[] fourthRotorChoices = {"","BETA","GAMMA"};
     String[] reflectorChoices = {"REFLECTOR B","REFLECTOR C",
         "REFLECTOR B THIN", "REFLECTOR C THIN"};
@@ -915,7 +920,48 @@ public class EnigmaGUI extends JFrame{
                 }
             }
         });
-
+        leftRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (leftRotorChoice.getSelectedItem().equals(tempMiddle) ||
+                		leftRotorChoice.getSelectedItem().equals(tempRight)){
+                    leftRotorChoice.setSelectedItem(tempLeft);
+                    JOptionPane.showMessageDialog(tempFrame,
+    						"You cannot reuse rotor choices");
+                }
+                else {
+                	tempLeft = leftRotorChoice.getSelectedItem().toString();
+                }
+            }
+        });
+        middleRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (middleRotorChoice.getSelectedItem().equals(tempLeft) ||
+                		middleRotorChoice.getSelectedItem().equals(tempRight)){
+                	middleRotorChoice.setSelectedItem(tempMiddle);
+                	JOptionPane.showMessageDialog(tempFrame,
+    						"You cannot reuse rotor choices");
+                }
+                else {
+                	tempMiddle = middleRotorChoice.getSelectedItem().toString();
+                }
+            }
+        });
+        rightRotorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rightRotorChoice.getSelectedItem().equals(tempLeft) ||
+                		rightRotorChoice.getSelectedItem().equals(tempMiddle)){
+                	rightRotorChoice.setSelectedItem(tempRight);
+                	JOptionPane.showMessageDialog(tempFrame,
+    						"You cannot reuse rotor choices");
+                }
+                else {
+                	tempRight = rightRotorChoice.getSelectedItem().toString();
+                }
+            }
+        });
     }
     
     //Swap the plug board settings
