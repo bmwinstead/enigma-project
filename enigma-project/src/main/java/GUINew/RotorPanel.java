@@ -3,22 +3,26 @@ package main.java.GUINew;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class RotorPanel extends JPanel implements ActionListener,
-		ChangeListener {
-	//Constants
+		ChangeListener, Observer {
+	// Constants
 	private static final String[] rotorChoices = { "ROTOR I", "ROTOR II",
 			"ROTOR III", "ROTOR IV", "ROTOR V", "ROTOR VI", "ROTOR VII",
 			"ROTOR VIII" };
@@ -31,14 +35,14 @@ public class RotorPanel extends JPanel implements ActionListener,
 	private static final String[] fourthLetterChoices = { " ", "A", "B", "C",
 			"D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
 			"Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-	
-	//Machine state given by current choices. Initialized to default.
+
+	// Machine state given by current choices. Initialized to default.
 	private int[] rotors = { -1, 0, 1, 2 };
 	private int reflector = 0;
 	private char[] ringSettings = { '!', 'A', 'A', 'A' };
 	private char[] rotorPositions = { '!', 'A', 'A', 'A' };
-	
-	//Components
+	private String pbString = null;
+	// Components
 	private JLabel fourthRotor;
 	private JLabel leftRotor;
 	private JLabel middleRotor;
@@ -55,18 +59,39 @@ public class RotorPanel extends JPanel implements ActionListener,
 	private JComboBox<String> leftRotorRingSetting;
 	private JComboBox<String> middleRotorRingSetting;
 	private JComboBox<String> rightRotorRingSetting;
+	private JTextField pbField;
+	private JButton pbButton;
+	private JButton resetButton;
 	private EnigmaSpinner fourthRotorPosition;
 	private EnigmaSpinner leftRotorPosition;
 	private EnigmaSpinner middleRotorPosition;
 	private EnigmaSpinner rightRotorPosition;
+	private PlugboardDialog pbDialog;
+	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 
-	//Constructor... puts the thing together.
+	// Constructor... puts the thing together.
 	public RotorPanel() {
-		GroupLayout layout = new GroupLayout(this);
-		layout.setAutoCreateGaps(true);
-		layout.setAutoCreateContainerGaps(true);
-		this.setLayout(layout);
-		this.setBackground(Color.black);
+		machine.setState(rotors, reflector, ringSettings, rotorPositions,
+				pbString);
+		machine.addObserver(this);
+		pbDialog = new PlugboardDialog();
+		JPanel topPanel = buildTopPanel();
+		JPanel plugboardPanel = buildPlugboardPanel();
+		GroupLayout thisLayout = new GroupLayout(this);
+		this.setLayout(thisLayout);
+		thisLayout.setHorizontalGroup(thisLayout.createParallelGroup()
+				.addComponent(topPanel).addComponent(plugboardPanel));
+		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
+				.addComponent(topPanel).addComponent(plugboardPanel));
+	}
+
+	private JPanel buildTopPanel() {
+		JPanel topPanel = new JPanel();
+		GroupLayout topLayout = new GroupLayout(topPanel);
+		topLayout.setAutoCreateGaps(true);
+		topLayout.setAutoCreateContainerGaps(true);
+		topPanel.setLayout(topLayout);
+		topPanel.setBackground(Color.black);
 		
 		reflectorLabel = new JLabel("Reflector");
 		reflectorLabel.setForeground(Color.white);
@@ -88,14 +113,12 @@ public class RotorPanel extends JPanel implements ActionListener,
 		rightRotor.setForeground(Color.white);
 		rightRotor.setBackground(Color.black);
 
-
 		// Reflector Box
 		reflectorChoice = new JComboBox<String>(reflectorChoices);
 		reflectorChoice.setSelectedIndex(0);
 		reflectorChoice.setActionCommand("reflectorChoice");
 		reflectorChoice.addActionListener(this);
 
-		
 		fourthRotorChoice = new JComboBox<String>(fourthRotorChoices);
 		fourthRotorChoice.setSelectedIndex(0);
 		fourthRotorChoice.setActionCommand("fourthRotorChoice");
@@ -144,7 +167,7 @@ public class RotorPanel extends JPanel implements ActionListener,
 		rotorPositionsLabel = new JLabel("Rotor Positions");
 		rotorPositionsLabel.setForeground(Color.white);
 		rotorPositionsLabel.setBackground(Color.black);
-		
+
 		// Rotor Position Spinners
 		fourthRotorPosition = new EnigmaSpinner();
 		fourthRotorPosition.setModel(new SpinnerListModel(fourthLetterChoices));
@@ -169,69 +192,134 @@ public class RotorPanel extends JPanel implements ActionListener,
 		rightRotorPosition.setValue("A");
 		rightRotorPosition.addChangeListener(this);
 		rightRotorPosition.identifier = "rightRotorPosition";
-		
+
 		int min = 20;
 		int pref = 30;
 		int max = 40;
-		//LAYOUT CODE AWWW YEAH
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(reflectorLabel)
-						.addComponent(reflectorChoice)
-						.addComponent(ringSettingsLabel)
-						.addComponent(rotorPositionsLabel))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(fourthRotor)
-						.addComponent(fourthRotorChoice)
-						.addComponent(fourthRotorRingSetting,min,pref,max)
-						.addComponent(fourthRotorPosition,min,pref,max))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(leftRotor)
-						.addComponent(leftRotorChoice)
-						.addComponent(leftRotorRingSetting,min,pref,max)
-						.addComponent(leftRotorPosition,min,pref,max))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(middleRotor)
-						.addComponent(middleRotorChoice)
-						.addComponent(middleRotorRingSetting,min,pref,max)
-						.addComponent(middleRotorPosition,min,pref,max))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(rightRotor)
-						.addComponent(rightRotorChoice)
-						.addComponent(rightRotorRingSetting,min,pref,max)
-						.addComponent(rightRotorPosition,min,pref,max))
-				);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(reflectorLabel)
-						.addComponent(fourthRotor)
-						.addComponent(leftRotor)
-						.addComponent(middleRotor)
-						.addComponent(rightRotor))
-				.addGroup(layout.createParallelGroup()
-						.addComponent(reflectorChoice)
-						.addComponent(fourthRotorChoice)
-						.addComponent(leftRotorChoice)
-						.addComponent(middleRotorChoice)
-						.addComponent(rightRotorChoice))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(ringSettingsLabel)
-						.addComponent(fourthRotorRingSetting,min,pref,max)
-						.addComponent(leftRotorRingSetting,min,pref,max)
-						.addComponent(middleRotorRingSetting,min,pref,max)
-						.addComponent(rightRotorRingSetting,min,pref,max))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(rotorPositionsLabel)
-						.addComponent(fourthRotorPosition,min,pref,max)
-						.addComponent(leftRotorPosition,min,pref,max)
-						.addComponent(middleRotorPosition,min,pref,max)
-						.addComponent(rightRotorPosition,min,pref,max))
-				);
-		
+		// LAYOUT CODE AWWW YEAH
+		topLayout
+				.setHorizontalGroup(topLayout
+						.createSequentialGroup()
+						.addGroup(
+								topLayout.createParallelGroup()
+										.addComponent(reflectorLabel)
+										.addComponent(reflectorChoice)
+										.addComponent(ringSettingsLabel)
+										.addComponent(rotorPositionsLabel))
+						.addGroup(
+								topLayout
+										.createParallelGroup(
+												GroupLayout.Alignment.CENTER)
+										.addComponent(fourthRotor)
+										.addComponent(fourthRotorChoice)
+										.addComponent(fourthRotorRingSetting,
+												min, pref, max)
+										.addComponent(fourthRotorPosition, min,
+												pref, max))
+						.addGroup(
+								topLayout
+										.createParallelGroup(
+												GroupLayout.Alignment.CENTER)
+										.addComponent(leftRotor)
+										.addComponent(leftRotorChoice)
+										.addComponent(leftRotorRingSetting,
+												min, pref, max)
+										.addComponent(leftRotorPosition, min,
+												pref, max))
+						.addGroup(
+								topLayout
+										.createParallelGroup(
+												GroupLayout.Alignment.CENTER)
+										.addComponent(middleRotor)
+										.addComponent(middleRotorChoice)
+										.addComponent(middleRotorRingSetting,
+												min, pref, max)
+										.addComponent(middleRotorPosition, min,
+												pref, max))
+						.addGroup(
+								topLayout
+										.createParallelGroup(
+												GroupLayout.Alignment.CENTER)
+										.addComponent(rightRotor)
+										.addComponent(rightRotorChoice)
+										.addComponent(rightRotorRingSetting,
+												min, pref, max)
+										.addComponent(rightRotorPosition, min,
+												pref, max)));
+		topLayout
+				.setVerticalGroup(topLayout
+						.createSequentialGroup()
+						.addGroup(
+								topLayout.createParallelGroup()
+										.addComponent(reflectorLabel)
+										.addComponent(fourthRotor)
+										.addComponent(leftRotor)
+										.addComponent(middleRotor)
+										.addComponent(rightRotor))
+						.addGroup(
+								topLayout.createParallelGroup()
+										.addComponent(reflectorChoice)
+										.addComponent(fourthRotorChoice)
+										.addComponent(leftRotorChoice)
+										.addComponent(middleRotorChoice)
+										.addComponent(rightRotorChoice))
+						.addGroup(
+								topLayout
+										.createParallelGroup(
+												GroupLayout.Alignment.CENTER)
+										.addComponent(ringSettingsLabel)
+										.addComponent(fourthRotorRingSetting,
+												min, pref, max)
+										.addComponent(leftRotorRingSetting,
+												min, pref, max)
+										.addComponent(middleRotorRingSetting,
+												min, pref, max)
+										.addComponent(rightRotorRingSetting,
+												min, pref, max))
+						.addGroup(
+								topLayout
+										.createParallelGroup(
+												GroupLayout.Alignment.CENTER)
+										.addComponent(rotorPositionsLabel)
+										.addComponent(fourthRotorPosition, min,
+												pref, max)
+										.addComponent(leftRotorPosition, min,
+												pref, max)
+										.addComponent(middleRotorPosition, min,
+												pref, max)
+										.addComponent(rightRotorPosition, min,
+												pref, max)));
+		return topPanel;
 	}
 
-	//ActionListener for the ComboBoxes. Performs validation and updates machine
-	//state accordingly.
+	private JPanel buildPlugboardPanel() {
+		JPanel plugboardPanel = new JPanel();
+		plugboardPanel.setBackground(Color.black);
+		pbField = new JTextField(30);
+		pbField.setEditable(false);
+		pbButton = new JButton("Plugboard Settings");
+		pbButton.addActionListener(new ButtonListener());
+		pbButton.setActionCommand("Plugboard");
+		resetButton = new JButton("Reset Plugboard");
+		resetButton.addActionListener(new ButtonListener());
+		resetButton.setActionCommand("Reset");
+		GroupLayout plugboardLayout = new GroupLayout(plugboardPanel);
+
+		plugboardLayout.setHorizontalGroup(plugboardLayout.createParallelGroup()
+				.addComponent(pbField)
+				.addComponent(pbButton)
+				.addComponent(resetButton));
+		plugboardLayout.setVerticalGroup(plugboardLayout.createSequentialGroup()
+				.addComponent(pbField)
+				.addComponent(pbButton)
+				.addComponent(resetButton));
+		plugboardLayout.linkSize(pbButton, resetButton);
+		return plugboardPanel;
+	}
+
+	// ActionListener for the ComboBoxes. Performs validation and updates
+	// machine
+	// state accordingly.
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		@SuppressWarnings("rawtypes")
@@ -328,14 +416,14 @@ public class RotorPanel extends JPanel implements ActionListener,
 			ringSettings[3] = temp.getSelectedItem().toString().charAt(0);
 			break;
 		default:
-			System.out.println("WTF?");
 			break;
 		}
-		printState();
+		machine.setState(rotors, reflector, ringSettings);
 	}
 
-	//ActionListener for the Spinners. Performs what little validation is needed
-	//and alters machine state accordingly.
+	// ActionListener for the Spinners. Performs what little validation is
+	// needed
+	// and alters machine state accordingly.
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 		EnigmaSpinner js = (EnigmaSpinner) arg0.getSource();
@@ -361,54 +449,51 @@ public class RotorPanel extends JPanel implements ActionListener,
 			rotorPositions[3] = js.getValue().toString().toCharArray()[0];
 			break;
 		}
-		printState();
+		if(rotorPositions[0] == '!'){
+			machine.setPositions(new char[] { rotorPositions[1], rotorPositions[2], rotorPositions[3]});
+		} else{
+		machine.setPositions(rotorPositions);
+		}
 	}
 
-	//methods for getting at the state in the main GUI class.
-	public int[] getRotors() {
-		if (rotors[0] == -1)
-			return new int[] { rotors[1], rotors[2], rotors[3] };
-		return new int[] { rotors[0], rotors[1], rotors[2], rotors[3] };
+	public void setRotorPositions(char[] positions) {
+		if (positions.length == 4 && positions[0] != '!') {
+			fourthRotorPosition.setValue(String.valueOf(positions[0]));
+			leftRotorPosition.setValue(String.valueOf(positions[1]));
+			middleRotorPosition.setValue(String.valueOf(positions[2]));
+			rightRotorPosition.setValue(String.valueOf(positions[3]));
+		} else {
+			leftRotorPosition.setValue(String.valueOf(positions[0]));
+			middleRotorPosition.setValue(String.valueOf(positions[1]));
+			rightRotorPosition.setValue(String.valueOf(positions[2]));
+		}
 	}
 
-	public int getReflector() {
-		return reflector;
-	}
-
-	public char[] getRingSettings() {
-		if (rotors[0] == -1)
-			return new char[] { ringSettings[1], ringSettings[2],
-					ringSettings[3] };
-		return new char[] { ringSettings[0], ringSettings[1], ringSettings[2],
-				ringSettings[3] };
-	}
-
-	public char[] getRotorPositions() {
-		if (rotors[0] == -1)
-			return new char[] { rotorPositions[1], rotorPositions[2],
-					rotorPositions[3] };
-		return new char[] { rotorPositions[0], rotorPositions[1],
-				rotorPositions[2], rotorPositions[3] };
-	}
-
-	//testing method to ensure all validation works properly...
-	//it will output numerous messages per action. The last one is
-	//the current machine state and the only important one.
-	private void printState() {
-		int[] t = getRotors();
-		System.out.print("Rotors: " + t[0] + "," + t[1] + "," + t[2]);
-		if (t.length == 4)
-			System.out.print("," + t[3] + "\n");
-		else
-			System.out.print("\n");
-		System.out.println("Reflector: " + getReflector());
-		System.out.println("Ring Settings: "
-				+ String.valueOf(getRingSettings()));
-		System.out.println("Rotor Positions: "
-				+ String.valueOf(getRotorPositions()));
-	}
-	
 	private class EnigmaSpinner extends JSpinner {
 		public String identifier;
+	}
+
+	private class ButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String message = arg0.getActionCommand();
+			if (message.equals("Reset")) {
+				pbDialog.resetPlugBoard();
+				pbString = null;
+				pbField.setText("");
+				System.out.println("Changing plugboard to: ");
+			} else if (message.equals("Plugboard")) {
+				pbString = pbDialog.displayDialog();
+				pbField.setText(pbString);
+				System.out.println("Changing plugboard to: " + pbString);
+			}
+		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		String s = (String) arg1;
+		System.out.println("Changing rotors to " + s);
+		setRotorPositions(s.toCharArray());
 	}
 }

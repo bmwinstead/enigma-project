@@ -124,8 +124,21 @@ public class EnigmaMachine {
 		initPositions = newPositions;
 		reset();
 	} // end setPositions method
+	
+	public void setRotorChoices(int[] rotorChoices,int reflectorChoice){
+		rotors = new Rotors(rotorChoices,reflectorChoice);
+	}
+	
+	public void setRingSettings(char[] ringSettings){
+		rotors.setRingSettings(ringSettings);
+	}
+	
+	public void setPlugboard(String pbMap){
+		plugboard = new Plugboard(pbMap);
+	}
+	
 	/**
-	 * Returns the Rotor Positions to the GUI so that i will accurately
+	 * Returns the Rotor Positions to the GUI so that I will accurately
 	 * reflect the current settings after encryption.
 	 * 
 	 * @param newPositions

@@ -1,0 +1,223 @@
+/*Issues:  getRotorSetting(). needs work to ensure that data definition matches how 
+ * Enigma Machine process the rotors */
+
+
+import java.awt.*;
+import javax.swing.border.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.*;
+
+public class RotorsandReflectorGUI extends JFrame{
+	private String[] machineOptions = {" ","Enigma1", "M3","M4", "M4 - R1", "M4 - R2"};
+	
+	private String[][] rotors= {{""}, 
+			{"","I","II", "III"}, //EnigmaI Rotors 
+			{"","IV", "V", "VI","VII", "VIII"}, //M3 Rotors
+			{"", "VI","VII", "VIII"},//M4 Rotors
+			{"", "VI","VII", "VIII"}, //M4 - R1 Rotors 1-3
+			{"", "VI","VII", "VIII"}, //M4 - R2 Rotors 1-3
+			{"", "Gamma", "Beta"} // 4th position Rotors	
+	}; 
+	
+	private String[][] reflectors= {{""},
+			{"","B","C"}, //EnigmaI Reflectors 
+			{"","B","C"}, //M3 Reflectors
+			{"","B","C"},//M4 Reflectors
+			{"", "B - Thin", "C - Thin"}, //M4 - R1 Reflectors
+			{"", "B - Thin", "C - Thin"} //M4 - R2 Reflectors	
+	};
+	
+	private int type = 0;
+	private int[] rotorSelection = new int[3];
+	private int fourthRotor;
+	
+	private JComboBox machineType = new JComboBox(machineOptions);
+	private JComboBox rotorL = new JComboBox();
+	private JComboBox rotorM = new JComboBox();
+	private JComboBox rotorR = new JComboBox();
+	private JComboBox rotor4 = new JComboBox();
+	private JComboBox reflector = new JComboBox();
+	
+	public RotorsandReflectorGUI(){
+
+		initializeGUI();
+		
+		
+		machineType.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				rotor4.setEnabled(false);
+				type = machineType.getSelectedIndex();
+				setSelection(rotors[type], rotorL);
+				setSelection(reflectors[type], reflector);
+				
+				//Enable 4th rotor if m4-R1 or M4-R2 models are selected
+				if(3 < type){
+					rotor4.setEnabled(true);
+					setSelection(rotors[6], rotor4);
+				}
+			}
+		});
+		
+		rotorL.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e){
+				int selectedItem1 = rotorL.getSelectedIndex();
+				
+				//ensure that no items are removed, when the box is initially set to position o
+				//or when no item is selected in which case position is -1
+				if(0 < selectedItem1){
+					setSelection(rotors[type], rotorM);
+					removeSelectedRotors(selectedItem1, 0, rotorM);
+				}
+			}
+		});
+		
+		rotorM.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){			
+				int selectedItem2 = rotorM.getSelectedIndex();
+				
+				//ensure that no items are removed, when the box is initially set to position 0
+				//or when no item is selected in which case position is -1
+				if(0 < selectedItem2){
+					setSelection(rotors[type], rotorR);
+					removeSelectedRotors(selectedItem2, 1, rotorR);
+				}
+			}
+		});
+		rotorR.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				int selectedItem3 = rotorM.getSelectedIndex();
+				
+				//save rotor 3 selection
+				if(0 < selectedItem3){
+					rotorSelection[2] = selectedItem3;
+				}
+			}
+		});
+		
+	}
+	
+	public static void main(String args[]){
+		new RotorsandReflectorGUI();
+	}
+	
+	//********This function initialize all GUI components
+
+	private void initializeGUI(){
+
+		setLayout(new FlowLayout());
+		
+		//create panel for Machine Configuration
+		JPanel typePanel = new JPanel();
+		typePanel.add(machineType);
+		typePanel.setBorder(new TitledBorder("Machine Type"));
+		
+		//create panel for standard rotors and add them to it
+		JPanel rotorsPanel = new JPanel(new GridLayout(1,4,5,5));
+		
+		//Create a Panel for each rotor JComboBox for flexible layout
+		JPanel rotorLPanel = new JPanel(new GridLayout());
+		rotorLPanel.add(rotorL);
+		rotorLPanel.setBorder(new TitledBorder("Left"));
+		rotorL.setPreferredSize(new Dimension(110,2));
+		
+		JPanel rotorMPanel = new JPanel(new GridLayout());
+		rotorMPanel.add(rotorM);
+		rotorMPanel.setBorder(new TitledBorder("Middle"));
+		
+		JPanel rotorRPanel = new JPanel(new GridLayout());
+		rotorRPanel.add(rotorR);
+		rotorRPanel.setBorder(new TitledBorder("Right"));
+
+		JPanel rotor4Panel = new JPanel(new GridLayout());
+		rotor4Panel.setBorder(new TitledBorder("4th Rotor"));
+		rotor4Panel.add(rotor4);
+		rotor4.setEnabled(false);
+		
+		//Add all components to the main rotor panel
+
+		rotorsPanel.add(rotorLPanel);
+		rotorsPanel.add(rotorMPanel);
+		rotorsPanel.add(rotorRPanel);
+		rotorsPanel.add(rotor4Panel);
+		rotorsPanel.setBorder(new TitledBorder("Rotors"));
+		
+		//create panel for reflector Configuration
+		JPanel reflectorPanel = new JPanel();
+		reflectorPanel.add(reflector);
+		reflector.setPreferredSize(new Dimension(110,25));
+		reflectorPanel.setBorder(new TitledBorder("Reflector"));
+			
+		//Put it all together
+		add(typePanel);
+		add(rotorsPanel);
+		add(reflectorPanel);
+		
+		pack();
+		setVisible(true);
+		}
+	
+//******Auxiliary functions that support the listeners
+	void setSelection(String[] options, JComboBox box){
+
+		//in case that the box selection is change, ensure that old items are removed
+		box.removeAllItems();
+		System.out.println("Inside setRotor");
+		
+		for(String e : options){		
+			box.addItem(e);		
+		}
+	}
+	void removeSelectedRotors(int selected, int rotor, JComboBox box){
+		rotorSelection[rotor] = selected;
+		System.out.println("Selected"+ Arrays.toString(rotorSelection));
+		
+		for (int i = 0; i<= rotor; i++){
+			box.removeItemAt(rotorSelection[i]);
+		}
+		
+	}
+	
+//reset all values for rotors and reflectors
+	void resetRandR(){
+		rotorL.removeAll();
+		rotorM.removeAll();
+		rotorR.removeAll();
+		rotor4.removeAll();
+		reflector.removeAll();
+		type = 0;
+		
+		for(int e : rotorSelection)
+			rotorSelection[e] =0;
+	}
+
+/*//get all values for rotors and reflectors, if the settings are invalid this function
+	//will return an empty array
+	int[] getRotorSetting(){
+		ArrayList<Integer> rotorSetting;
+		
+		if(validateSettings(rotorSelection)){// all values are valided
+			//? ran out of brain juice here--
+			if(type < 4)
+				//rotorSetting = rotorSelection;
+			else
+				
+				//rotorSetting.add(rotor4);
+		}
+		
+		
+		return rotorSetting;
+	}
+// This function ensure that no zero or -1 values are passed	
+	boolean validateSettings(int[] input){
+		for (int e: input){
+			if (e < 1)
+				return false;
+		}
+		
+		return false;
+	}*/
+}
