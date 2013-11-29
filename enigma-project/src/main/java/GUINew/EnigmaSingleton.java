@@ -61,7 +61,6 @@ public class EnigmaSingleton extends Observable {
 	public void setPositions(char[] rotorPositions) {
 		System.out.println("Setting rotor positions to: " + String.valueOf(rotorPositions));
 		machine.setPositions(rotorPositions);
-		notifyObservers();
 	}
 
 	public void setPlugboard(String pbMap) {
@@ -87,7 +86,7 @@ public class EnigmaSingleton extends Observable {
 	}
 	@Override
 	public void notifyObservers(){
-		System.out.println("Notifying ");
+		System.out.println("Notifying, rotors are currently " + String.valueOf(machine.getPositions()));
 		for(Observer obs : observers){
 			obs.update(this, String.valueOf(machine.getPositions()));
 		}

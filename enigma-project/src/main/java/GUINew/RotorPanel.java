@@ -449,7 +449,11 @@ public class RotorPanel extends JPanel implements ActionListener,
 			rotorPositions[3] = js.getValue().toString().toCharArray()[0];
 			break;
 		}
+		if(rotorPositions[0] == '!'){
+			machine.setPositions(new char[] { rotorPositions[1], rotorPositions[2], rotorPositions[3]});
+		} else{
 		machine.setPositions(rotorPositions);
+		}
 	}
 
 	public void setRotorPositions(char[] positions) {
@@ -470,7 +474,6 @@ public class RotorPanel extends JPanel implements ActionListener,
 	}
 
 	private class ButtonListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String message = arg0.getActionCommand();
