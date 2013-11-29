@@ -35,7 +35,7 @@ public class WordParser {
 			
 			// Parse words.
 			while (scanner.hasNext()) {
-				String currentWord = scanner.next().toLowerCase();
+				String currentWord = scanner.next().toUpperCase();
 				
 				Matcher punctuationMatcher = nonAlphanumeric.matcher(currentWord);
 
