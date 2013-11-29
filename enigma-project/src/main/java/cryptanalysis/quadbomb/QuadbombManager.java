@@ -83,8 +83,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		// Create a log file with the timestamp.
 		Calendar date = Calendar.getInstance();
 		
-		String formattedDate = "Quadgram stat attempt " + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.YEAR)
-				+ " " + date.get(Calendar.HOUR) + date.get(Calendar.MINUTE) + date.get(Calendar.SECOND) + ".txt";
+		String formattedDate = "Quadbomb attempt " + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.YEAR)
+				+ " " + date.get(Calendar.HOUR) + date.get(Calendar.MINUTE) + date.get(Calendar.SECOND) + " " + statTest + " " + threadSize + " " + candidateSize + ".txt";
 		
 		log = new Logger(formattedDate);
 	}
@@ -94,7 +94,9 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		ExecutorService threadManager = Executors.newFixedThreadPool(threadSize);
 		CountDownLatch doneSignal = new CountDownLatch(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS);
 		
-		log.makeEntry("Starting quadgram analysis...", true);
+		log.makeEntry("Starting QuadBomb analysis...", true);
+		log.makeEntry("Encrypted message: " + message, true);
+		
 		long startTime = System.currentTimeMillis();
 		
 		int operationCount = 0;
@@ -202,12 +204,13 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		double bestScore = Double.NEGATIVE_INFINITY;
 
-		for (EnigmaSettings candidate: resultsList) {
-			if (candidate.getFitnessScore() > bestScore) {
-				result = candidate;
-				bestScore = candidate.getFitnessScore();
-			}
-		}
+		// Trim candidate list.
+		trimCandidateList();
+		log.makeEntry("Plugboard candidates:", true);
+		printCandidateList();
+		
+		result = candidateList.last();
+		bestScore = result.getFitnessScore();
 		
 		EnigmaMachine decoder = result.createEnigmaMachine();
 		decryptedMessage = decoder.encryptString(message);
@@ -217,14 +220,14 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		log.makeEntry("Quadgram analysis complete.", true);
 		log.makeEntry("Results:", true);
-		log.makeEntry("Decrypted message: " + result, true);
+		log.makeEntry("Decrypted message: " + decryptedMessage, true);
 		
 		log.makeEntry("Wheel order: " + result.printWheelOrder(), true);
 		log.makeEntry("Best reflector: " + result.printReflector(), true);
 		log.makeEntry("Ring settings: " + result.printRingSettings(), true);
 		log.makeEntry("Rotor indicators: " + result.printIndicators(), true);
 		log.makeEntry("Plugboard settings: " + result.printPlugboard(), true);
-		log.makeEntry("Quadgram fitness score: " + bestScore, true);
+		log.makeEntry("Fitness score: " + bestScore, true);
 		
 		long endTime = System.currentTimeMillis();
 		log.makeEntry("Analysis took " + (endTime - startTime) + " milliseconds to complete.", true);
@@ -261,7 +264,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	public void printCandidateList() {
 		int count = 1;
 		for (EnigmaSettings candidate: candidateList) {
-			log.makeEntry("Candidate #" + count + " of " + candidateList.size() + ":" + candidate.printSettings(), true);
+			log.makeEntry("Candidate #" + count++ + " of " + candidateList.size() + ":" + candidate.printSettings(), true);
 		}
 	}
 	

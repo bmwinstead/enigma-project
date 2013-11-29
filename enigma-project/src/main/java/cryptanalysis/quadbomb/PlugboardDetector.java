@@ -54,8 +54,6 @@ public class PlugboardDetector implements Runnable {
 			// Compute control probability.
 			EnigmaMachine bomb = testSettings.createEnigmaMachine();
 			controlValue = tester.computeFitnessScore(bomb.encryptString(message));
-			//double[] values = tester.computeAllScores(bomb.encryptString(message));
-			//controlValue = values[3];
 			
 			String currentPlugboard = testSettings.getPlugboardMap();
 			
@@ -74,8 +72,6 @@ public class PlugboardDetector implements Runnable {
 						
 						// Compute test probability.
 						double testValue = tester.computeFitnessScore(cipher);
-						//values = tester.computeAllScores(cipher);
-						//double testValue = values[3];
 						
 						// Find best plugboard pair.
 						if (testValue > controlValue) {

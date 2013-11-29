@@ -50,9 +50,7 @@ public class IndicatorDetector implements Runnable {
 					
 					String cipher = bomb.encryptString(message);
 					double testValue = tester.computeFitnessScore(cipher);
-					//double[] values = tester.computeAllScores(cipher);
-					//double testValue = values[3];
-					
+					/*
 					if (testValue > bestScore) {
 						bestScore = testValue;
 						
@@ -63,6 +61,13 @@ public class IndicatorDetector implements Runnable {
 						// Save best indicator result into list for further processing.
 						resultsList.add(candidate);
 					} // End best result if
+					*/
+					EnigmaSettings candidate = settings.copy();
+					candidate.setIndicatorSettings(rotorTestSettings);
+					candidate.setFitnessScore(testValue);
+					
+					// Save best indicator result into list for further processing.
+					resultsList.add(candidate);
 				} // End right indicator for
 			} // End middle indicator for
 		} // End left indicator for
