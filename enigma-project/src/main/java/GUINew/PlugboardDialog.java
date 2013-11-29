@@ -103,9 +103,7 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	// I believe we want to use this later
-	private void resetPlugBoard() {
+	public void resetPlugBoard() {
 		// deselect all button and enable them
 		for (int i = 0; i < letterTotal; i++) {
 			plugs[i].setSelected(false);
@@ -116,7 +114,6 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 			plugPairs[0][i] = " ";
 			plugPairs[1][i] = " ";
 		}
-
 		filled = 0;
 		linker.clear();
 	}
@@ -134,6 +131,8 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 	private String getPBMap(){
 		String pbMap = "";
 		for(int i = 0; i < maxPairs; i++){
+			if(plugPairs[0][1] == null)
+				break;
 			pbMap += plugPairs[0][i];
 			pbMap += plugPairs[1][i];
 		}

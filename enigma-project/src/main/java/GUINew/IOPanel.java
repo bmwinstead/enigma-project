@@ -1,45 +1,73 @@
 package main.java.GUINew;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 public class IOPanel extends JPanel {
+	private final int tapeLength = 50;
 	private JTextField outputTape;
 	private JTextField manualInput;
 	private JTextArea bulkInput;
 	private JTextArea bulkOutput;
-	private JTextField fileField;
-	private JButton chooseFile;
+	private JTextField fileTextField;
+	private JButton browseButton;
 	private JButton bulkEncryptButton;
 	private JLabel tapeLabel;
 	private JLabel manualInputLabel;
-
-	public IOPanel() {
+	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
+	public IOPanel()  {
 		GroupLayout mainLayout = new GroupLayout(this);
 		setLayout(mainLayout);
 		setBackground(Color.black);
-		JPanel panel1 = new JPanel();
-		panel1.setBackground(Color.black);
-		GroupLayout panel1Layout = new GroupLayout(panel1);
-		panel1.setLayout(panel1Layout);
+		JPanel topPanel = setUpTopPanel();
+		JPanel bottomPanel = setUpBottomPanel();
+		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup()
+				.addComponent(topPanel)
+				.addComponent(bottomPanel));
+		mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
+				.addComponent(topPanel)
+				.addComponent(bottomPanel));
+	}
+	
+	private JPanel setUpTopPanel(){
+		JPanel topPanel = new JPanel();
+		topPanel.setBackground(Color.black);
+		GroupLayout panel1Layout = new GroupLayout(topPanel);
+		topPanel.setLayout(panel1Layout);
 		panel1Layout.setAutoCreateGaps(true);
 		panel1Layout.setAutoCreateContainerGaps(true);
 		
 		tapeLabel = new JLabel("Encrypted Output");
 		tapeLabel.setForeground(Color.white);
-		outputTape = new JTextField(50);
+		outputTape = new JTextField(tapeLength);
 		outputTape.setEditable(false);
+		outputTape.setBackground(Color.lightGray);
 		manualInputLabel = new JLabel("Manual Input");
 		manualInputLabel.setForeground(Color.white);
-		manualInput = new JTextField(50);
-
+		manualInput = new JTextField(tapeLength);
+		manualInput.getDocument().addDocumentListener(new FieldListener());
 		panel1Layout.setHorizontalGroup(panel1Layout.createSequentialGroup()
 				.addGroup(
 						panel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -60,51 +88,111 @@ public class IOPanel extends JPanel {
 								.addComponent(manualInput)));
 		panel1Layout.linkSize(SwingConstants.VERTICAL, tapeLabel,manualInputLabel);
 		panel1Layout.linkSize(SwingConstants.VERTICAL, outputTape, manualInput);
-		
-		JPanel panel2 = new JPanel();
-		panel2.setBackground(Color.black);
-		GroupLayout panel2Layout = new GroupLayout(panel2);
-		panel2.setLayout(panel2Layout);
+		return topPanel;
+	}
+	private JPanel setUpBottomPanel(){
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setBackground(Color.black);
+		GroupLayout panel2Layout = new GroupLayout(bottomPanel);
+		bottomPanel.setLayout(panel2Layout);
 		panel2Layout.setAutoCreateGaps(true);
 		panel2Layout.setAutoCreateContainerGaps(true);
 		
 		bulkInput = new JTextArea(5, 20);
-		bulkInput.setLineWrap(true);
-		bulkInput.setWrapStyleWord(true);
+		JScrollPane inputScrollPane = new JScrollPane(bulkInput);
 		bulkOutput = new JTextArea(5, 20);
 		bulkOutput.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(bulkOutput);
-		fileField = new JTextField(20);
-		chooseFile = new JButton("Browse");
+		JScrollPane outputScrollPane = new JScrollPane(bulkOutput);
+		fileTextField = new JTextField(20);
+		browseButton = new JButton("Browse");
+        browseButton.addActionListener(new BrowseButtonListener());
 		bulkEncryptButton = new JButton("Encrypt");
-
+		bulkEncryptButton.addActionListener(new EncryptButtonListener());
+		
 		panel2Layout.setHorizontalGroup(panel2Layout.createSequentialGroup()
 				.addGroup(
 						panel2Layout.createParallelGroup()
-								.addComponent(bulkInput)
-								.addComponent(fileField))
+								.addComponent(inputScrollPane)
+								.addComponent(fileTextField))
 				.addGroup(
 						panel2Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(scrollPane)
+								.addComponent(outputScrollPane)
 								.addGroup(panel2Layout.createSequentialGroup()
-												.addComponent(chooseFile)
+												.addComponent(browseButton)
 												.addComponent(bulkEncryptButton))));
 		panel2Layout.setVerticalGroup(panel2Layout.createSequentialGroup()
 				.addGroup(
 						panel2Layout.createParallelGroup()
-								.addComponent(bulkInput)
-								.addComponent(scrollPane))
+								.addComponent(inputScrollPane)
+								.addComponent(outputScrollPane))
 				.addGroup(
 						panel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(fileField)
-								.addComponent(chooseFile)
+								.addComponent(fileTextField)
+								.addComponent(browseButton)
 								.addComponent(bulkEncryptButton)));
-		panel2Layout.linkSize(SwingConstants.VERTICAL,chooseFile,bulkEncryptButton);
-		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup()
-				.addComponent(panel1)
-				.addComponent(panel2));
-		mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
-				.addComponent(panel1)
-				.addComponent(panel2));
+		panel2Layout.linkSize(SwingConstants.VERTICAL,browseButton,bulkEncryptButton);
+		panel2Layout.linkSize(SwingConstants.VERTICAL, inputScrollPane, outputScrollPane);
+		return bottomPanel;
+	}
+	private class BrowseButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+
+            if (fileChooser.showOpenDialog(null) == 
+                    JFileChooser.APPROVE_OPTION) {
+                fileTextField.setText
+                        (fileChooser.getSelectedFile().getAbsolutePath());
+            }
+        }
+	}
+	
+	private class EncryptButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String possibleFile = fileTextField.getText();
+			try{
+				Path file = Paths.get(possibleFile);
+				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
+				String encrypted = "";
+				for(String s : ls){
+					encrypted += machine.encryptString(s); 
+				}
+				bulkOutput.setText(encrypted);
+			} catch(InvalidPathException e){
+				String s = bulkInput.getText();
+				String encrypted = machine.encryptString(s);
+				bulkOutput.setText(encrypted);
+			} catch (IOException e) {
+				String s = bulkInput.getText();
+				s = machine.encryptString(s);
+				bulkOutput.setText(s);
+				if(s.equals("") || s.equals(null))
+					bulkOutput.setText("What have you done?");
+			} 
+		}
+	}
+	private class FieldListener implements  DocumentListener{
+		@Override
+		public void changedUpdate(DocumentEvent arg0) {
+			//Do nothing
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent arg0) {
+			Document doc = arg0.getDocument();
+			char c = '!';
+			try {
+				c = doc.getText((doc.getLength() - 1), 1).charAt(0); //get latest character.
+			} catch (BadLocationException e) {
+			}
+			char encrypted = machine.encryptChar(c);
+			String curText = outputTape.getText();
+			outputTape.setText(curText + encrypted);
+		}
+		@Override
+		public void removeUpdate(DocumentEvent arg0) {
+			//Do nothing
+		}
 	}
 }
