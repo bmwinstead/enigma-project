@@ -30,7 +30,7 @@
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.Calendar;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -62,7 +62,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private ResultsPanel resultsPanel;
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
-	private TreeSet<EnigmaSettings> candidateList;
+	private PriorityQueue<EnigmaSettings> candidateList;
 	
 	private Logger log;
 	
@@ -76,7 +76,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		resultsPanel = panel;
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
-		candidateList = new TreeSet<EnigmaSettings>();
+		candidateList = new PriorityQueue<EnigmaSettings>();
 		
 		statGenerator = new StatisticsGenerator(database, statTest);
 		
@@ -139,7 +139,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Trim candidate list.
 		trimCandidateList();
-		log.makeEntry("Rotor and indicator candidates:", true);
+		log.makeEntry("Rotor and indicator candidates:", false);
 		printCandidateList();
 		
 		// Step 2: Determine possible ring settings.
@@ -169,7 +169,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Trim candidate list.
 		trimCandidateList();
-		log.makeEntry("Ring candidates:", true);
+		log.makeEntry("Ring candidates:", false);
 		printCandidateList();
 		
 		// Step 3: Determine possible plugboard settings.
@@ -209,7 +209,10 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Plugboard candidates:", true);
 		printCandidateList();
 		
-		result = candidateList.last();
+		while (!candidateList.isEmpty()) {
+			result = candidateList.remove();
+		}
+		
 		bestScore = result.getFitnessScore();
 		
 		EnigmaMachine decoder = result.createEnigmaMachine();
@@ -252,7 +255,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		candidateList.addAll(resultsList);	// Sorts on adding.
 		
 		while (candidateList.size() > candidateSize) {
-			candidateList.pollFirst();
+			candidateList.poll();
 		}
 		
 		resultsList.clear();	// Clear out result list for next step.
@@ -263,9 +266,19 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	public void printCandidateList() {
 		int count = 1;
+		double bestScore = Double.NEGATIVE_INFINITY;
+		EnigmaSettings bestCandidate = candidateList.peek();
+		
 		for (EnigmaSettings candidate: candidateList) {
-			log.makeEntry("Candidate #" + count++ + " of " + candidateList.size() + ":" + candidate.printSettings(), true);
+			log.makeEntry("Candidate #" + count++ + " of " + candidateList.size() + ":" + candidate.printSettings(), false);
+			
+			if (candidate.getFitnessScore() > bestScore) {
+				bestScore = candidate.getFitnessScore();
+				bestCandidate = candidate;
+			}
 		}
+		
+		log.makeEntry("Best Candidate: " + bestCandidate.printSettings(), true);
 	}
 	
 	public void updateProgress(int progress) {
