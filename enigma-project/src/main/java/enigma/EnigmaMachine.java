@@ -124,4 +124,15 @@ public class EnigmaMachine {
 		initPositions = newPositions;
 		reset();
 	} // end setPositions method
+	/**
+	 * Returns the Rotor Positions to the GUI so that i will accurately
+	 * reflect the current settings after encryption.
+	 * 
+	 * @param newPositions
+	 *            3-4 character array representing the new positions the rotors
+	 *            are to be set to.
+	 */
+	public char[] getPositions() {
+		return rotors.getPositions();
+	} // end getPositions method
 } // end EnigmaMachine class

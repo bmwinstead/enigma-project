@@ -662,6 +662,11 @@ public class EnigmaGUI extends JFrame{
                     else{
                         outputTextArea.setText(newMachine.encryptString(text));
                     }
+                    //Set rotor positions
+                    char [] rotorPositions = newMachine.getPositions();
+                    leftRotorPosition.setValue(Character.toString(rotorPositions[0]));
+                    middleRotorPosition.setValue(Character.toString(rotorPositions[1]));
+                    rightRotorPosition.setValue(Character.toString(rotorPositions[2]));
                 }
                 else { //All 4 Rotors selected
                 	// JLI fourthRotorChoice receives an adjustment due to
@@ -714,6 +719,12 @@ public class EnigmaGUI extends JFrame{
                     else{
                         outputTextArea.setText(newFourMachine.encryptString(text));
                     }
+                    //Set rotor positions
+                    char [] rotorPositions = newFourMachine.getPositions();
+                    fourthRotorPosition.setValue(Character.toString(rotorPositions[0]));
+                    leftRotorPosition.setValue(Character.toString(rotorPositions[1]));
+                    middleRotorPosition.setValue(Character.toString(rotorPositions[2]));
+                    rightRotorPosition.setValue(Character.toString(rotorPositions[3]));
                 }
                 
                 //Turn on the lights!
