@@ -929,6 +929,13 @@ public class EnigmaGUI extends JFrame{
                 if (fourthRotorChoice.getSelectedIndex() == 0){
                     fourthRotorRingSetting.setSelectedIndex(0);
                     fourthRotorPosition.setValue("");
+                    if (reflectorChoice.getSelectedIndex() != 0 &&
+                    		reflectorChoice.getSelectedIndex() != 1){
+                    	reflectorChoice.setSelectedIndex(0);
+                    	JOptionPane.showMessageDialog(tempFrame,
+        						"You can only use THIN reflectors with the "
+        						+ "fourth rotor selected.");
+                    }
                 }
                 else if (reflectorChoice.getSelectedIndex() != 2 &&
                 		reflectorChoice.getSelectedIndex() != 3){
