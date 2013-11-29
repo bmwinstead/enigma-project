@@ -11,20 +11,20 @@ package main.java.cryptanalysis.quadbomb;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
+import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
-import main.java.enigma.Plugboard;
 
 public class PlugboardDetector implements Runnable {
-	private QuadbombManager manager;
+	private StatisticsGenerator tester;
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private EnigmaSettings settings;
 	private final String message;
 	
 	private CountDownLatch latch;
 	
-	public PlugboardDetector(QuadbombManager manager, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
-		this.manager = manager;
+	public PlugboardDetector(StatisticsGenerator tester, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
+		this.tester = tester;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
@@ -53,8 +53,10 @@ public class PlugboardDetector implements Runnable {
 			
 			// Compute control probability.
 			EnigmaMachine bomb = testSettings.createEnigmaMachine();
-			controlValue = manager.computeQuadgramProbability(bomb.encryptString(message));
-
+			controlValue = tester.computeFitnessScore(bomb.encryptString(message));
+			//double[] values = tester.computeAllScores(bomb.encryptString(message));
+			//controlValue = values[3];
+			
 			String currentPlugboard = testSettings.getPlugboardMap();
 			
 			for (int left = 0; left < 26; left++) {
@@ -71,7 +73,9 @@ public class PlugboardDetector implements Runnable {
 						String cipher = bomb.encryptString(message);
 						
 						// Compute test probability.
-						double testValue = manager.computeQuadgramProbability(cipher);
+						double testValue = tester.computeFitnessScore(cipher);
+						//values = tester.computeAllScores(cipher);
+						//double testValue = values[3];
 						
 						// Find best plugboard pair.
 						if (testValue > controlValue) {
