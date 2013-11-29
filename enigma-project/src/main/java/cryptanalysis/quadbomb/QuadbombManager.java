@@ -17,6 +17,7 @@
  * Step 3: Determine plugboard connections by brute force.
  * 
  * Improvements:
+ * Incorporated multiple threading to improve CPU utilization.
  * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
  * 
  * Limitations:
@@ -38,16 +39,20 @@ import java.util.concurrent.Executors;
 import javax.swing.SwingWorker;
 
 import main.java.cryptanalysis.nlp.Corpus;
+import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 import misc.Logger;
 import views.ResultsPanel;
 
 public class QuadbombManager extends SwingWorker<Long, Void> {
-	private static int NUM_REFLECTORS = 1;
+	private static int NUM_REFLECTORS = 1;	// Debugging line to speed up testing.
+	private static int NUM_ROTORS = 3;		// Debugging line to speed up testing.
 	
-	private final Corpus database;
+	private final StatisticsGenerator statGenerator;
+	
 	private final String message;
+	private String decryptedMessage;
 	
 	private EnigmaSettings result;
 	
@@ -58,13 +63,11 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private TreeSet<EnigmaSettings> candidateList;
-	private String decryptedMessage;
 	
 	private Logger log;
 	
 	// Constructor.
-	public QuadbombManager(Corpus database, String message, int threadSize, int candidateSize, ResultsPanel panel) {
-		this.database = database;
+	public QuadbombManager(Corpus database, String message, int statTest, int threadSize, int candidateSize, ResultsPanel panel) {
 		this.message = message;
 		
 		this.threadSize = threadSize;
@@ -74,6 +77,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
 		candidateList = new TreeSet<EnigmaSettings>();
+		
+		statGenerator = new StatisticsGenerator(database, statTest);
 		
 		// Create a log file with the timestamp.
 		Calendar date = Calendar.getInstance();
@@ -87,7 +92,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	public Long doInBackground() {
 		// Initialize thread list.
 		ExecutorService threadManager = Executors.newFixedThreadPool(threadSize);
-		CountDownLatch doneSignal = new CountDownLatch(NUM_REFLECTORS * 60);
+		CountDownLatch doneSignal = new CountDownLatch(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS);
 		
 		log.makeEntry("Starting quadgram analysis...", true);
 		long startTime = System.currentTimeMillis();
@@ -100,16 +105,16 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		long startDecryptTime = System.currentTimeMillis();
 		
 		for (int reflector = 0; reflector < NUM_REFLECTORS; reflector++) {
-			for (int i = 0; i < 5; i++) { // Left rotor.
-				for (int j = 0; j < 5; j++) { // Middle rotor.
+			for (int i = 0; i < NUM_ROTORS; i++) { // Left rotor.
+				for (int j = 0; j < NUM_ROTORS; j++) { // Middle rotor.
 					if (i != j) { // Skip equal rotor selections.
-						for (int k = 0; k < 5; k++) { // Right rotor.
+						for (int k = 0; k < NUM_ROTORS; k++) { // Right rotor.
 							if (i != k && j != k) { // Skip equal rotor selections.
 								
 								int[] rotors = {i, j, k};
 								EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
 								
-								threadManager.execute(new IndicatorDetector(this, candidate, resultsList, message, doneSignal));
+								threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
 								updateProgress(++operationCount);
 							} // End rotor check if
 						} // End left rotor for
@@ -142,7 +147,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		startDecryptTime = System.currentTimeMillis();
 		
 		for (EnigmaSettings candidate: candidateList) {
-			threadManager.execute(new RingDetector(this, candidate, resultsList, message, doneSignal));
+			threadManager.execute(new RingDetector(statGenerator, candidate, resultsList, message, doneSignal));
 			updateProgress(++operationCount);
 		}
 		
@@ -170,7 +175,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		startDecryptTime = System.currentTimeMillis();
 		
 		for (EnigmaSettings candidate: candidateList) {
-			threadManager.execute(new PlugboardDetector(this, candidate, resultsList, message, doneSignal));
+			threadManager.execute(new PlugboardDetector(statGenerator, candidate, resultsList, message, doneSignal));
 			updateProgress(++operationCount);
 		}
 		
@@ -230,6 +235,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 	}
 	
+	// Loads candidateList with the top candidates, with the list size selected by the user.
 	public void trimCandidateList() {
 		// Trim candidate list.
 		log.makeEntry("Sorting candidate list...", true);
@@ -246,32 +252,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		long endSortTime = System.currentTimeMillis();
 		log.makeEntry("Sorting completed in " + (endSortTime - beginSortTime) + " milliseconds.", true);
-	}
-	
-	// Compute log probability of a message compared to a corpus.
-	public double computeQuadgramProbability(String message) {
-		double result = 0.0;
-		
-		// Set floor value to 1 / 1000 of single instance of gram. See above references.
-		double floorLog = -3.0 + Math.log10(1.0 / database.getTotalQuadgramCount());
-		
-		int totalCount = database.getTotalQuadgramCount();
-		char[] characters = message.toCharArray();
-		
-		// Compute individual quadgram log probabilites.
-		// log probabilities are used to avoid numerical underflow. See above references.
-		for (int index = 0; index < message.length() - 4; index++) {
-			String gram = "" + characters[index] + characters[index + 1] + characters[index + 2] + characters[index + 3];
-			int count = database.getQuadgramCount(gram);
-			double logProb = Math.log10((double)count / totalCount);
-			
-			if (count > 0)
-				result += logProb;
-			else
-				result += floorLog;	// Prevent addition by negative infinity resulting from log(0).
-		}
-		
-		return result;
 	}
 	
 	public void updateProgress(int progress) {
