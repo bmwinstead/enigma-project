@@ -64,32 +64,32 @@ public class Corpus {
 	}
 	
 	public int getUnigramCount(String gram) {
-		if (unigramTable.containsKey(gram.toLowerCase())) {
-			return unigramTable.get(gram.toLowerCase());
+		if (unigramTable.containsKey(gram.toUpperCase())) {
+			return unigramTable.get(gram.toUpperCase());
 		}
 		
 		return 0;
 	}
 	
 	public int getBigramCount(String gram) {
-		if (bigramTable.containsKey(gram.toLowerCase())) {
-			return bigramTable.get(gram.toLowerCase());
+		if (bigramTable.containsKey(gram.toUpperCase())) {
+			return bigramTable.get(gram.toUpperCase());
 		}
 		
 		return 0;
 	}
 	
 	public int getTrigramCount(String gram) {
-		if (trigramTable.containsKey(gram.toLowerCase())) {
-			return trigramTable.get(gram.toLowerCase());
+		if (trigramTable.containsKey(gram.toUpperCase())) {
+			return trigramTable.get(gram.toUpperCase());
 		}
 		
 		return 0;
 	}
 	
 	public int getQuadgramCount(String gram) {
-		if (quadgramTable.containsKey(gram.toLowerCase())) {
-			return quadgramTable.get(gram.toLowerCase());
+		if (quadgramTable.containsKey(gram.toUpperCase())) {
+			return quadgramTable.get(gram.toUpperCase());
 		}
 		
 		return 0;
