@@ -90,6 +90,7 @@ public class IOPanel extends JPanel {
 		panel1Layout.linkSize(SwingConstants.VERTICAL, outputTape, manualInput);
 		return topPanel;
 	}
+	
 	private JPanel setUpBottomPanel(){
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.black);
@@ -156,7 +157,7 @@ public class IOPanel extends JPanel {
 				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
 				String encrypted = "";
 				for(String s : ls){
-					encrypted += machine.encryptString(s); 
+					encrypted += machine.encryptString(s) + "\n"; 
 				}
 				bulkOutput.setText(encrypted);
 			} catch(InvalidPathException e){
