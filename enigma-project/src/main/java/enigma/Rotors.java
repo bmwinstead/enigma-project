@@ -169,4 +169,26 @@ public class Rotors {
 		}
 		return letter;
 	} // end encrypt method
+	/**
+	 * Returns the Rotor Positions to EnigmMachine, which
+	 * then passes them on to the GUI
+	 * 
+	 */
+	public char[] getPositions() {
+		char[] threePositions = new char[3];
+		char[] fourPositions = new char[4];
+		if(fourth != null){
+			fourPositions[0] = fourth.getPosition();
+			fourPositions[1] = left.getPosition();
+			fourPositions[2] = middle.getPosition();
+			fourPositions[3] = right.getPosition();
+			return fourPositions;
+		}
+		else{
+			threePositions[0] = left.getPosition();
+			threePositions[1] = middle.getPosition();
+			threePositions[2] = right.getPosition();
+			return threePositions;
+		}
+	} // end getPositions method
 } // end Rotors class
