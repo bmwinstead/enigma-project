@@ -30,7 +30,7 @@ public class CharacterParser {
 			
 			// Parse words.
 			while (scanner.hasNext()) {
-				char[] characters = scanner.next().toLowerCase().toCharArray();
+				char[] characters = scanner.next().toUpperCase().toCharArray();
 
 				for (char character: characters) {
 					if (Character.isAlphabetic(character)) {	// Skip punctuation.
