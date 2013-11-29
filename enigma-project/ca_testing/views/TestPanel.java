@@ -35,6 +35,8 @@ import main.java.cryptanalysis.quadbomb.QuadbombManager;
 import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -69,6 +71,7 @@ public class TestPanel extends JFrame {
 	private JProgressBar decryptProgressBar;
 	private JButton breakCodeButton;
 	private JSpinner candidateSpinner;
+	private JComboBox testComboBox;
 	
 	public TestPanel() {
 		addWindowListener(new WindowAdapter() {
@@ -351,6 +354,13 @@ public class TestPanel extends JFrame {
 		candidateSpinner.setModel(new SpinnerNumberModel(100, 100, 5000, 100));
 		decryptPanel.add(candidateSpinner);
 		
+		JLabel lblNewLabel_2 = new JLabel("Test Statistic:");
+		decryptPanel.add(lblNewLabel_2);
+		
+		testComboBox = new JComboBox();
+		testComboBox.setModel(new DefaultComboBoxModel(new String[] {"Sinkov's Unigram", "Sinkov's Bigram", "Sinkov's Trigram", "Sinkov's Quadgram", "I.O.C. Unigram", "I.O.C. Bigram", "I.O.C. Trigram", "I.O.C. Quadgram"}));
+		decryptPanel.add(testComboBox);
+		
 		JLabel lblNewLabel_11 = new JLabel("Progress:");
 		decryptPanel.add(lblNewLabel_11);
 		
@@ -377,7 +387,9 @@ public class TestPanel extends JFrame {
 					
 					int threadLimit = (int)(threadCountSpinner.getValue());
 					int candidateSize = (int)(candidateSpinner.getValue());
-					QuadbombManager analyzer = new QuadbombManager(database, cipher, threadLimit, candidateSize, resultsPanel);
+					
+					int statTest = testComboBox.getSelectedIndex();	// debugging to select stat test.
+					QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {
