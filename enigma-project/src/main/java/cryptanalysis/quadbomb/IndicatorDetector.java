@@ -12,19 +12,20 @@ package main.java.cryptanalysis.quadbomb;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
+import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
 public class IndicatorDetector implements Runnable {
-	private QuadbombManager manager;
+	private StatisticsGenerator tester;
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private EnigmaSettings settings;
 	private final String message;
 	
 	private CountDownLatch latch;
 	
-	public IndicatorDetector(QuadbombManager manager, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
-		this.manager = manager;
+	public IndicatorDetector(StatisticsGenerator tester, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
+		this.tester = tester;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
@@ -48,7 +49,9 @@ public class IndicatorDetector implements Runnable {
 					EnigmaMachine bomb = new EnigmaMachine(settings.getRotors(), settings.getReflector(), settings.getRingSettings(), rotorTestSettings);
 					
 					String cipher = bomb.encryptString(message);
-					double testValue = manager.computeQuadgramProbability(cipher);
+					double testValue = tester.computeFitnessScore(cipher);
+					//double[] values = tester.computeAllScores(cipher);
+					//double testValue = values[3];
 					
 					if (testValue > bestScore) {
 						bestScore = testValue;
