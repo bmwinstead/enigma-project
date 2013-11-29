@@ -918,6 +918,13 @@ public class EnigmaGUI extends JFrame{
                     fourthRotorRingSetting.setSelectedIndex(0);
                     fourthRotorPosition.setValue("");
                 }
+                else if (reflectorChoice.getSelectedIndex() != 2 &&
+                		reflectorChoice.getSelectedIndex() != 3){
+                	reflectorChoice.setSelectedIndex(2);
+                	JOptionPane.showMessageDialog(tempFrame,
+    						"You can only use THIN reflectors with the "
+    						+ "fourth rotor selected.");
+                }
             }
         });
         leftRotorChoice.addActionListener(new ActionListener() {
@@ -960,6 +967,31 @@ public class EnigmaGUI extends JFrame{
                 else {
                 	tempRight = rightRotorChoice.getSelectedItem().toString();
                 }
+            }
+        });
+      //Action Listener for Reflector Setting
+        reflectorChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fourthRotorChoice.getSelectedIndex() != 0){
+                	if (reflectorChoice.getSelectedIndex() != 2 &&
+                    		reflectorChoice.getSelectedIndex() != 3){
+                    	reflectorChoice.setSelectedIndex(2);
+                    	JOptionPane.showMessageDialog(tempFrame,
+        						"You can only use THIN reflectors with the "
+        						+ "fourth rotor selected.");
+                    }
+                }
+                else{
+                	if (reflectorChoice.getSelectedIndex() != 0 &&
+                    		reflectorChoice.getSelectedIndex() != 1){
+                    	reflectorChoice.setSelectedIndex(0);
+                    	JOptionPane.showMessageDialog(tempFrame,
+        						"You can only use THIN reflectors with the "
+        						+ "fourth rotor selected.");
+                    }
+            	}
+                
             }
         });
     }
