@@ -12,19 +12,20 @@ package main.java.cryptanalysis.quadbomb;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
+import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
 public class RingDetector implements Runnable {
-	private QuadbombManager manager;
+	private StatisticsGenerator tester;
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private EnigmaSettings settings;
 	private final String message;
 	
 	private CountDownLatch latch;
 	
-	public RingDetector(QuadbombManager manager, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
-		this.manager = manager;
+	public RingDetector(StatisticsGenerator tester, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
+		this.tester = tester;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
@@ -41,15 +42,15 @@ public class RingDetector implements Runnable {
 		double bestScore = Double.NEGATIVE_INFINITY;
 		
 		// Cycle through ring setting combinations.
-		for (int i = 0; i < 26; i++) {
+		//for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < 26; j++) {
 				for (int k = 0; k < 26; k++) {
-					ringTestSettings[0] = (char) ('A' + i);
+					ringTestSettings[0] = 'A';//(char) ('A' + i);
 					ringTestSettings[1] = (char) ('A' + j);
 					ringTestSettings[2] = (char) ('A' + k);
 					
 					// Offset the indicators the same as the ring offset. See references above.	
-					int leftOffset = baseRotorSettings[0] + i - 'A';
+					int leftOffset = baseRotorSettings[0] - 'A';// + i - 'A';
 					int middleOffset = baseRotorSettings[1] + j - 'A';
 					int rightOffset = baseRotorSettings[2] + k - 'A';
 					
@@ -64,7 +65,9 @@ public class RingDetector implements Runnable {
 					EnigmaMachine bomb = new EnigmaMachine(settings.getRotors(), settings.getReflector(), ringTestSettings, rotorTestSettings);
 					
 					String cipher = bomb.encryptString(message);
-					double testValue = manager.computeQuadgramProbability(cipher);
+					double testValue = tester.computeFitnessScore(cipher);
+					//double[] values = tester.computeAllScores(cipher);
+					//double testValue = values[3];
 					
 					if (testValue > bestScore) {
 						bestScore = testValue;
@@ -75,7 +78,7 @@ public class RingDetector implements Runnable {
 					} // End best result if
 				} // End right ring for
 			} // End middle ring for
-		} // End left ring for
+		//} // End left ring for
 		
 		// Save best indicator result into list for further processing.
 		resultsList.add(candidate);
