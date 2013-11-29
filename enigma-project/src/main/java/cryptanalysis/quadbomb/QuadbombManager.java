@@ -137,6 +137,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Trim candidate list.
 		trimCandidateList();
+		log.makeEntry("Rotor and indicator candidates:", true);
+		printCandidateList();
 		
 		// Step 2: Determine possible ring settings.
 		// Initialize thread list.
@@ -165,6 +167,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Trim candidate list.
 		trimCandidateList();
+		log.makeEntry("Ring candidates:", true);
+		printCandidateList();
 		
 		// Step 3: Determine possible plugboard settings.
 		// Initialize thread list.
@@ -252,6 +256,13 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		long endSortTime = System.currentTimeMillis();
 		log.makeEntry("Sorting completed in " + (endSortTime - beginSortTime) + " milliseconds.", true);
+	}
+	
+	public void printCandidateList() {
+		int count = 1;
+		for (EnigmaSettings candidate: candidateList) {
+			log.makeEntry("Candidate #" + count + " of " + candidateList.size() + ":" + candidate.printSettings(), true);
+		}
 	}
 	
 	public void updateProgress(int progress) {

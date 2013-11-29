@@ -211,6 +211,10 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 		
 		return result;
 	}
+	
+	public String printSettings() {
+		return printWheelOrder() + " " + printRingSettings() + " " + printIndicators() + " " + printPlugboard();
+	}
 
 	// Allows sorting by fitness score.
 	public int compareTo(EnigmaSettings settings) {
