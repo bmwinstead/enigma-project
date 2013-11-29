@@ -1,0 +1,23 @@
+[Wed Nov 27 22:13:06 EST 2013] - Logger initialized.
+[Wed Nov 27 22:13:07 EST 2013] - TestPanel initialized.
+[Wed Nov 27 22:13:37 EST 2013] - Parsing C:\Users\Slyjinks\git\enigma\enigma-project\ca_testing\Text Files\War and Peace.txt...
+[Wed Nov 27 22:13:41 EST 2013] - Parsing complete.
+[Wed Nov 27 22:13:41 EST 2013] - Parsing took 4229 milliseconds.
+[Wed Nov 27 22:13:41 EST 2013] - Corpus now contains:
+[Wed Nov 27 22:13:41 EST 2013] - 2513042 unigrams.
+[Wed Nov 27 22:13:41 EST 2013] - 2513041 bigrams.
+[Wed Nov 27 22:13:41 EST 2013] - 2513040 trigrams.
+[Wed Nov 27 22:13:41 EST 2013] - 2513039 quadgrams.
+[Wed Nov 27 22:14:29 EST 2013] - Starting encryption...
+[Wed Nov 27 22:14:29 EST 2013] - Rotors - 402
+[Wed Nov 27 22:14:29 EST 2013] - Reflector - C
+[Wed Nov 27 22:14:29 EST 2013] - Ring Settings - YOU
+[Wed Nov 27 22:14:29 EST 2013] - Rotor Settings - FUK
+[Wed Nov 27 22:14:29 EST 2013] - Encryption Complete.
+
+[Wed Nov 27 22:14:29 EST 2013] - Decryption Complete.
+
+[Wed Nov 27 22:14:41 EST 2013] - Starting quadgram analyser...
+[Wed Nov 27 22:14:41 EST 2013] - Quadgram analyser finished.
+[Thu Nov 28 06:25:19 EST 2013] - TestPanel closed.
+[Thu Nov 28 06:25:19 EST 2013] - Logger closed.

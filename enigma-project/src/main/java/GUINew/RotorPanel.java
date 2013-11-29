@@ -1,11 +1,10 @@
 package main.java.GUINew;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -62,140 +61,173 @@ public class RotorPanel extends JPanel implements ActionListener,
 	private EnigmaSpinner rightRotorPosition;
 
 	//Constructor... puts the thing together.
-	//Old bounds are commented out in case we find some way to
-	//re-use them.
 	public RotorPanel() {
-		this.setSize(300,300);
-		this.setLayout(new GridLayout(4, 5));
+		GroupLayout layout = new GroupLayout(this);
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		this.setLayout(layout);
 		this.setBackground(Color.black);
-		fourthRotor = new JLabel("Rotor 4");
-		fourthRotor.setForeground(Color.white);
-		fourthRotor.setBackground(Color.black);
-		this.add(fourthRotor);
-		leftRotor = new JLabel("Rotor 3");
-		leftRotor.setForeground(Color.white);
-		leftRotor.setBackground(Color.black);
-		this.add(leftRotor);
-		middleRotor = new JLabel("Rotor 2");
-		middleRotor.setForeground(Color.white);
-		middleRotor.setBackground(Color.black);
-		this.add(middleRotor);
-		rightRotor = new JLabel("Rotor 1");
-		rightRotor.setForeground(Color.white);
-		rightRotor.setBackground(Color.black);
-		this.add(rightRotor);
+		
 		reflectorLabel = new JLabel("Reflector");
 		reflectorLabel.setForeground(Color.white);
 		reflectorLabel.setBackground(Color.black);
-		this.add(reflectorLabel);
 
-		fourthRotorChoice = new JComboBox<String>(fourthRotorChoices);
-		// fourthRotorChoice.setBounds(19, 89, 124, 28);
-		fourthRotorChoice.setSelectedIndex(0);
-		fourthRotorChoice.setActionCommand("fourthRotorChoice");
-		fourthRotorChoice.addActionListener(this);
-		this.add(fourthRotorChoice);
+		fourthRotor = new JLabel("Rotor 4");
+		fourthRotor.setForeground(Color.white);
+		fourthRotor.setBackground(Color.black);
 
-		leftRotorChoice = new JComboBox<String>(rotorChoices);
-		// leftRotorChoice.setBounds(148, 89, 124, 28);
-		leftRotorChoice.setSelectedIndex(0);
-		leftRotorChoice.setActionCommand("leftRotorChoice");
-		leftRotorChoice.addActionListener(this);
-		this.add(leftRotorChoice);
+		leftRotor = new JLabel("Rotor 3");
+		leftRotor.setForeground(Color.white);
+		leftRotor.setBackground(Color.black);
 
-		middleRotorChoice = new JComboBox<String>(rotorChoices);
-		// middleRotorChoice.setBounds(276, 89, 124, 28);
-		middleRotorChoice.setSelectedIndex(1);
-		middleRotorChoice.setActionCommand("middleRotorChoice");
-		middleRotorChoice.addActionListener(this);
-		this.add(middleRotorChoice);
+		middleRotor = new JLabel("Rotor 2");
+		middleRotor.setForeground(Color.white);
+		middleRotor.setBackground(Color.black);
 
-		rightRotorChoice = new JComboBox<String>(rotorChoices);
-		// rightRotorChoice.setBounds(404, 89, 124, 28);
-		rightRotorChoice.setSelectedIndex(2);
-		rightRotorChoice.setActionCommand("rightRotorChoice");
-		rightRotorChoice.addActionListener(this);
-		this.add(rightRotorChoice);
+		rightRotor = new JLabel("Rotor 1");
+		rightRotor.setForeground(Color.white);
+		rightRotor.setBackground(Color.black);
+
 
 		// Reflector Box
 		reflectorChoice = new JComboBox<String>(reflectorChoices);
-		// reflectorChoice.setBounds(552, 89, 124, 28);
 		reflectorChoice.setSelectedIndex(0);
 		reflectorChoice.setActionCommand("reflectorChoice");
 		reflectorChoice.addActionListener(this);
-		this.add(reflectorChoice);
+
+		
+		fourthRotorChoice = new JComboBox<String>(fourthRotorChoices);
+		fourthRotorChoice.setSelectedIndex(0);
+		fourthRotorChoice.setActionCommand("fourthRotorChoice");
+		fourthRotorChoice.addActionListener(this);
+
+		leftRotorChoice = new JComboBox<String>(rotorChoices);
+		leftRotorChoice.setSelectedIndex(0);
+		leftRotorChoice.setActionCommand("leftRotorChoice");
+		leftRotorChoice.addActionListener(this);
+
+		middleRotorChoice = new JComboBox<String>(rotorChoices);
+		middleRotorChoice.setSelectedIndex(1);
+		middleRotorChoice.setActionCommand("middleRotorChoice");
+		middleRotorChoice.addActionListener(this);
+
+		rightRotorChoice = new JComboBox<String>(rotorChoices);
+		rightRotorChoice.setSelectedIndex(2);
+		rightRotorChoice.setActionCommand("rightRotorChoice");
+		rightRotorChoice.addActionListener(this);
 
 		ringSettingsLabel = new JLabel("Ring Settings");
 		ringSettingsLabel.setForeground(Color.white);
 		ringSettingsLabel.setBackground(Color.black);
-		this.add(ringSettingsLabel);
-		
+
 		// Ring Setting Boxes
 		fourthRotorRingSetting = new JComboBox<String>(fourthLetterChoices);
-		// fourthRotorRingSetting.setBounds(55, 126, 46, 28);
 		fourthRotorRingSetting.setSelectedIndex(0);
 		fourthRotorRingSetting.setActionCommand("fourthRotorRingSetting");
 		fourthRotorRingSetting.addActionListener(this);
-		this.add(fourthRotorRingSetting);
 
 		leftRotorRingSetting = new JComboBox<String>(letterChoices);
-		// leftRotorRingSetting.setBounds(187, 126, 46, 28);
 		leftRotorRingSetting.setSelectedIndex(0);
 		leftRotorRingSetting.setActionCommand("leftRotorRingSetting");
 		leftRotorRingSetting.addActionListener(this);
-		this.add(leftRotorRingSetting);
 
 		middleRotorRingSetting = new JComboBox<String>(letterChoices);
-		// middleRotorRingSetting.setBounds(315, 126, 46, 28);
 		middleRotorRingSetting.setSelectedIndex(0);
 		middleRotorRingSetting.setActionCommand("middleRotorRingSetting");
 		middleRotorRingSetting.addActionListener(this);
-		this.add(middleRotorRingSetting);
 
 		rightRotorRingSetting = new JComboBox<String>(letterChoices);
-		// rightRotorRingSetting.setBounds(443, 126, 46, 28);
 		rightRotorRingSetting.setSelectedIndex(0);
 		rightRotorRingSetting.setActionCommand("rightRotorRingSetting");
 		rightRotorRingSetting.addActionListener(this);
-		this.add(rightRotorRingSetting);
 
 		rotorPositionsLabel = new JLabel("Rotor Positions");
 		rotorPositionsLabel.setForeground(Color.white);
 		rotorPositionsLabel.setBackground(Color.black);
-		this.add(rotorPositionsLabel);
 		
 		// Rotor Position Spinners
 		fourthRotorPosition = new EnigmaSpinner();
 		fourthRotorPosition.setModel(new SpinnerListModel(fourthLetterChoices));
-		// fourthRotorPosition.setBounds(55, 159, 46, 28);
 		fourthRotorPosition.setValue(" ");
 		fourthRotorPosition.identifier = "fourthRotorPosition";
 		fourthRotorPosition.addChangeListener(this);
-		this.add(fourthRotorPosition);
 
 		leftRotorPosition = new EnigmaSpinner();
 		leftRotorPosition.setModel(new SpinnerListModel(letterChoices));
-		// leftRotorPosition.setBounds(187, 159, 46, 28);
 		leftRotorPosition.setValue("A");
 		leftRotorPosition.addChangeListener(this);
 		leftRotorPosition.identifier = "leftRotorPosition";
-		this.add(leftRotorPosition);
 
 		middleRotorPosition = new EnigmaSpinner();
 		middleRotorPosition.setModel(new SpinnerListModel(letterChoices));
-		// middleRotorPosition.setBounds(315, 159, 46, 28);
 		middleRotorPosition.setValue("A");
 		middleRotorPosition.addChangeListener(this);
 		middleRotorPosition.identifier = "middleRotorPosition";
-		this.add(middleRotorPosition);
 
 		rightRotorPosition = new EnigmaSpinner();
 		rightRotorPosition.setModel(new SpinnerListModel(letterChoices));
-		// rightRotorPosition.setBounds(443, 159, 46, 28);
 		rightRotorPosition.setValue("A");
 		rightRotorPosition.addChangeListener(this);
 		rightRotorPosition.identifier = "rightRotorPosition";
-		this.add(rightRotorPosition);
+		
+		int min = 20;
+		int pref = 30;
+		int max = 40;
+		//LAYOUT CODE AWWW YEAH
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+						.addComponent(reflectorLabel)
+						.addComponent(reflectorChoice)
+						.addComponent(ringSettingsLabel)
+						.addComponent(rotorPositionsLabel))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(fourthRotor)
+						.addComponent(fourthRotorChoice)
+						.addComponent(fourthRotorRingSetting,min,pref,max)
+						.addComponent(fourthRotorPosition,min,pref,max))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(leftRotor)
+						.addComponent(leftRotorChoice)
+						.addComponent(leftRotorRingSetting,min,pref,max)
+						.addComponent(leftRotorPosition,min,pref,max))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(middleRotor)
+						.addComponent(middleRotorChoice)
+						.addComponent(middleRotorRingSetting,min,pref,max)
+						.addComponent(middleRotorPosition,min,pref,max))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(rightRotor)
+						.addComponent(rightRotorChoice)
+						.addComponent(rightRotorRingSetting,min,pref,max)
+						.addComponent(rightRotorPosition,min,pref,max))
+				);
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+						.addComponent(reflectorLabel)
+						.addComponent(fourthRotor)
+						.addComponent(leftRotor)
+						.addComponent(middleRotor)
+						.addComponent(rightRotor))
+				.addGroup(layout.createParallelGroup()
+						.addComponent(reflectorChoice)
+						.addComponent(fourthRotorChoice)
+						.addComponent(leftRotorChoice)
+						.addComponent(middleRotorChoice)
+						.addComponent(rightRotorChoice))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(ringSettingsLabel)
+						.addComponent(fourthRotorRingSetting,min,pref,max)
+						.addComponent(leftRotorRingSetting,min,pref,max)
+						.addComponent(middleRotorRingSetting,min,pref,max)
+						.addComponent(rightRotorRingSetting,min,pref,max))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(rotorPositionsLabel)
+						.addComponent(fourthRotorPosition,min,pref,max)
+						.addComponent(leftRotorPosition,min,pref,max)
+						.addComponent(middleRotorPosition,min,pref,max)
+						.addComponent(rightRotorPosition,min,pref,max))
+				);
+		
 	}
 
 	//ActionListener for the ComboBoxes. Performs validation and updates machine
