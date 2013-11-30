@@ -1,4 +1,4 @@
-package main.java.GUI;
+package main.java.GUINew;
 
 public class ConfigureOutput {
 	
@@ -57,9 +57,11 @@ public class ConfigureOutput {
     				}
     			}
     		}
+    		System.out.println(setString + "setString");
     		return setString.toUpperCase();
         }
         else{
+        	System.out.println(getString + "getString");
         	return getString;
         }
     }
