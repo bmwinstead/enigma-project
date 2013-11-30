@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,11 @@ import java.util.PriorityQueue;
 // and then sortDatabase() is called to load priority queues with the entered words in descending word count order.
 // Then each call to get(n-gram)TestQueue() returns a shallow copy of each queue for word processing.
 
-public class Corpus {
+public class Corpus implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2096305067100712292L;
 	// Statistic databases.
 	private Map<String, Integer> unigramTable;
 	private Map<String, Integer> bigramTable;
@@ -227,7 +232,11 @@ public class Corpus {
 	}
 	
 	// Inner class to sort database words in descending count order.
-	public class GramComparator implements Comparator<String> {
+	public class GramComparator implements Comparator<String>, Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -245563502404239581L;
 		private Map<String, Integer> table;
 		
 		public GramComparator(Map<String, Integer> database) {
