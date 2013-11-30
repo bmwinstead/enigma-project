@@ -37,6 +37,7 @@ public class IOPanel extends JPanel {
 	private JLabel tapeLabel;
 	private JLabel manualInputLabel;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
+	private ConfigureOutput output = new ConfigureOutput(); //Configure
 	public IOPanel()  {
 		GroupLayout mainLayout = new GroupLayout(this);
 		setLayout(mainLayout);
@@ -159,10 +160,14 @@ public class IOPanel extends JPanel {
 				for(String s : ls){
 					encrypted += machine.encryptString(s) + "\n"; 
 				}
+				encrypted = output.configure(encrypted); //Text error checking
+				System.out.println("Text Error Checking and Conversion");
 				bulkOutput.setText(encrypted);
 			} catch(InvalidPathException e){
 				String s = bulkInput.getText();
 				String encrypted = machine.encryptString(s);
+				encrypted = output.configure(encrypted); //Text error checking
+				System.out.println("Text Error Checking and Conversion");
 				bulkOutput.setText(encrypted);
 			} catch (IOException e) {
 				String s = bulkInput.getText();

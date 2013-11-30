@@ -77,12 +77,15 @@ public class RotorPanel extends JPanel implements ActionListener,
 		pbDialog = new PlugboardDialog();
 		JPanel topPanel = buildTopPanel();
 		JPanel plugboardPanel = buildPlugboardPanel();
+		Lightboard lightboardPanel = buildLightboardPanel(); // Lightboard
 		GroupLayout thisLayout = new GroupLayout(this);
 		this.setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createParallelGroup()
-				.addComponent(topPanel).addComponent(plugboardPanel));
+				.addComponent(topPanel).addComponent(plugboardPanel)
+				.addComponent(lightboardPanel)); //Lightboard
 		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
-				.addComponent(topPanel).addComponent(plugboardPanel));
+				.addComponent(topPanel).addComponent(plugboardPanel)
+				.addComponent(lightboardPanel)); //Lightboard
 	}
 
 	private JPanel buildTopPanel() {
@@ -315,6 +318,13 @@ public class RotorPanel extends JPanel implements ActionListener,
 				.addComponent(resetButton));
 		plugboardLayout.linkSize(pbButton, resetButton);
 		return plugboardPanel;
+	}
+	
+	//Lightboard panel
+	private Lightboard buildLightboardPanel() {
+		Lightboard lightboardPanel = new Lightboard();
+		lightboardPanel.setBackground(Color.black);
+		return lightboardPanel;
 	}
 
 	// ActionListener for the ComboBoxes. Performs validation and updates

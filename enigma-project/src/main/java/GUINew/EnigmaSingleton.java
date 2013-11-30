@@ -19,6 +19,7 @@ public class EnigmaSingleton extends Observable {
 	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton();
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
+	private ConfigureOutput output = new ConfigureOutput(); //Configure
 
 	private EnigmaSingleton() {
 		// No constructor for you.
@@ -77,6 +78,8 @@ public class EnigmaSingleton extends Observable {
 	public String encryptString(String s) {
 		System.out.println("Encrypting string " + s);
 		notifyObservers();
+		s = output.configure(s); //Text error checking
+		System.out.println("Text Error Checking and Conversion");
 		return machine.encryptString(s);
 	}
 	
