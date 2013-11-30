@@ -18,13 +18,13 @@ public class Enigma {
 
     public static void main(String[] args) {
         new Enigma(); //Original GUI
-        //New Rotor Panel GUI
+        /*New Rotor Panel GUI
 		RotorPanel r = new RotorPanel();
 		JFrame frame = new JFrame();
 		frame.add(r);
 		frame.pack();
 		frame.setVisible(true);
-		new PlugBoardGUI().setLocation(0,200); //New PlugBoard GUI
+		new PlugBoardGUI().setLocation(0,200); //New PlugBoard GUI*/
     }
     
     public Enigma(){
