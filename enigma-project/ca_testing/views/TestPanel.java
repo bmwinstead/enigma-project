@@ -7,6 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -121,13 +127,47 @@ public class TestPanel extends JFrame {
 		JButton parseButton = new JButton("Parse");
 		buttonPanel.add(parseButton);
 		
-		JButton dumpTextFileButton = new JButton("Dump to Text File...");
-		dumpTextFileButton.addActionListener(new ActionListener() {
+		JButton saveCorpusButton = new JButton("Save..");
+		saveCorpusButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				database.dumpDatabaseToText();
+				JFileChooser fileChooser = new JFileChooser();
+
+				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					try {
+						ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileChooser.getSelectedFile() + ".corpus"));
+						output.writeObject(database);
+						output.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		});
-		buttonPanel.add(dumpTextFileButton);
+		buttonPanel.add(saveCorpusButton);
+		
+		JButton loadCorpusButton = new JButton("Load...");
+		loadCorpusButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileChooser = new JFileChooser();
+
+				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					try {
+						FileInputStream fileStream = new FileInputStream(fileChooser.getSelectedFile());
+						ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+						database = (Corpus) objectStream.readObject();
+						objectStream.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		buttonPanel.add(loadCorpusButton);
 		
 		// Parse a text file and display results..
 		parseButton.addActionListener(new ActionListener() {
