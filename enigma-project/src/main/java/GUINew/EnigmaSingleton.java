@@ -19,7 +19,9 @@ public class EnigmaSingleton extends Observable {
 	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton();
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
-	private ConfigureOutput output = new ConfigureOutput(); //Configure
+	private ConfigureOutput output = new ConfigureOutput(); //Configure text
+	private String encryptedString = ""; //String to send Lightboard Update
+	private char encryptedChar = ' '; //String to send Lightboard Update
 
 	private EnigmaSingleton() {
 		// No constructor for you.
@@ -71,16 +73,21 @@ public class EnigmaSingleton extends Observable {
 
 	public char encryptChar(char c) {
 		System.out.println("Encrypting char " + c);
+		c = output.configure(c); //Text error checking
+		System.out.println("Text Error Checking and Conversion");
+		encryptedChar = machine.encryptChar(c); 
+		encryptedString = Character.toString(encryptedChar);//For Lightboard submission
 		notifyObservers();
-		return machine.encryptChar(c);
+		return encryptedChar;
 	}
 
 	public String encryptString(String s) {
 		System.out.println("Encrypting string " + s);
-		notifyObservers();
 		s = output.configure(s); //Text error checking
 		System.out.println("Text Error Checking and Conversion");
-		return machine.encryptString(s);
+		encryptedString = machine.encryptString(s); //For Lightboard submission
+		notifyObservers();
+		return encryptedString;
 	}
 	
 	@Override
@@ -93,5 +100,11 @@ public class EnigmaSingleton extends Observable {
 		for(Observer obs : observers){
 			obs.update(this, String.valueOf(machine.getPositions()));
 		}
+	}
+	
+	//Update Lightboard
+	public String getEncryptedString(){
+		System.out.println("Setting Light Board");
+		return encryptedString;
 	}
 }

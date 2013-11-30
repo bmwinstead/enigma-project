@@ -68,6 +68,7 @@ public class RotorPanel extends JPanel implements ActionListener,
 	private EnigmaSpinner rightRotorPosition;
 	private PlugboardDialog pbDialog;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
+	Lightboard lightboard = new Lightboard(); //Light board
 
 	// Constructor... puts the thing together.
 	public RotorPanel() {
@@ -322,9 +323,8 @@ public class RotorPanel extends JPanel implements ActionListener,
 	
 	//Lightboard panel
 	private Lightboard buildLightboardPanel() {
-		Lightboard lightboardPanel = new Lightboard();
-		lightboardPanel.setBackground(Color.black);
-		return lightboardPanel;
+		lightboard.setBackground(Color.black);
+		return lightboard;
 	}
 
 	// ActionListener for the ComboBoxes. Performs validation and updates
@@ -478,6 +478,11 @@ public class RotorPanel extends JPanel implements ActionListener,
 			rightRotorPosition.setValue(String.valueOf(positions[2]));
 		}
 	}
+	
+	//Method to set lightboard
+	public void setLightboard(String lightString){
+		lightboard.turnOnLight(lightString);
+	}
 
 	private class EnigmaSpinner extends JSpinner {
 		public String identifier;
@@ -505,5 +510,8 @@ public class RotorPanel extends JPanel implements ActionListener,
 		String s = (String) arg1;
 		System.out.println("Changing rotors to " + s);
 		setRotorPositions(s.toCharArray());
+		if (!machine.getEncryptedString().isEmpty()){
+			setLightboard(machine.getEncryptedString());
+		}
 	}
 }

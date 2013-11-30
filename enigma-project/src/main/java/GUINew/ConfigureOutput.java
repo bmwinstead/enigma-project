@@ -6,6 +6,7 @@ public class ConfigureOutput {
 	}
 	
     //Change input to correct case & remove special characters
+	//String Method
 	public String configure(String getString){
     	String setString = "";
     	char[] swapChar = getString.toCharArray();
@@ -63,4 +64,45 @@ public class ConfigureOutput {
         	return getString;
         }
     }
+	//Change input to correct case & remove special characters
+	//Char Method
+	public char configure(char getChar){
+	    char setChar = ' ';
+	    if (Character.isLetter(getChar)){
+	    	setChar = getChar;
+	    }
+	    else if(Character.isDigit(getChar)){
+	    	if(getChar == '0'){
+	    		setChar = 'P';
+	    	}
+	    	else if(getChar == '1'){
+	    		setChar = 'Q';
+	    	}
+	    	else if(getChar == '2'){
+	    		setChar = 'W';
+	    	}
+	    	else if(getChar == '3'){
+	    		setChar = 'E';
+	    	}
+	    	else if(getChar == '4'){
+	    		setChar = 'R';
+	    	}
+	    	else if(getChar == '5'){
+	    		setChar = 'T';
+	    	}
+	    	else if(getChar == '6'){
+	    		setChar = 'Z';
+	    	}
+	    	else if(getChar == '7'){
+	    		setChar = 'U';
+	    	}
+	    	else if(getChar == '8'){
+	    		setChar = 'I';
+	    	}
+	    	else if(getChar == '9'){
+	    		setChar = 'O';
+	    	}
+	    }
+	    return setChar;
+	}
 }

@@ -219,7 +219,7 @@ public class Lightboard extends JPanel {
 		layeredPane.add(lightZ, new Integer(0), 0);
 	}
 
-	private void resetLights(){
+	public void resetLights(){
 		layeredPane.setLayer(lightA, new Integer(0), 0);
 		layeredPane.setLayer(lightB, new Integer(0), 0);
 		layeredPane.setLayer(lightC, new Integer(0), 0);
