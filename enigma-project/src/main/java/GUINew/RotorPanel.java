@@ -521,7 +521,7 @@ public class RotorPanel extends JPanel implements Observer {
 				pbField.setText(pbString);
 				// JLI Wasn't setting the machine's plugboard.
 				machine.setPlugboard(pbString);
-				System.out.println("Changing plugboard to: " + pbString);
+				System.out.println("RotorPanel: Changing plugboard to: " + pbString);
 			}
 		}
 	}

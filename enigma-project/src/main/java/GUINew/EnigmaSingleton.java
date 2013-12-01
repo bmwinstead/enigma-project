@@ -56,7 +56,7 @@ public class EnigmaSingleton extends Observable {
 				+ String.valueOf(ringSettings));
 		System.out.println("Changing rotor positions to: "
 				+ String.valueOf(initialPositions));
-		System.out.println("Changing plugboard to: " + plugboardMap);
+		System.out.println("Singleton: Changing plugboard to: " + plugboardMap);
 	} // end setState
 
 	/**
@@ -98,7 +98,7 @@ public class EnigmaSingleton extends Observable {
 	 * @param pbMap
 	 */
 	public void setPlugboard(String pbMap) {
-		System.out.println("Setting plugboard to: " + pbMap);
+		System.out.println("Singleton: Setting plugboard to: " + pbMap);
 		machine.setPlugboard(pbMap);
 	}
 
