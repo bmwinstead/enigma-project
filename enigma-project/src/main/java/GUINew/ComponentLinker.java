@@ -16,6 +16,9 @@ import java.util.Map;
  * @date - Nov 27, 2013
  * Most of this code comes from 
  * @see http://stackoverflow.com/a/12389479/909085
+ * 
+ * Draws the lines that illustrate which letters are linked together in the
+ * plugboard. 
  */
 
 
@@ -23,22 +26,36 @@ import java.util.Map;
 public class ComponentLinker extends JComponent{
 	private Map<JComponent, JComponent> linked;
 
+	/**
+	 * Constuctor. Initializes a new hashmap to contain the links.
+	 */
     public ComponentLinker()
     {
         super();
         linked = new HashMap<JComponent, JComponent> ();
-    }
+    } // end constructor
 
+    /**
+     * Adds a new link to the hashmap, indicting which letters are linked.
+     * 
+     * @param c1
+     * 			First component to be linked.
+     * @param c2
+     * 			Second component to be linked. 
+     */
     public void link ( JComponent c1, JComponent c2 )
     {
         linked.put ( c1, c2 );
         repaint();
-    }
+    } // end link method
     
+    /**
+     * Clears the hashmap. Used when the plugboard is reset. 
+     */
     public void clear(){
     	linked.clear();
     	repaint();
-    }
+    } // end clear method
 
     protected void paintComponent ( Graphics g )
     {
@@ -95,4 +112,4 @@ public class ComponentLinker extends JComponent{
         return false;
     }
 	
-}
+} // end ComponentLinker class

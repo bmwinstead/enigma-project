@@ -117,25 +117,48 @@ public class EnigmaMachine {
 	 * testing.
 	 * 
 	 * @param newPositions
-	 *            3-4 character array representing the new positions the rotors
-	 *            are to be set to.
+	 *            Array of 3-4 character array representing the new positions
+	 *            the rotors are to be set to.
 	 */
 	public void setPositions(char[] newPositions) {
 		initPositions = newPositions;
 		reset();
 	} // end setPositions method
 	
+	/**
+	 * Changes the Rotor and Reflector choices of the Enigma.
+	 * 
+	 * @param rotorChoices
+	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
+	 *            to be included in the Enigma.
+	 * @param reflectorChoice
+	 *            An integer from 0-3 indicating which of the four available
+	 *            reflectors to include.
+	 */
 	public void setRotorChoices(int[] rotorChoices,int reflectorChoice){
 		rotors = new Rotors(rotorChoices,reflectorChoice);
-	}
+	} // end setRotorChoices
 	
+	/**
+	 * Changes the Ring Settings of the Enigma's rotors.
+	 * 
+	 * @param ringSettings
+	 *            An array of 3-4 characters indicating the rotors' ring
+	 *            settings.
+	 */
 	public void setRingSettings(char[] ringSettings){
 		rotors.setRingSettings(ringSettings);
-	}
+	} // end setRingSettings
 	
+	/**
+	 * Sets a new Plugboard map for the Enigma Machine.
+	 * 
+	 * @param pbMap
+	 *            String indicating the plugboard replacement mapping.
+	 */
 	public void setPlugboard(String pbMap){
 		plugboard = new Plugboard(pbMap);
-	}
+	} // end setPlugboard
 	
 	/**
 	 * Returns the Rotor Positions to the GUI so that I will accurately

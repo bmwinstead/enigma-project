@@ -169,9 +169,13 @@ public class Rotors {
 		}
 		return letter;
 	} // end encrypt method
+	
 	/**
-	 * Returns the Rotor Positions to EnigmMachine, which
-	 * then passes them on to the GUI
+	 * Returns the Rotor Positions to EnigmMachine, which then passes them on to
+	 * the GUI
+	 * 
+	 * @return A 3-4 character array representing the current positions of the
+	 *         Enigma rotors
 	 * 
 	 */
 	public char[] getPositions() {

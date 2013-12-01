@@ -13,6 +13,8 @@ import main.java.enigma.EnigmaMachine;
  * changed and stuff.
  * 
  * @author bwinstead
+ * @version 0.9
+ * @date 30 Nov 2013
  * 
  */
 public class EnigmaSingleton extends Observable {
@@ -25,6 +27,15 @@ public class EnigmaSingleton extends Observable {
 		// No constructor for you.
 	}
 
+	/**
+	 * Sets the full state, including plugboardMap and initialPositions.
+	 * 
+	 * @param rotorChoices
+	 * @param reflectorChoice
+	 * @param ringSettings
+	 * @param initialPositions
+	 * @param plugboardMap
+	 */
 	public void setState(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap) {
 		if (rotorChoices.length == 4 && rotorChoices[0] == -1){
 			rotorChoices = new int[] { rotorChoices[1], rotorChoices[2],
@@ -46,8 +57,15 @@ public class EnigmaSingleton extends Observable {
 		System.out.println("Changing rotor positions to: "
 				+ String.valueOf(initialPositions));
 		System.out.println("Changing plugboard to: " + plugboardMap);
-	}
+	} // end setState
 
+	/**
+	 * Only sets the rotorChoices, reflectorChoice, and ringSettings.
+	 * 
+	 * @param rotorChoices
+	 * @param reflectorChoice
+	 * @param ringSettings
+	 */
 	public void setState(int[] rotorChoices, int reflectorChoice,
 			char[] ringSettings) {
 		machine.setRotorChoices(rotorChoices, reflectorChoice);
@@ -59,22 +77,40 @@ public class EnigmaSingleton extends Observable {
 				+ String.valueOf(ringSettings));
 	}
 
+	/**
+	 * 
+	 * @param rotorPositions
+	 */
 	public void setPositions(char[] rotorPositions) {
 		System.out.println("Setting rotor positions to: " + String.valueOf(rotorPositions));
 		machine.setPositions(rotorPositions);
 	}
 
+	/**
+	 * 
+	 * @param pbMap
+	 */
 	public void setPlugboard(String pbMap) {
 		System.out.println("Setting plugboard to: " + pbMap);
 		machine.setPlugboard(pbMap);
 	}
 
+	/**
+	 * 
+	 * @param c
+	 * @return
+	 */
 	public char encryptChar(char c) {
 		System.out.println("Encrypting char " + c);
 		notifyObservers();
 		return machine.encryptChar(c);
 	}
 
+	/**
+	 * 
+	 * @param s
+	 * @return
+	 */
 	public String encryptString(String s) {
 		System.out.println("Encrypting string " + s);
 		notifyObservers();
@@ -94,4 +130,4 @@ public class EnigmaSingleton extends Observable {
 			obs.update(this, String.valueOf(machine.getPositions()));
 		}
 	}
-}
+} // end EnigmaSingleton class
