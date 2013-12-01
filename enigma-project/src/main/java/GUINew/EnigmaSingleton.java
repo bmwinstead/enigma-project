@@ -87,6 +87,8 @@ public class EnigmaSingleton extends Observable {
 	 * @param rotorPositions
 	 */
 	public void setPositions(char[] rotorPositions) {
+		if(rotorPositions.length == 4 && rotorPositions[0] == '!')
+			rotorPositions = new char[] {rotorPositions[1], rotorPositions[2], rotorPositions[3]};
 		System.out.println("Setting rotor positions to: " + String.valueOf(rotorPositions));
 		machine.setPositions(rotorPositions);
 	}

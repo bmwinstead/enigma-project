@@ -328,12 +328,15 @@ public class RotorPanel extends JPanel implements Observer {
 	}
 
 	public void setRotorPositions(char[] positions) {
+		System.out.println(String.valueOf(positions));
 		if (positions.length == 4 && positions[0] != '!') {
+			System.out.println("4");
 			fourthRotorPosition.setValue(String.valueOf(positions[0]));
 			leftRotorPosition.setValue(String.valueOf(positions[1]));
 			middleRotorPosition.setValue(String.valueOf(positions[2]));
 			rightRotorPosition.setValue(String.valueOf(positions[3]));
 		} else {
+			System.out.println("3");
 			leftRotorPosition.setValue(String.valueOf(positions[0]));
 			middleRotorPosition.setValue(String.valueOf(positions[1]));
 			rightRotorPosition.setValue(String.valueOf(positions[2]));
