@@ -247,6 +247,7 @@ public class Lightboard extends JPanel {
 		layeredPane.setLayer(lightY, new Integer(0), 0);
 		layeredPane.setLayer(lightZ, new Integer(0), 0);
 	}
+	
 	public void turnOnLight(String s) {
 		resetLights();
 		char switchChar = s.toUpperCase().charAt(s.length()-1);
