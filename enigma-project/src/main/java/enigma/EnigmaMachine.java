@@ -138,7 +138,7 @@ public class EnigmaMachine {
 	}
 	
 	/**
-	 * Returns the Rotor Positions to the GUI so that I will accurately
+	 * Returns the Rotor Positions to the GUI so that it will accurately
 	 * reflect the current settings after encryption.
 	 * 
 	 * @param newPositions

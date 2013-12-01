@@ -19,21 +19,25 @@ public class EnigmaSingleton extends Observable {
 	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton();
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
-	private ConfigureOutput output = new ConfigureOutput(); //Configure
+	private ConfigureOutput output = new ConfigureOutput(); // Configure
 
 	private EnigmaSingleton() {
 		// No constructor for you.
 	}
 
-	public void setState(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap) {
-		if (rotorChoices.length == 4 && rotorChoices[0] == -1){
+	public void setState(int[] rotorChoices, int reflectorChoice,
+			char[] ringSettings, char[] initialPositions, String plugboardMap) {
+		if (rotorChoices.length == 4 && rotorChoices[0] == -1) {
 			rotorChoices = new int[] { rotorChoices[1], rotorChoices[2],
 					rotorChoices[3] };
-			ringSettings = new char[] { ringSettings[1], ringSettings[2], ringSettings[3]};
-			initialPositions = new char[] { initialPositions[1], initialPositions[2], initialPositions[3]};
+			ringSettings = new char[] { ringSettings[1], ringSettings[2],
+					ringSettings[3] };
+			initialPositions = new char[] { initialPositions[1],
+					initialPositions[2], initialPositions[3] };
 		}
 		if (plugboardMap == null)
-			machine = new EnigmaMachine(rotorChoices,reflectorChoice,ringSettings, initialPositions);
+			machine = new EnigmaMachine(rotorChoices, reflectorChoice,
+					ringSettings, initialPositions);
 		else
 			machine = new EnigmaMachine(rotorChoices, reflectorChoice,
 					ringSettings, initialPositions, plugboardMap);
@@ -50,6 +54,12 @@ public class EnigmaSingleton extends Observable {
 
 	public void setState(int[] rotorChoices, int reflectorChoice,
 			char[] ringSettings) {
+		if (rotorChoices.length == 4 && rotorChoices[0] == -1) {
+			rotorChoices = new int[] { rotorChoices[1], rotorChoices[2],
+					rotorChoices[3] };
+			ringSettings = new char[] { ringSettings[1], ringSettings[2],
+					ringSettings[3] };
+		}
 		machine.setRotorChoices(rotorChoices, reflectorChoice);
 		machine.setRingSettings(ringSettings);
 		System.out.println("Changing rotors to: "
@@ -57,10 +67,16 @@ public class EnigmaSingleton extends Observable {
 		System.out.println("Changing reflector to: " + reflectorChoice);
 		System.out.println("Changing ring settings to: "
 				+ String.valueOf(ringSettings));
+		System.out.println("Keeping rotor positions the same: "
+				+ String.valueOf(machine.getPositions()));
 	}
 
 	public void setPositions(char[] rotorPositions) {
-		System.out.println("Setting rotor positions to: " + String.valueOf(rotorPositions));
+		if (rotorPositions.length == 4 && rotorPositions[0] == '!')
+			rotorPositions = new char[] { rotorPositions[1], rotorPositions[2],
+					rotorPositions[3] };
+		System.out.println("Setting rotor positions to: "
+				+ String.valueOf(rotorPositions));
 		machine.setPositions(rotorPositions);
 	}
 
@@ -78,19 +94,21 @@ public class EnigmaSingleton extends Observable {
 	public String encryptString(String s) {
 		System.out.println("Encrypting string " + s);
 		notifyObservers();
-		s = output.configure(s); //Text error checking
+		s = output.configure(s); // Text error checking
 		System.out.println("Text Error Checking and Conversion");
 		return machine.encryptString(s);
 	}
-	
+
 	@Override
-	public void addObserver(Observer obs){
+	public void addObserver(Observer obs) {
 		observers.add(obs);
 	}
+
 	@Override
-	public void notifyObservers(){
-		System.out.println("Notifying, rotors are currently " + String.valueOf(machine.getPositions()));
-		for(Observer obs : observers){
+	public void notifyObservers() {
+		System.out.println("Notifying, rotor positions are currently "
+				+ String.valueOf(machine.getPositions()));
+		for (Observer obs : observers) {
 			obs.update(this, String.valueOf(machine.getPositions()));
 		}
 	}

@@ -38,16 +38,20 @@ public class IOPanel extends JPanel {
 	private JLabel manualInputLabel;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
+	private Lightboard lightboard;
 	public IOPanel()  {
 		GroupLayout mainLayout = new GroupLayout(this);
 		setLayout(mainLayout);
 		setBackground(Color.black);
 		JPanel topPanel = setUpTopPanel();
 		JPanel bottomPanel = setUpBottomPanel();
+		lightboard = buildLightboardPanel();
 		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup()
-				.addComponent(topPanel)
+				.addComponent(lightboard)
+				.addComponent(topPanel)							
 				.addComponent(bottomPanel));
 		mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
+				.addComponent(lightboard)
 				.addComponent(topPanel)
 				.addComponent(bottomPanel));
 	}
@@ -136,6 +140,12 @@ public class IOPanel extends JPanel {
 		panel2Layout.linkSize(SwingConstants.VERTICAL, inputScrollPane, outputScrollPane);
 		return bottomPanel;
 	}
+	// Lightboard panel
+	private Lightboard buildLightboardPanel() {
+		Lightboard lightboardPanel = new Lightboard();
+		lightboardPanel.setBackground(Color.black);
+		return lightboardPanel;
+	}
 	private class BrowseButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
@@ -193,6 +203,7 @@ public class IOPanel extends JPanel {
 			} catch (BadLocationException e) {
 			}
 			char encrypted = machine.encryptChar(c);
+			lightboard.turnOnLight(String.valueOf(encrypted));
 			String curText = outputTape.getText();
 			outputTape.setText(curText + encrypted);
 		}
