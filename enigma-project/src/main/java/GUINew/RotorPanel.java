@@ -519,6 +519,8 @@ public class RotorPanel extends JPanel implements Observer {
 			} else if (message.equals("Plugboard")) {
 				pbString = pbDialog.displayDialog();
 				pbField.setText(pbString);
+				// JLI Wasn't setting the machine's plugboard.
+				machine.setPlugboard(pbString);
 				System.out.println("Changing plugboard to: " + pbString);
 			}
 		}
