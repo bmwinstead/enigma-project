@@ -118,7 +118,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 								EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
 								
 								threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
-								updateProgress(++operationCount);
 							} // End rotor check if
 						} // End left rotor for
 					} // End rotor check if
@@ -135,9 +134,9 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
-		updateProgress(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS);
 		long endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
+		setProgress(33);
 		
 		// Trim candidate list.
 		trimCandidateList();
@@ -154,7 +153,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		for (EnigmaSettings candidate: candidateList) {
 			threadManager.execute(new RingDetector(statGenerator, candidate, resultsList, message, doneSignal));
-			updateProgress(++operationCount);
 		}
 		
 		// Wait until all tasks are complete.
@@ -168,6 +166,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
+		setProgress(67);
 		
 		// Trim candidate list.
 		trimCandidateList();
@@ -184,7 +183,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		for (EnigmaSettings candidate: candidateList) {
 			threadManager.execute(new PlugboardDetector(statGenerator, candidate, resultsList, message, doneSignal));
-			updateProgress(++operationCount);
 		}
 		
 		// Wait until all tasks are complete.
@@ -196,7 +194,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
-		updateProgress(100);
+		setProgress(100);
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
@@ -282,11 +280,5 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		}
 		
 		log.makeEntry("Best Candidate: " + bestCandidate.printSettings(), true);
-	}
-	
-	public void updateProgress(int progress) {
-		int totalOperations = NUM_REFLECTORS * NUM_ROTORS * (NUM_ROTORS - 1) * (NUM_ROTORS - 2) * candidateSize * candidateSize;
-		double percent = 100.0 * progress / totalOperations;
-		setProgress((int)percent);
 	}
 }
