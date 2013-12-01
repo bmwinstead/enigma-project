@@ -3,6 +3,15 @@ package main.java.GUINew;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 
+/**
+ * 
+ * @author Team Enigma
+ * @version 0.9
+ * @date Nov 30, 2013
+ * 
+ *       Driver/outer GUI to contain and organize the Enigma GUI elements.
+ * 
+ */
 public class EnigmaGUI {
 	private static RotorPanel rotorPanel;
 	private static JFrame mainFrame;
@@ -25,5 +34,5 @@ public class EnigmaGUI {
 		mainFrame.pack();
 		mainFrame.setVisible(true);
 //		System.out.println(s);
-	}
-}
+	} // end main method
+} // end EnigmaGUI class

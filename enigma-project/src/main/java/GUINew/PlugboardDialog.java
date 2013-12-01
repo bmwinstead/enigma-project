@@ -131,7 +131,7 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 	private String getPBMap(){
 		String pbMap = "";
 		for(int i = 0; i < maxPairs; i++){
-			if(plugPairs[0][1] == null)
+			if(plugPairs[0][i] == null || plugPairs[0][i].equals(" "))
 				break;
 			pbMap += plugPairs[0][i];
 			pbMap += plugPairs[1][i];

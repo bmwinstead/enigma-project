@@ -129,7 +129,7 @@ public class TestPanel extends JFrame {
 
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					try {
-						log.makeEntry("Saving corpus....", true);
+						log.makeEntry("Saving corpus...", true);
 						ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileChooser.getSelectedFile() + ".corpus"));
 						output.writeObject(database);
 						output.close();
@@ -148,11 +148,10 @@ public class TestPanel extends JFrame {
 		loadCorpusButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
-				
+
 				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					try {
-						log.makeEntry("Loading corpus....", true);
-						
+						log.makeEntry("Loading corpus...", true);
 						FileInputStream fileStream = new FileInputStream(fileChooser.getSelectedFile());
 						ObjectInputStream objectStream = new ObjectInputStream(fileStream);
 						database = (Corpus) objectStream.readObject();
@@ -250,7 +249,7 @@ public class TestPanel extends JFrame {
 		
 		reflectorSpinner = new JSpinner();
 		reflectorSpinner.setPreferredSize(new Dimension(60, 20));
-		reflectorSpinner.setModel(new SpinnerListModel(new String[] {"B", "C", "B Thin", "C Thin"}));
+		reflectorSpinner.setModel(new SpinnerListModel(new String[] {"B", "C"}));
 		rotorSelectionPanel.add(reflectorSpinner);
 		
 		JPanel rotorSettingPanel = new JPanel();
@@ -400,7 +399,7 @@ public class TestPanel extends JFrame {
 		decryptPanel.add(lblNewLabel_2);
 		
 		testComboBox = new JComboBox();
-		testComboBox.setModel(new DefaultComboBoxModel(new String[] {"Sinkov's Unigram", "Sinkov's Bigram", "Sinkov's Trigram", "Sinkov's Quadgram", "I.O.C. Unigram", "I.O.C. Bigram", "I.O.C. Trigram", "I.O.C. Quadgram"}));
+		testComboBox.setModel(new DefaultComboBoxModel(new String[] {"Sinkov's Unigram", "Sinkov's Bigram", "Sinkov's Trigram", "Sinkov's Quadgram", "I.O.C. Unigram", "I.O.C. Bigram", "I.O.C. Trigram", "I.O.C. Quadgram", "Chi Sq. Unigram", "Chi Sq. Bigram"}));
 		decryptPanel.add(testComboBox);
 		
 		JLabel lblNewLabel_11 = new JLabel("Progress:");
@@ -422,8 +421,8 @@ public class TestPanel extends JFrame {
 					}
 					
 					// Init. log file for decryption attempt.
-					log.makeEntry("Starting quadgram analyser...", true);
-
+					log.makeEntry("Starting quadbomb analysis...", false);
+					
 					int threadLimit = (int)(threadCountSpinner.getValue());
 					int candidateSize = (int)(candidateSpinner.getValue());
 					
@@ -440,7 +439,7 @@ public class TestPanel extends JFrame {
 					
 					analyzer.execute();
 					
-					log.makeEntry("Quadgram analyser finished.", true);
+					log.makeEntry("Quadbomb analysis finished.", false);
 				}
 			}
 		});

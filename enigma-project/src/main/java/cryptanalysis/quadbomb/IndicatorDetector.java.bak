@@ -35,7 +35,7 @@ public class IndicatorDetector implements Runnable {
 	
 	public void run() {
 		char[] rotorTestSettings = new char[3];
-
+		
 		// Cycle through rotor indicator combinations.
 		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < 26; j++) {

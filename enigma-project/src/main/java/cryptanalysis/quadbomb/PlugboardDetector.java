@@ -63,7 +63,6 @@ public class PlugboardDetector implements Runnable {
 						char testRight = (char) ('A' + right);
 						
 						// Implement test plugboard pair.
-						
 						testSettings.setPlugboardMap(currentPlugboard + testLeft + testRight);
 						
 						bomb = testSettings.createEnigmaMachine();
