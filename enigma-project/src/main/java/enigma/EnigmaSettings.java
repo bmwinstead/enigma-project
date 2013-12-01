@@ -169,7 +169,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	
 	// Prints out the rotor order in a String.
 	public String printWheelOrder() {
-		return "" + rotors[0] + rotors[1] + rotors[2];
+		return "" + (rotors[0] + 1) + (rotors[1] + 1) + (rotors[2] + 1);
 	}
 	
 	// Prints out the ring settings in a String.

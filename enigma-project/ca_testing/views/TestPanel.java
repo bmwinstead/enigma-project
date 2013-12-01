@@ -1,48 +1,43 @@
 package views;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 
 import main.java.cryptanalysis.nlp.CharacterParser;
 import main.java.cryptanalysis.nlp.Corpus;
+import main.java.cryptanalysis.quadbomb.QuadbombManager;
 import main.java.enigma.EnigmaMachine;
 import misc.Logger;
-
-import javax.swing.SpinnerNumberModel;
-
-import java.awt.Dimension;
-import javax.swing.JProgressBar;
-
-import main.java.cryptanalysis.quadbomb.QuadbombManager;
-
-import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 // Testing GUI interface for word demonstration.
 // Used GWT Designer in Eclipse to build GUI.
@@ -134,6 +129,7 @@ public class TestPanel extends JFrame {
 
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					try {
+						log.makeEntry("Saving corpus....", true);
 						ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileChooser.getSelectedFile() + ".corpus"));
 						output.writeObject(database);
 						output.close();
@@ -142,6 +138,8 @@ public class TestPanel extends JFrame {
 						e.printStackTrace();
 					}
 				}
+				
+				log.makeEntry("Corpus saved.", true);
 			}
 		});
 		buttonPanel.add(saveCorpusButton);
@@ -150,9 +148,11 @@ public class TestPanel extends JFrame {
 		loadCorpusButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
-
+				
 				if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					try {
+						log.makeEntry("Loading corpus....", true);
+						
 						FileInputStream fileStream = new FileInputStream(fileChooser.getSelectedFile());
 						ObjectInputStream objectStream = new ObjectInputStream(fileStream);
 						database = (Corpus) objectStream.readObject();
@@ -165,6 +165,8 @@ public class TestPanel extends JFrame {
 						e.printStackTrace();
 					}
 				}
+				
+				log.makeEntry("Corpus loaded.", true);
 			}
 		});
 		buttonPanel.add(loadCorpusButton);
