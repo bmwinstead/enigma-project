@@ -68,6 +68,11 @@ public class EnigmaSingleton extends Observable {
 	 */
 	public void setState(int[] rotorChoices, int reflectorChoice,
 			char[] ringSettings) {
+		if (rotorChoices.length == 4 && rotorChoices[0] == -1){
+			rotorChoices = new int[] { rotorChoices[1], rotorChoices[2],
+					rotorChoices[3] };
+			ringSettings = new char[] { ringSettings[1], ringSettings[2], ringSettings[3]};
+		}
 		machine.setRotorChoices(rotorChoices, reflectorChoice);
 		machine.setRingSettings(ringSettings);
 		System.out.println("Changing rotors to: "

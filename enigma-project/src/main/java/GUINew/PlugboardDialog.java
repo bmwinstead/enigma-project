@@ -135,7 +135,6 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 				break;
 			pbMap += plugPairs[0][i];
 			pbMap += plugPairs[1][i];
-			System.out.println(pbMap);
 		}
 		return pbMap;
 	}
