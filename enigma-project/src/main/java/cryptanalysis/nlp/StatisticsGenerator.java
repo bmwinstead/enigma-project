@@ -26,6 +26,8 @@
  */
 package main.java.cryptanalysis.nlp;
 
+import java.util.HashMap;
+
 public class StatisticsGenerator {
 	private Corpus database;
 	private int statIndex;		// Used to select statistic to use.
@@ -41,22 +43,26 @@ public class StatisticsGenerator {
 	
 	public double computeFitnessScore(String message) {
 		switch (statIndex) {
-			case 0:		// Unigram character probability.
+			case 0:		// Sinkov unigram character probability.
 				return computeSinkovUnigramProbability(message);
-			case 1:		// Bigram character probability.
+			case 1:		// Sinkov bigram character probability.
 				return computeSinkovBigramProbability(message);
-			case 2:		// Trigram character probability.
+			case 2:		// Sinkov trigram character probability.
 				return computeSinkovTrigramProbability(message);
-			case 3:		// Quadgram character probability.
+			case 3:		// Sinkov quadgram character probability.
 				return computeSinkovQuadgramProbability(message);
-			case 4:		// Unigram character probability.
+			case 4:		// Index of Coincidence unigram character probability.
 				return computeIocUnigramProbability(message);
-			case 5:		// Bigram character probability.
+			case 5:		// Index of Coincidence bigram character probability.
 				return computeIocBigramProbability(message);
-			case 6:		// Trigram character probability.
+			case 6:		// Index of Coincidence trigram character probability.
 				return computeIocTrigramProbability(message);
-			case 7:		// Quadgram character probability.
+			case 7:		// Index of Coincidence quadgram character probability.
 				return computeIocQuadgramProbability(message);
+			case 8:		// Chi-Squared unigram probability.
+				return computeChiSquaredUnigramProbability(message);
+			case 9:		// Chi-Squared bigram probability.
+				return computeChiSquaredBigramProbability(message);
 			default:	// Error condition.
 				return Double.NEGATIVE_INFINITY;
 		}
@@ -66,7 +72,7 @@ public class StatisticsGenerator {
 	public double computeSinkovUnigramProbability(String message) {
 		double result = 0.0;
 		
-		int totalCount = database.getTotalUnigramCount();
+		long totalCount = database.getTotalUnigramCount();
 		
 		// Set floor value to 1 / 1000 of single instance of gram. See above references.
 		double floorLog = -3.0 + Math.log10(1.0 / totalCount);
@@ -77,7 +83,7 @@ public class StatisticsGenerator {
 		// log probabilities are used to avoid numerical underflow. See above references.
 		for (int index = 0; index < message.length(); index++) {
 			String gram = "" + characters[index];
-			int count = database.getUnigramCount(gram);
+			long count = database.getUnigramCount(gram);
 			double logProb = Math.log10((double)count / totalCount);
 			
 			if (count > 0)
@@ -93,7 +99,7 @@ public class StatisticsGenerator {
 	public double computeSinkovBigramProbability(String message) {
 		double result = 0.0;
 		
-		int totalCount = database.getTotalBigramCount();
+		long totalCount = database.getTotalBigramCount();
 		
 		// Set floor value to 1 / 1000 of single instance of gram. See above references.
 		double floorLog = -3.0 + Math.log10(1.0 / totalCount);
@@ -104,7 +110,7 @@ public class StatisticsGenerator {
 		// log probabilities are used to avoid numerical underflow. See above references.
 		for (int index = 0; index < message.length() - 1; index++) {
 			String gram = "" + characters[index] + characters[index + 1];
-			int count = database.getBigramCount(gram);
+			long count = database.getBigramCount(gram);
 			double logProb = Math.log10((double)count / totalCount);
 			
 			if (count > 0)
@@ -120,7 +126,7 @@ public class StatisticsGenerator {
 	public double computeSinkovTrigramProbability(String message) {
 		double result = 0.0;
 		
-		int totalCount = database.getTotalTrigramCount();
+		long totalCount = database.getTotalTrigramCount();
 		
 		// Set floor value to 1 / 1000 of single instance of gram. See above references.
 		double floorLog = -3.0 + Math.log10(1.0 / totalCount);
@@ -131,7 +137,7 @@ public class StatisticsGenerator {
 		// log probabilities are used to avoid numerical underflow. See above references.
 		for (int index = 0; index < message.length() - 2; index++) {
 			String gram = "" + characters[index] + characters[index + 1] + characters[index + 2];
-			int count = database.getTrigramCount(gram);
+			long count = database.getTrigramCount(gram);
 			double logProb = Math.log10((double)count / totalCount);
 			
 			if (count > 0)
@@ -147,7 +153,7 @@ public class StatisticsGenerator {
 	public double computeSinkovQuadgramProbability(String message) {
 		double result = 0.0;
 		
-		int totalCount = database.getTotalQuadgramCount();
+		long totalCount = database.getTotalQuadgramCount();
 		
 		// Set floor value to 1 / 1000 of single instance of gram. See above references.
 		double floorLog = -3.0 + Math.log10(1.0 / totalCount);
@@ -158,7 +164,7 @@ public class StatisticsGenerator {
 		// log probabilities are used to avoid numerical underflow. See above references.
 		for (int index = 0; index < message.length() - 3; index++) {
 			String gram = "" + characters[index] + characters[index + 1] + characters[index + 2] + characters[index + 3];
-			int count = database.getQuadgramCount(gram);
+			long count = database.getQuadgramCount(gram);
 			double logProb = Math.log10((double)count / totalCount);
 			
 			if (count > 0)
@@ -175,7 +181,7 @@ public class StatisticsGenerator {
 		Corpus iocCounter = new Corpus();
 		
 		double result = 0.0;
-		
+
 		char[] characters = message.toCharArray();
 		
 		// Count gram instances.
@@ -186,12 +192,12 @@ public class StatisticsGenerator {
 		
 		// Compute Index of Coincidences.
 		for (String gram: iocCounter.getUnigramTestQueue()) {
-			int count = iocCounter.getUnigramCount(gram);
+			long count = iocCounter.getUnigramCount(gram);
+			
 			result += count * (count - 1);
 		}
 		
-		int totalCount = database.getTotalUnigramCount();
-		result /= totalCount * (totalCount - 1);
+		result /= message.length() * (message.length() - 1);
 		
 		return result;
 	}
@@ -212,12 +218,12 @@ public class StatisticsGenerator {
 		
 		// Compute Index of Coincidences.
 		for (String gram: iocCounter.getBigramTestQueue()) {
-			int count = iocCounter.getBigramCount(gram);
+			long count = iocCounter.getBigramCount(gram);
+			
 			result += count * (count - 1);
 		}
 		
-		int totalCount = database.getTotalBigramCount();
-		result /= totalCount * (totalCount - 1);
+		result /= message.length() * (message.length() - 1);
 		
 		return result;
 	}
@@ -238,12 +244,12 @@ public class StatisticsGenerator {
 		
 		// Compute Index of Coincidences.
 		for (String gram: iocCounter.getTrigramTestQueue()) {
-			int count = iocCounter.getTrigramCount(gram);
+			long count = iocCounter.getTrigramCount(gram);
+			
 			result += count * (count - 1);
 		}
 		
-		int totalCount = database.getTotalTrigramCount();
-		result /= totalCount * (totalCount - 1);
+		result /= message.length() * (message.length() - 1);
 		
 		return result;
 	}
@@ -264,12 +270,91 @@ public class StatisticsGenerator {
 		
 		// Compute Index of Coincidences.
 		for (String gram: iocCounter.getQuadgramTestQueue()) {
-			int count = iocCounter.getQuadgramCount(gram);
+			long count = iocCounter.getQuadgramCount(gram);
+			
 			result += count * (count - 1);
 		}
 		
-		int totalCount = database.getTotalQuadgramCount();
-		result /= totalCount * (totalCount - 1);
+		result /= message.length() * (message.length() - 1);
+		
+		return result;
+	}
+	
+	public double computeChiSquaredUnigramProbability(String message) {
+		Corpus gramCounter = new Corpus();
+		
+		double result = 0.0;
+		
+		char[] characters = message.toCharArray();
+		
+		// Count gram instances.
+		for (int index = 0; index < message.length(); index++) {
+			String gram = "" + characters[index];
+			gramCounter.addUnigram(gram);
+		}
+		
+		// Count gram instances.
+		for (String gram: gramCounter.getUnigramTestQueue()) {
+			double count = gramCounter.getUnigramCount(gram);
+			double unigramCount = database.getUnigramCount(gram);
+			long totalCount = database.getTotalUnigramCount();
+			
+			double relativeFreq = count / message.length();
+			double absoluteFreq = unigramCount / totalCount;
+			
+			result += -(relativeFreq - absoluteFreq) * (relativeFreq - absoluteFreq) / absoluteFreq;
+		}
+		
+		return result;
+	}
+	
+	public double computeChiSquaredBigramProbability(String message) {
+		Corpus gramCounter = new Corpus();
+		
+		double result = 0.0;
+		
+		char[] characters = message.toCharArray();
+		
+		HashMap<Character, Integer> bigramFirstLetterCount = new HashMap<Character, Integer>();
+		
+		for (int index = 0; index < 26; index++) {
+			bigramFirstLetterCount.put((char)('A' + index), 0);
+		}
+		
+		// Count gram instances.
+		for (int index = 0; index < message.length() - 1; index++) {
+			String gram = "" + characters[index] + characters[index + 1];
+
+			int count = bigramFirstLetterCount.get(characters[index]) + 1;
+			bigramFirstLetterCount.put(characters[index], count);
+			
+			gramCounter.addUnigram("" + characters[index]);
+			gramCounter.addBigram(gram);
+		}
+		
+		gramCounter.addUnigram("" + characters[message.length() - 1]);
+		
+		// Count gram instances.
+		for (int i = 0; i < 26; i++) {
+			for (int j = 0; j < 26; j++) {
+				char first = (char)(i + 'A');
+				char second = (char)(j + 'A');
+				String gram = "" + first + second;
+				
+				int unigramCount = gramCounter.getUnigramCount("" + first);
+				int bigramCount = gramCounter.getBigramCount(gram);
+				double bigramLetterCount = bigramFirstLetterCount.get(first);
+				double bigramTotalCount = database.getBigramCount(gram);
+				int totalCount = database.getTotalBigramCount();
+				
+				if (bigramLetterCount > 0 && bigramTotalCount > 0) {
+					double relativeFreq = bigramCount / bigramLetterCount;
+					double absoluteFreq = bigramTotalCount / totalCount;
+					
+					result += -unigramCount * (relativeFreq - absoluteFreq) * (relativeFreq - absoluteFreq) / absoluteFreq;
+				}
+			}
+		}
 		
 		return result;
 	}
@@ -299,7 +384,7 @@ public class StatisticsGenerator {
 		for (int index = 0; index < message.length(); index++) {
 			// Compute unigram character statistics.
 			String gram = "" + characters[index];
-			int count = database.getUnigramCount(gram);
+			long count = database.getUnigramCount(gram);
 			double logProb = Math.log10((double)count / totalCount[0]);
 			
 			if (count > 0)
@@ -356,22 +441,22 @@ public class StatisticsGenerator {
 		
 		// Compute Index of Coincidences.
 		for (String gram: iocCounter.getUnigramTestQueue()) {
-			int count = iocCounter.getUnigramCount(gram);
+			long count = iocCounter.getUnigramCount(gram);
 			result[4] += count * (count - 1);
 		}
 		
 		for (String gram: iocCounter.getBigramTestQueue()) {
-			int count = iocCounter.getBigramCount(gram);
+			long count = iocCounter.getBigramCount(gram);
 			result[5] += count * (count - 1);
 		}
 		
 		for (String gram: iocCounter.getTrigramTestQueue()) {
-			int count = iocCounter.getTrigramCount(gram);
+			long count = iocCounter.getTrigramCount(gram);
 			result[6] += count * (count - 1);
 		}
 		
 		for (String gram: iocCounter.getQuadgramTestQueue()) {
-			int count = iocCounter.getQuadgramCount(gram);
+			long count = iocCounter.getQuadgramCount(gram);
 			result[7] += count * (count - 1);
 		}
 		

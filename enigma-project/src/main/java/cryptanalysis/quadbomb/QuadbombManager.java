@@ -46,8 +46,8 @@ import misc.Logger;
 import views.ResultsPanel;
 
 public class QuadbombManager extends SwingWorker<Long, Void> {
-	private static int NUM_REFLECTORS = 1;	// Debugging line to speed up testing.
-	private static int NUM_ROTORS = 3;		// Debugging line to speed up testing.
+	private static int NUM_REFLECTORS = 2;	// Debugging line to speed up testing.
+	private static int NUM_ROTORS = 8;		// Debugging line to speed up testing.
 	
 	private final StatisticsGenerator statGenerator;
 	
@@ -96,6 +96,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		log.makeEntry("Starting QuadBomb analysis...", true);
 		log.makeEntry("Encrypted message: " + message, true);
+		log.makeEntry("Start Fitness Score: " + statGenerator.computeFitnessScore(message), true);
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -134,6 +135,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
+		updateProgress(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS);
 		long endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
@@ -164,6 +166,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
+		updateProgress(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS * resultsList.size());
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
@@ -194,6 +197,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
+		updateProgress(100);
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
@@ -206,7 +210,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 
 		// Trim candidate list.
 		trimCandidateList();
-		log.makeEntry("Plugboard candidates:", true);
+		log.makeEntry("Plugboard candidates:", false);
 		printCandidateList();
 		
 		while (!candidateList.isEmpty()) {
@@ -282,7 +286,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	}
 	
 	public void updateProgress(int progress) {
-		//double percent = 100.0 * progress / TOTAL_OPERATIONS;
-		//setProgress((int)percent);
+		int totalOperations = NUM_REFLECTORS * NUM_ROTORS * (NUM_ROTORS - 1) * (NUM_ROTORS - 2) * candidateSize * candidateSize;
+		double percent = 100.0 * progress / totalOperations;
+		setProgress((int)percent);
 	}
 }

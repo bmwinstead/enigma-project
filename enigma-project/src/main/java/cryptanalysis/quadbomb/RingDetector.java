@@ -38,56 +38,46 @@ public class RingDetector implements Runnable {
 		char[] rotorTestSettings = new char[3];
 		char[] baseRotorSettings = settings.getIndicatorSettings();
 		
-		double bestScore = Double.NEGATIVE_INFINITY;
-		
 		// Cycle through ring setting combinations.
-		//for (int i = 0; i < 26; i++) {
-			for (int j = 0; j < 26; j++) {
-				for (int k = 0; k < 26; k++) {
-					ringTestSettings[0] = 'A';//(char) ('A' + i);
-					ringTestSettings[1] = (char) ('A' + j);
-					ringTestSettings[2] = (char) ('A' + k);
-					
-					// Offset the indicators the same as the ring offset. See references above.	
-					int leftOffset = baseRotorSettings[0] - 'A';// + i - 'A';
-					int middleOffset = baseRotorSettings[1] + j - 'A';
-					int rightOffset = baseRotorSettings[2] + k - 'A';
-					
-					char left = (char)(leftOffset % 26 + 'A');
-					char middle = (char)(middleOffset % 26 + 'A');
-					char right = (char)(rightOffset % 26 + 'A');
-					
-					rotorTestSettings[0] = left;
-					rotorTestSettings[1] = middle;
-					rotorTestSettings[2] = right;
-					
-					EnigmaMachine bomb = new EnigmaMachine(settings.getRotors(), settings.getReflector(), ringTestSettings, rotorTestSettings);
-					
-					String cipher = bomb.encryptString(message);
-					double testValue = tester.computeFitnessScore(cipher);
-					/*
-					if (testValue > bestScore) {
-						bestScore = testValue;
-						
-						candidate.setRingSettings(ringTestSettings);
-						candidate.setIndicatorSettings(rotorTestSettings);
-						candidate.setFitnessScore(testValue);
-						
-						// Save best indicator result into list for further processing.
-						resultsList.add(candidate);
-					} // End best result if
-					*/
-					EnigmaSettings candidate = settings.copy();
-					
-					candidate.setRingSettings(ringTestSettings);
-					candidate.setIndicatorSettings(rotorTestSettings);
-					candidate.setFitnessScore(testValue);
-					
-					// Save best indicator result into list for further processing.
-					resultsList.add(candidate);
-				} // End right ring for
-			} // End middle ring for
-		//} // End left ring for
+		for (int j = 0; j < 26; j++) {
+			for (int k = 0; k < 26; k++) {
+				ringTestSettings[0] = 'A';
+				ringTestSettings[1] = (char) ('A' + j);
+				ringTestSettings[2] = (char) ('A' + k);
+				
+				// Offset the indicators the same as the ring offset. See references above.	
+				//int leftOffset = baseRotorSettings[0] - 'A';
+				int middleOffset = baseRotorSettings[1] + j - 'A';
+				int rightOffset = baseRotorSettings[2] + k - 'A';
+				
+				//char left = //(char)(leftOffset % 26 + 'A');
+				char middle = (char)(middleOffset % 26 + 'A');
+				char right = (char)(rightOffset % 26 + 'A');
+				
+				rotorTestSettings[0] = baseRotorSettings[0];
+				rotorTestSettings[1] = middle;
+				rotorTestSettings[2] = right;
+				
+				EnigmaMachine bomb = new EnigmaMachine(settings.getRotors(), settings.getReflector(), ringTestSettings, rotorTestSettings);
+				
+				String cipher = bomb.encryptString(message);
+				
+				double testValue = tester.computeFitnessScore(cipher);
+
+				if (rotorTestSettings[0] == 'R' && rotorTestSettings[2] == 'Q') {
+					rotorTestSettings[0] = 'R';
+				}
+				
+				EnigmaSettings candidate = settings.copy();
+				
+				candidate.setRingSettings(ringTestSettings);
+				candidate.setIndicatorSettings(rotorTestSettings);
+				candidate.setFitnessScore(testValue);
+				
+				// Save best indicator result into list for further processing.
+				resultsList.add(candidate);
+			} // End right ring for
+		} // End middle ring for
 		
 		latch.countDown();
 	} // End run()

@@ -35,9 +35,7 @@ public class IndicatorDetector implements Runnable {
 	
 	public void run() {
 		char[] rotorTestSettings = new char[3];
-		
-		double bestScore = Double.NEGATIVE_INFINITY;
-		
+
 		// Cycle through rotor indicator combinations.
 		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < 26; j++) {
@@ -50,18 +48,7 @@ public class IndicatorDetector implements Runnable {
 					
 					String cipher = bomb.encryptString(message);
 					double testValue = tester.computeFitnessScore(cipher);
-					/*
-					if (testValue > bestScore) {
-						bestScore = testValue;
-						
-						EnigmaSettings candidate = settings.copy();
-						candidate.setIndicatorSettings(rotorTestSettings);
-						candidate.setFitnessScore(testValue);
-						
-						// Save best indicator result into list for further processing.
-						resultsList.add(candidate);
-					} // End best result if
-					*/
+
 					EnigmaSettings candidate = settings.copy();
 					candidate.setIndicatorSettings(rotorTestSettings);
 					candidate.setFitnessScore(testValue);
