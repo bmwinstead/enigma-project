@@ -46,11 +46,9 @@ public class RingDetector implements Runnable {
 				ringTestSettings[2] = (char) ('A' + k);
 				
 				// Offset the indicators the same as the ring offset. See references above.	
-				//int leftOffset = baseRotorSettings[0] - 'A';
 				int middleOffset = baseRotorSettings[1] + j - 'A';
 				int rightOffset = baseRotorSettings[2] + k - 'A';
 				
-				//char left = //(char)(leftOffset % 26 + 'A');
 				char middle = (char)(middleOffset % 26 + 'A');
 				char right = (char)(rightOffset % 26 + 'A');
 				

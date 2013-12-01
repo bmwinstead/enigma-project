@@ -17,6 +17,8 @@
  * 5 - Bigram character probability. (Index of Coincidence)
  * 6 - Trigram character probability. (Index of Coincidence)
  * 7 - Quadgram character probability. (Index of Coincidence)
+ * 8 - Unigram character probability. (Chi-Squared Statistic)
+ * 9 - Bigram character probability. (Chi-Squared Statistic)
  * 
  * References:
  * http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/
@@ -176,7 +178,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a unigram character string compared to a corpus.
+	// Compute I.O.C. probability of a unigram character string compared to a corpus.
 	public double computeIocUnigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -202,7 +204,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a bigram character string compared to a corpus.
+	// Compute I.O.C. probability of a bigram character string compared to a corpus.
 	public double computeIocBigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -228,7 +230,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a trigram character string compared to a corpus.
+	// Compute I.O.C. probability of a trigram character string compared to a corpus.
 	public double computeIocTrigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -254,7 +256,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a quadgram character string compared to a corpus.
+	// Compute I.O.C. probability of a quadgram character string compared to a corpus.
 	public double computeIocQuadgramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		

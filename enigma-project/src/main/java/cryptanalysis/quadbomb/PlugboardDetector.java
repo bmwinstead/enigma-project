@@ -39,7 +39,6 @@ public class PlugboardDetector implements Runnable {
 		char bestLeft;
 		char bestRight;
 		double controlValue;
-		//EnigmaMachine bomb = settings.createEnigmaMachine();
 		
 		EnigmaSettings testSettings = settings.copy();
 		EnigmaSettings candidate = settings.copy();
@@ -64,7 +63,6 @@ public class PlugboardDetector implements Runnable {
 						char testRight = (char) ('A' + right);
 						
 						// Implement test plugboard pair.
-						
 						testSettings.setPlugboardMap(currentPlugboard + testLeft + testRight);
 						
 						bomb = testSettings.createEnigmaMachine();

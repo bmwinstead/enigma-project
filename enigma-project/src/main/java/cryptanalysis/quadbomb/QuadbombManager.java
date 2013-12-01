@@ -46,8 +46,8 @@ import misc.Logger;
 import views.ResultsPanel;
 
 public class QuadbombManager extends SwingWorker<Long, Void> {
-	private static int NUM_REFLECTORS = 2;	// Debugging line to speed up testing.
-	private static int NUM_ROTORS = 8;		// Debugging line to speed up testing.
+	private static int NUM_REFLECTORS = 1;	// Debugging line to speed up testing.
+	private static int NUM_ROTORS = 3;		// Debugging line to speed up testing.
 	
 	private final StatisticsGenerator statGenerator;
 	
@@ -166,7 +166,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
-		updateProgress(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS * resultsList.size());
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
