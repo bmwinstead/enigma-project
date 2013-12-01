@@ -76,6 +76,7 @@ public class EnigmaMachine {
 	 * @return Character after encryption.
 	 */
 	public char encryptChar(char c){
+		c = Character.toUpperCase(c);
 		char a = c;
 		if(plugboard != null){
 			a = plugboard.matchChar(c);
@@ -157,6 +158,7 @@ public class EnigmaMachine {
 	 *            String indicating the plugboard replacement mapping.
 	 */
 	public void setPlugboard(String pbMap){
+		System.out.println("EnigmaMachine: Setting Plugboard to: " + pbMap);
 		plugboard = new Plugboard(pbMap);
 	} // end setPlugboard
 	
