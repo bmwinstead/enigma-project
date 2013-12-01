@@ -421,10 +421,7 @@ public class TestPanel extends JFrame {
 					
 					// Init. log file for decryption attempt.
 					log.makeEntry("Starting quadgram analyser...", true);
-					
-					//QuadgramStatAnalyzer analyzer = new QuadgramStatAnalyzer(database);
-					//analyzer.decryptMessage(cipher);
-					
+
 					int threadLimit = (int)(threadCountSpinner.getValue());
 					int candidateSize = (int)(candidateSpinner.getValue());
 					

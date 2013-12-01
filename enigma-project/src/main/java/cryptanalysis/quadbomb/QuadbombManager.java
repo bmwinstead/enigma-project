@@ -98,9 +98,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Encrypted message: " + message, true);
 		
 		long startTime = System.currentTimeMillis();
-		
-		int operationCount = 0;
-		
+
 		// Step 1: Determine possible rotor, reflector, and indicator orders.
 		// Create tasks segregated by rotor / reflector configuration and submit to threadManager.
 		log.makeEntry("Determining rotors, reflectors, and indicator settings...", true);
@@ -117,7 +115,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 								EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
 								
 								threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
-								updateProgress(++operationCount);
 							} // End rotor check if
 						} // End left rotor for
 					} // End rotor check if
@@ -136,6 +133,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		long endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
+		setProgress(33);
 		
 		// Trim candidate list.
 		trimCandidateList();
@@ -152,7 +150,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		for (EnigmaSettings candidate: candidateList) {
 			threadManager.execute(new RingDetector(statGenerator, candidate, resultsList, message, doneSignal));
-			updateProgress(++operationCount);
 		}
 		
 		// Wait until all tasks are complete.
@@ -166,6 +163,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
+		setProgress(67);
 		
 		// Trim candidate list.
 		trimCandidateList();
@@ -182,7 +180,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		for (EnigmaSettings candidate: candidateList) {
 			threadManager.execute(new PlugboardDetector(statGenerator, candidate, resultsList, message, doneSignal));
-			updateProgress(++operationCount);
 		}
 		
 		// Wait until all tasks are complete.
@@ -194,6 +191,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			e.printStackTrace();
 		}
 		
+		setProgress(100);
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
@@ -202,8 +200,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		long startSearchTime = System.currentTimeMillis();
 		
-		double bestScore = Double.NEGATIVE_INFINITY;
-
 		// Trim candidate list.
 		trimCandidateList();
 		log.makeEntry("Plugboard candidates:", true);
@@ -213,7 +209,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 			result = candidateList.remove();
 		}
 		
-		bestScore = result.getFitnessScore();
+		double bestScore = result.getFitnessScore();
 		
 		EnigmaMachine decoder = result.createEnigmaMachine();
 		decryptedMessage = decoder.encryptString(message);
@@ -242,7 +238,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
 		resultsPanel.printSettings(result, decryptedMessage);
-		
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.
@@ -279,10 +274,5 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		}
 		
 		log.makeEntry("Best Candidate: " + bestCandidate.printSettings(), true);
-	}
-	
-	public void updateProgress(int progress) {
-		//double percent = 100.0 * progress / TOTAL_OPERATIONS;
-		//setProgress((int)percent);
 	}
 }

@@ -127,7 +127,7 @@ public class StatisticsGenerator {
 		
 		char[] characters = message.toCharArray();
 		
-		// Compute individual log probabilites.
+		// Compute individual log probabilities.
 		// log probabilities are used to avoid numerical underflow. See above references.
 		for (int index = 0; index < message.length() - 2; index++) {
 			String gram = "" + characters[index] + characters[index + 1] + characters[index + 2];
@@ -154,7 +154,7 @@ public class StatisticsGenerator {
 		
 		char[] characters = message.toCharArray();
 		
-		// Compute individual quadgram log probabilites.
+		// Compute individual quadgram log probabilities.
 		// log probabilities are used to avoid numerical underflow. See above references.
 		for (int index = 0; index < message.length() - 3; index++) {
 			String gram = "" + characters[index] + characters[index + 1] + characters[index + 2] + characters[index + 3];
@@ -170,7 +170,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a unigram character string compared to a corpus.
+	// Compute I.O.C. probability of a unigram character string compared to a corpus.
 	public double computeIocUnigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -196,7 +196,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a bigram character string compared to a corpus.
+	// Compute I.O.C. probability of a bigram character string compared to a corpus.
 	public double computeIocBigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -222,7 +222,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a trigram character string compared to a corpus.
+	// Compute I.O.C. probability of a trigram character string compared to a corpus.
 	public double computeIocTrigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -248,7 +248,7 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a quadgram character string compared to a corpus.
+	// Compute I.O.C. probability of a quadgram character string compared to a corpus.
 	public double computeIocQuadgramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
