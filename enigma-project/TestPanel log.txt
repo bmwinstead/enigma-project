@@ -1,23 +1,352 @@
-[Wed Nov 27 22:13:06 EST 2013] - Logger initialized.
-[Wed Nov 27 22:13:07 EST 2013] - TestPanel initialized.
-[Wed Nov 27 22:13:37 EST 2013] - Parsing C:\Users\Slyjinks\git\enigma\enigma-project\ca_testing\Text Files\War and Peace.txt...
-[Wed Nov 27 22:13:41 EST 2013] - Parsing complete.
-[Wed Nov 27 22:13:41 EST 2013] - Parsing took 4229 milliseconds.
-[Wed Nov 27 22:13:41 EST 2013] - Corpus now contains:
-[Wed Nov 27 22:13:41 EST 2013] - 2513042 unigrams.
-[Wed Nov 27 22:13:41 EST 2013] - 2513041 bigrams.
-[Wed Nov 27 22:13:41 EST 2013] - 2513040 trigrams.
-[Wed Nov 27 22:13:41 EST 2013] - 2513039 quadgrams.
-[Wed Nov 27 22:14:29 EST 2013] - Starting encryption...
-[Wed Nov 27 22:14:29 EST 2013] - Rotors - 402
-[Wed Nov 27 22:14:29 EST 2013] - Reflector - C
-[Wed Nov 27 22:14:29 EST 2013] - Ring Settings - YOU
-[Wed Nov 27 22:14:29 EST 2013] - Rotor Settings - FUK
-[Wed Nov 27 22:14:29 EST 2013] - Encryption Complete.
+[Sun Dec 01 14:29:13 EST 2013] - Logger initialized.
+[Sun Dec 01 14:29:13 EST 2013] - TestPanel initialized.
+[Sun Dec 01 14:29:17 EST 2013] - TestPanel closed.
+[Sun Dec 01 14:29:17 EST 2013] - Logger closed.
+[Sun Dec 01 14:29:25 EST 2013] - Logger initialized.
+[Sun Dec 01 14:29:25 EST 2013] - TestPanel initialized.
+[Sun Dec 01 14:29:30 EST 2013] - Loading corpus...
+[Sun Dec 01 14:29:34 EST 2013] - Corpus loaded.
+[Sun Dec 01 14:29:51 EST 2013] - Starting encryption...
+[Sun Dec 01 14:29:51 EST 2013] - Rotors - 021
+[Sun Dec 01 14:29:51 EST 2013] - Reflector - B
+[Sun Dec 01 14:29:51 EST 2013] - Ring Settings - CTY
+[Sun Dec 01 14:29:51 EST 2013] - Rotor Settings - TWO
+[Sun Dec 01 14:29:51 EST 2013] - Encryption Complete.
 
-[Wed Nov 27 22:14:29 EST 2013] - Decryption Complete.
+[Sun Dec 01 14:29:51 EST 2013] - Decryption Complete.
 
-[Wed Nov 27 22:14:41 EST 2013] - Starting quadgram analyser...
-[Wed Nov 27 22:14:41 EST 2013] - Quadgram analyser finished.
-[Thu Nov 28 06:25:19 EST 2013] - TestPanel closed.
-[Thu Nov 28 06:25:19 EST 2013] - Logger closed.
+[Sun Dec 01 14:29:55 EST 2013] - Starting quadbomb analysis...
+[Sun Dec 01 14:29:55 EST 2013] - Quadbomb analysis finished.
+[Sun Dec 01 14:31:46 EST 2013] - TestPanel closed.
+[Sun Dec 01 14:31:46 EST 2013] - Logger closed.
+[Sun Dec 01 14:31:47 EST 2013] - Logger initialized.
+[Sun Dec 01 14:31:47 EST 2013] - TestPanel initialized.
+[Sun Dec 01 14:31:52 EST 2013] - Loading corpus...
+[Sun Dec 01 14:31:56 EST 2013] - Corpus loaded.
+[Sun Dec 01 14:32:14 EST 2013] - Starting encryption...
+[Sun Dec 01 14:32:14 EST 2013] - Rotors - 021
+[Sun Dec 01 14:32:14 EST 2013] - Reflector - B
+[Sun Dec 01 14:32:14 EST 2013] - Ring Settings - CTY
+[Sun Dec 01 14:32:14 EST 2013] - Rotor Settings - TWO
+[Sun Dec 01 14:32:14 EST 2013] - Encryption Complete.
+
+[Sun Dec 01 14:32:14 EST 2013] - Decryption Complete.
+
+[Sun Dec 01 14:32:18 EST 2013] - Starting quadbomb analysis...
+[Sun Dec 01 14:32:18 EST 2013] - Quadbomb analysis finished.
+[Sun Dec 01 14:33:19 EST 2013] - TestPanel closed.
+[Sun Dec 01 14:33:19 EST 2013] - Logger closed.
+[Sun Dec 01 17:00:30 EST 2013] - Logger initialized.
+[Sun Dec 01 17:00:30 EST 2013] - TestPanel initialized.
+[Sun Dec 01 17:00:37 EST 2013] - TestPanel closed.
+[Sun Dec 01 17:00:37 EST 2013] - Logger closed.
+[Sun Dec 01 17:01:12 EST 2013] - Logger initialized.
+[Sun Dec 01 17:01:12 EST 2013] - TestPanel initialized.
+[Sun Dec 01 17:01:19 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\A Christmas Carol.txt...
+[Sun Dec 01 17:02:54 EST 2013] - Parsing complete.
+[Sun Dec 01 17:02:54 EST 2013] - Parsing took 95054 milliseconds.
+[Sun Dec 01 17:02:54 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:02:54 EST 2013] - 121622 unigrams.
+[Sun Dec 01 17:02:54 EST 2013] - 121621 bigrams.
+[Sun Dec 01 17:02:54 EST 2013] - 121620 trigrams.
+[Sun Dec 01 17:02:54 EST 2013] - 121619 quadgrams.
+[Sun Dec 01 17:03:58 EST 2013] - TestPanel closed.
+[Sun Dec 01 17:03:58 EST 2013] - Logger closed.
+[Sun Dec 01 17:04:37 EST 2013] - Logger initialized.
+[Sun Dec 01 17:04:37 EST 2013] - TestPanel initialized.
+[Sun Dec 01 17:04:43 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\A Christmas Carol.txt...
+[Sun Dec 01 17:04:43 EST 2013] - Parsing complete.
+[Sun Dec 01 17:04:43 EST 2013] - Parsing took 262 milliseconds.
+[Sun Dec 01 17:04:43 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:04:43 EST 2013] - 121622 unigrams.
+[Sun Dec 01 17:04:43 EST 2013] - 121621 bigrams.
+[Sun Dec 01 17:04:43 EST 2013] - 121620 trigrams.
+[Sun Dec 01 17:04:43 EST 2013] - 121619 quadgrams.
+[Sun Dec 01 17:04:43 EST 2013] - 28542 words.
+[Sun Dec 01 17:04:50 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\A Tale of Two Cities.txt...
+[Sun Dec 01 17:04:51 EST 2013] - Parsing complete.
+[Sun Dec 01 17:04:51 EST 2013] - Parsing took 348 milliseconds.
+[Sun Dec 01 17:04:51 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:04:51 EST 2013] - 706217 unigrams.
+[Sun Dec 01 17:04:51 EST 2013] - 706215 bigrams.
+[Sun Dec 01 17:04:51 EST 2013] - 706213 trigrams.
+[Sun Dec 01 17:04:51 EST 2013] - 706211 quadgrams.
+[Sun Dec 01 17:04:51 EST 2013] - 164384 words.
+[Sun Dec 01 17:04:55 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Alice in Wonderland.txt...
+[Sun Dec 01 17:04:56 EST 2013] - Parsing complete.
+[Sun Dec 01 17:04:56 EST 2013] - Parsing took 72 milliseconds.
+[Sun Dec 01 17:04:56 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:04:56 EST 2013] - 813911 unigrams.
+[Sun Dec 01 17:04:56 EST 2013] - 813908 bigrams.
+[Sun Dec 01 17:04:56 EST 2013] - 813905 trigrams.
+[Sun Dec 01 17:04:56 EST 2013] - 813902 quadgrams.
+[Sun Dec 01 17:04:56 EST 2013] - 190829 words.
+[Sun Dec 01 17:05:03 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Dracula.txt...
+[Sun Dec 01 17:05:03 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:03 EST 2013] - Parsing took 385 milliseconds.
+[Sun Dec 01 17:05:03 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:03 EST 2013] - 1453138 unigrams.
+[Sun Dec 01 17:05:03 EST 2013] - 1453134 bigrams.
+[Sun Dec 01 17:05:03 EST 2013] - 1453130 trigrams.
+[Sun Dec 01 17:05:03 EST 2013] - 1453126 quadgrams.
+[Sun Dec 01 17:05:03 EST 2013] - 351732 words.
+[Sun Dec 01 17:05:08 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Frankenstein.txt...
+[Sun Dec 01 17:05:08 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:08 EST 2013] - Parsing took 194 milliseconds.
+[Sun Dec 01 17:05:08 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:08 EST 2013] - 1785374 unigrams.
+[Sun Dec 01 17:05:08 EST 2013] - 1785369 bigrams.
+[Sun Dec 01 17:05:08 EST 2013] - 1785364 trigrams.
+[Sun Dec 01 17:05:08 EST 2013] - 1785359 quadgrams.
+[Sun Dec 01 17:05:08 EST 2013] - 426685 words.
+[Sun Dec 01 17:05:13 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Great Expectations.txt...
+[Sun Dec 01 17:05:14 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:14 EST 2013] - Parsing took 431 milliseconds.
+[Sun Dec 01 17:05:14 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:14 EST 2013] - 2547027 unigrams.
+[Sun Dec 01 17:05:14 EST 2013] - 2547021 bigrams.
+[Sun Dec 01 17:05:14 EST 2013] - 2547015 trigrams.
+[Sun Dec 01 17:05:14 EST 2013] - 2547009 quadgrams.
+[Sun Dec 01 17:05:14 EST 2013] - 611113 words.
+[Sun Dec 01 17:05:19 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Grimms Fairy Tales.txt...
+[Sun Dec 01 17:05:19 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:19 EST 2013] - Parsing took 279 milliseconds.
+[Sun Dec 01 17:05:19 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:19 EST 2013] - 2943344 unigrams.
+[Sun Dec 01 17:05:19 EST 2013] - 2943337 bigrams.
+[Sun Dec 01 17:05:19 EST 2013] - 2943330 trigrams.
+[Sun Dec 01 17:05:19 EST 2013] - 2943323 quadgrams.
+[Sun Dec 01 17:05:19 EST 2013] - 712203 words.
+[Sun Dec 01 17:05:27 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Les Miserables.txt...
+[Sun Dec 01 17:05:28 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:28 EST 2013] - Parsing took 1387 milliseconds.
+[Sun Dec 01 17:05:28 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:28 EST 2013] - 5451814 unigrams.
+[Sun Dec 01 17:05:28 EST 2013] - 5451806 bigrams.
+[Sun Dec 01 17:05:28 EST 2013] - 5451798 trigrams.
+[Sun Dec 01 17:05:28 EST 2013] - 5451790 quadgrams.
+[Sun Dec 01 17:05:28 EST 2013] - 1275767 words.
+[Sun Dec 01 17:05:35 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Moby Dick.txt...
+[Sun Dec 01 17:05:35 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:35 EST 2013] - Parsing took 550 milliseconds.
+[Sun Dec 01 17:05:35 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:35 EST 2013] - 6403794 unigrams.
+[Sun Dec 01 17:05:35 EST 2013] - 6403785 bigrams.
+[Sun Dec 01 17:05:35 EST 2013] - 6403776 trigrams.
+[Sun Dec 01 17:05:35 EST 2013] - 6403767 quadgrams.
+[Sun Dec 01 17:05:35 EST 2013] - 1487787 words.
+[Sun Dec 01 17:05:41 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Paradise Lost.txt...
+[Sun Dec 01 17:05:41 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:41 EST 2013] - Parsing took 225 milliseconds.
+[Sun Dec 01 17:05:41 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:41 EST 2013] - 6760712 unigrams.
+[Sun Dec 01 17:05:41 EST 2013] - 6760702 bigrams.
+[Sun Dec 01 17:05:41 EST 2013] - 6760692 trigrams.
+[Sun Dec 01 17:05:41 EST 2013] - 6760682 quadgrams.
+[Sun Dec 01 17:05:41 EST 2013] - 1567791 words.
+[Sun Dec 01 17:05:48 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Peter Pan.txt...
+[Sun Dec 01 17:05:48 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:48 EST 2013] - Parsing took 132 milliseconds.
+[Sun Dec 01 17:05:48 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:48 EST 2013] - 6956518 unigrams.
+[Sun Dec 01 17:05:48 EST 2013] - 6956507 bigrams.
+[Sun Dec 01 17:05:48 EST 2013] - 6956496 trigrams.
+[Sun Dec 01 17:05:48 EST 2013] - 6956485 quadgrams.
+[Sun Dec 01 17:05:48 EST 2013] - 1615233 words.
+[Sun Dec 01 17:05:55 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Adventures of Sherlock Holmes.txt...
+[Sun Dec 01 17:05:56 EST 2013] - Parsing complete.
+[Sun Dec 01 17:05:56 EST 2013] - Parsing took 264 milliseconds.
+[Sun Dec 01 17:05:56 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:05:56 EST 2013] - 7388267 unigrams.
+[Sun Dec 01 17:05:56 EST 2013] - 7388255 bigrams.
+[Sun Dec 01 17:05:56 EST 2013] - 7388243 trigrams.
+[Sun Dec 01 17:05:56 EST 2013] - 7388231 quadgrams.
+[Sun Dec 01 17:05:56 EST 2013] - 1719726 words.
+[Sun Dec 01 17:06:05 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Adventures of Tom Sawyer.txt...
+[Sun Dec 01 17:06:05 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:05 EST 2013] - Parsing took 192 milliseconds.
+[Sun Dec 01 17:06:05 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:05 EST 2013] - 7689388 unigrams.
+[Sun Dec 01 17:06:05 EST 2013] - 7689375 bigrams.
+[Sun Dec 01 17:06:05 EST 2013] - 7689362 trigrams.
+[Sun Dec 01 17:06:05 EST 2013] - 7689349 quadgrams.
+[Sun Dec 01 17:06:05 EST 2013] - 1790528 words.
+[Sun Dec 01 17:06:10 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Complete Works of William Shakespeare.txt...
+[Sun Dec 01 17:06:12 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:12 EST 2013] - Parsing took 2203 milliseconds.
+[Sun Dec 01 17:06:12 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:12 EST 2013] - 11471891 unigrams.
+[Sun Dec 01 17:06:12 EST 2013] - 11471877 bigrams.
+[Sun Dec 01 17:06:12 EST 2013] - 11471863 trigrams.
+[Sun Dec 01 17:06:12 EST 2013] - 11471849 quadgrams.
+[Sun Dec 01 17:06:12 EST 2013] - 2690124 words.
+[Sun Dec 01 17:06:19 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Count of Monte Cristo.txt...
+[Sun Dec 01 17:06:20 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:20 EST 2013] - Parsing took 1151 milliseconds.
+[Sun Dec 01 17:06:20 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:20 EST 2013] - 13487591 unigrams.
+[Sun Dec 01 17:06:20 EST 2013] - 13487576 bigrams.
+[Sun Dec 01 17:06:20 EST 2013] - 13487561 trigrams.
+[Sun Dec 01 17:06:20 EST 2013] - 13487546 quadgrams.
+[Sun Dec 01 17:06:20 EST 2013] - 3149260 words.
+[Sun Dec 01 17:06:25 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Great Gatsby.txt...
+[Sun Dec 01 17:06:25 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:25 EST 2013] - Parsing took 144 milliseconds.
+[Sun Dec 01 17:06:25 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:25 EST 2013] - 13693883 unigrams.
+[Sun Dec 01 17:06:25 EST 2013] - 13693867 bigrams.
+[Sun Dec 01 17:06:25 EST 2013] - 13693851 trigrams.
+[Sun Dec 01 17:06:25 EST 2013] - 13693835 quadgrams.
+[Sun Dec 01 17:06:25 EST 2013] - 3197674 words.
+[Sun Dec 01 17:06:35 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Jungle Book.txt...
+[Sun Dec 01 17:06:35 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:35 EST 2013] - Parsing took 136 milliseconds.
+[Sun Dec 01 17:06:35 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:35 EST 2013] - 13902074 unigrams.
+[Sun Dec 01 17:06:35 EST 2013] - 13902057 bigrams.
+[Sun Dec 01 17:06:35 EST 2013] - 13902040 trigrams.
+[Sun Dec 01 17:06:35 EST 2013] - 13902023 quadgrams.
+[Sun Dec 01 17:06:35 EST 2013] - 3248511 words.
+[Sun Dec 01 17:06:45 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Jungle.txt...
+[Sun Dec 01 17:06:45 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:45 EST 2013] - Parsing took 378 milliseconds.
+[Sun Dec 01 17:06:45 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:45 EST 2013] - 14532575 unigrams.
+[Sun Dec 01 17:06:45 EST 2013] - 14532557 bigrams.
+[Sun Dec 01 17:06:45 EST 2013] - 14532539 trigrams.
+[Sun Dec 01 17:06:45 EST 2013] - 14532521 quadgrams.
+[Sun Dec 01 17:06:45 EST 2013] - 3397630 words.
+[Sun Dec 01 17:06:52 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The King James Bible.txt...
+[Sun Dec 01 17:06:53 EST 2013] - Parsing complete.
+[Sun Dec 01 17:06:53 EST 2013] - Parsing took 1763 milliseconds.
+[Sun Dec 01 17:06:53 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:06:53 EST 2013] - 17756807 unigrams.
+[Sun Dec 01 17:06:53 EST 2013] - 17756788 bigrams.
+[Sun Dec 01 17:06:53 EST 2013] - 17756769 trigrams.
+[Sun Dec 01 17:06:53 EST 2013] - 17756750 quadgrams.
+[Sun Dec 01 17:06:53 EST 2013] - 4218764 words.
+[Sun Dec 01 17:07:00 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Legend of Sleepy Hollow.txt...
+[Sun Dec 01 17:07:00 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:00 EST 2013] - Parsing took 52 milliseconds.
+[Sun Dec 01 17:07:00 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:00 EST 2013] - 17812346 unigrams.
+[Sun Dec 01 17:07:00 EST 2013] - 17812326 bigrams.
+[Sun Dec 01 17:07:00 EST 2013] - 17812306 trigrams.
+[Sun Dec 01 17:07:00 EST 2013] - 17812286 quadgrams.
+[Sun Dec 01 17:07:00 EST 2013] - 4230978 words.
+[Sun Dec 01 17:07:07 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Prince and the Pauper.txt...
+[Sun Dec 01 17:07:07 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:07 EST 2013] - Parsing took 199 milliseconds.
+[Sun Dec 01 17:07:07 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:07 EST 2013] - 18119690 unigrams.
+[Sun Dec 01 17:07:07 EST 2013] - 18119669 bigrams.
+[Sun Dec 01 17:07:07 EST 2013] - 18119648 trigrams.
+[Sun Dec 01 17:07:07 EST 2013] - 18119627 quadgrams.
+[Sun Dec 01 17:07:07 EST 2013] - 4301027 words.
+[Sun Dec 01 17:07:16 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The Scarlet Letter.txt...
+[Sun Dec 01 17:07:16 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:16 EST 2013] - Parsing took 236 milliseconds.
+[Sun Dec 01 17:07:16 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:16 EST 2013] - 18504393 unigrams.
+[Sun Dec 01 17:07:16 EST 2013] - 18504371 bigrams.
+[Sun Dec 01 17:07:16 EST 2013] - 18504349 trigrams.
+[Sun Dec 01 17:07:16 EST 2013] - 18504327 quadgrams.
+[Sun Dec 01 17:07:16 EST 2013] - 4384871 words.
+[Sun Dec 01 17:07:22 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\The War of the Worlds.txt...
+[Sun Dec 01 17:07:22 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:22 EST 2013] - Parsing took 169 milliseconds.
+[Sun Dec 01 17:07:22 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:22 EST 2013] - 18770416 unigrams.
+[Sun Dec 01 17:07:22 EST 2013] - 18770393 bigrams.
+[Sun Dec 01 17:07:22 EST 2013] - 18770370 trigrams.
+[Sun Dec 01 17:07:22 EST 2013] - 18770347 quadgrams.
+[Sun Dec 01 17:07:22 EST 2013] - 4444844 words.
+[Sun Dec 01 17:07:33 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Treasure Island.txt...
+[Sun Dec 01 17:07:33 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:33 EST 2013] - Parsing took 182 milliseconds.
+[Sun Dec 01 17:07:33 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:33 EST 2013] - 19047251 unigrams.
+[Sun Dec 01 17:07:33 EST 2013] - 19047227 bigrams.
+[Sun Dec 01 17:07:33 EST 2013] - 19047203 trigrams.
+[Sun Dec 01 17:07:33 EST 2013] - 19047179 quadgrams.
+[Sun Dec 01 17:07:33 EST 2013] - 4513655 words.
+[Sun Dec 01 17:07:42 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Twenty Thousand Leagues Under the Sea.txt...
+[Sun Dec 01 17:07:42 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:42 EST 2013] - Parsing took 283 milliseconds.
+[Sun Dec 01 17:07:42 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:42 EST 2013] - 19505224 unigrams.
+[Sun Dec 01 17:07:42 EST 2013] - 19505199 bigrams.
+[Sun Dec 01 17:07:42 EST 2013] - 19505174 trigrams.
+[Sun Dec 01 17:07:42 EST 2013] - 19505149 quadgrams.
+[Sun Dec 01 17:07:42 EST 2013] - 4616744 words.
+[Sun Dec 01 17:07:51 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\Ulysses.txt...
+[Sun Dec 01 17:07:52 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:52 EST 2013] - Parsing took 834 milliseconds.
+[Sun Dec 01 17:07:52 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:52 EST 2013] - 20687639 unigrams.
+[Sun Dec 01 17:07:52 EST 2013] - 20687613 bigrams.
+[Sun Dec 01 17:07:52 EST 2013] - 20687587 trigrams.
+[Sun Dec 01 17:07:52 EST 2013] - 20687561 quadgrams.
+[Sun Dec 01 17:07:52 EST 2013] - 4881710 words.
+[Sun Dec 01 17:07:57 EST 2013] - Parsing C:\Users\Walter\Documents\Enigma Text Files\War and Peace.txt...
+[Sun Dec 01 17:07:59 EST 2013] - Parsing complete.
+[Sun Dec 01 17:07:59 EST 2013] - Parsing took 1465 milliseconds.
+[Sun Dec 01 17:07:59 EST 2013] - Corpus now contains:
+[Sun Dec 01 17:07:59 EST 2013] - 23200681 unigrams.
+[Sun Dec 01 17:07:59 EST 2013] - 23200654 bigrams.
+[Sun Dec 01 17:07:59 EST 2013] - 23200627 trigrams.
+[Sun Dec 01 17:07:59 EST 2013] - 23200600 quadgrams.
+[Sun Dec 01 17:07:59 EST 2013] - 5444158 words.
+[Sun Dec 01 17:09:26 EST 2013] - Saving corpus...
+[Sun Dec 01 17:09:28 EST 2013] - Corpus saved.
+[Sun Dec 01 17:10:03 EST 2013] - Starting encryption...
+[Sun Dec 01 17:10:03 EST 2013] - Rotors - 021
+[Sun Dec 01 17:10:03 EST 2013] - Reflector - B
+[Sun Dec 01 17:10:03 EST 2013] - Ring Settings - CTY
+[Sun Dec 01 17:10:03 EST 2013] - Rotor Settings - TWO
+[Sun Dec 01 17:10:03 EST 2013] - Encryption Complete.
+
+[Sun Dec 01 17:10:03 EST 2013] - Decryption Complete.
+
+[Sun Dec 01 17:10:07 EST 2013] - Starting quadbomb analysis...
+[Sun Dec 01 17:10:07 EST 2013] - Quadbomb analysis finished.
+[Sun Dec 01 17:41:02 EST 2013] - Starting quadbomb analysis...
+[Sun Dec 01 17:41:02 EST 2013] - Quadbomb analysis finished.
+[Sun Dec 01 17:43:23 EST 2013] - Starting quadbomb analysis...
+[Sun Dec 01 17:43:23 EST 2013] - Quadbomb analysis finished.
+[Sun Dec 01 17:43:51 EST 2013] - TestPanel closed.
+[Sun Dec 01 17:43:51 EST 2013] - Logger closed.
+[Mon Dec 02 16:42:31 EST 2013] - Logger initialized.
+[Mon Dec 02 16:42:31 EST 2013] - TestPanel initialized.
+[Mon Dec 02 16:42:35 EST 2013] - Loading corpus...
+[Mon Dec 02 16:42:38 EST 2013] - Corpus loaded.
+[Mon Dec 02 16:42:50 EST 2013] - Starting encryption...
+[Mon Dec 02 16:42:50 EST 2013] - Rotors - 021
+[Mon Dec 02 16:42:50 EST 2013] - Reflector - B
+[Mon Dec 02 16:42:50 EST 2013] - Ring Settings - CTY
+[Mon Dec 02 16:42:50 EST 2013] - Rotor Settings - TWO
+[Mon Dec 02 16:42:50 EST 2013] - Encryption Complete.
+
+[Mon Dec 02 16:42:50 EST 2013] - Decryption Complete.
+
+[Mon Dec 02 16:42:54 EST 2013] - Starting quadbomb analysis...
+[Mon Dec 02 16:42:54 EST 2013] - Quadbomb analysis finished.
+[Mon Dec 02 16:44:02 EST 2013] - TestPanel closed.
+[Mon Dec 02 16:44:02 EST 2013] - Logger closed.
+[Mon Dec 02 16:53:14 EST 2013] - Logger initialized.
+[Mon Dec 02 16:53:14 EST 2013] - TestPanel initialized.
+[Mon Dec 02 16:53:18 EST 2013] - Loading corpus...
+[Mon Dec 02 16:53:21 EST 2013] - Corpus loaded.
+[Mon Dec 02 16:53:32 EST 2013] - Starting encryption...
+[Mon Dec 02 16:53:32 EST 2013] - Rotors - 021
+[Mon Dec 02 16:53:32 EST 2013] - Reflector - B
+[Mon Dec 02 16:53:32 EST 2013] - Ring Settings - CTY
+[Mon Dec 02 16:53:32 EST 2013] - Rotor Settings - TWO
+[Mon Dec 02 16:53:32 EST 2013] - Encryption Complete.
+
+[Mon Dec 02 16:53:32 EST 2013] - Decryption Complete.
+
+[Mon Dec 02 16:53:36 EST 2013] - Starting quadbomb analysis...
+[Mon Dec 02 16:53:36 EST 2013] - Quadbomb analysis finished.
+[Mon Dec 02 16:58:01 EST 2013] - TestPanel closed.
+[Mon Dec 02 16:58:01 EST 2013] - Logger closed.
