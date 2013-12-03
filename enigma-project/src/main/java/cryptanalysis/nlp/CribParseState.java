@@ -7,16 +7,17 @@
  */
 package main.java.cryptanalysis.nlp;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
-public class TestParserState implements Comparable<TestParserState> {
+public class CribParseState implements Comparable<CribParseState> {
 	private int startPointer;
 	private int wordPointer;
-	private Queue<String> wordList;
+	private Queue<Crib> wordList;
 	private int lettersRemaining;
 	private String message;
 	
-	public TestParserState(int startPointer, int wordPointer, Queue<String> wordList, int lettersRemaining, String message) {
+	public CribParseState(int startPointer, int wordPointer, Queue<Crib> wordList, int lettersRemaining, String message) {
 		this.startPointer = startPointer;
 		this.wordPointer = wordPointer;
 		this.wordList = wordList;
@@ -41,8 +42,11 @@ public class TestParserState implements Comparable<TestParserState> {
 	/**
 	 * @return the wordList
 	 */
-	public Queue<String> getWordList() {
-		return wordList;
+	public Queue<Crib> getWordList() {
+		Queue<Crib> result = new LinkedList<Crib>();
+		result.addAll(wordList);
+		
+		return result;
 	}
 
 	/**
@@ -58,9 +62,13 @@ public class TestParserState implements Comparable<TestParserState> {
 	public String getMessage() {
 		return message;
 	}
+	
+	public String toString() {
+		return lettersRemaining + " encrypted letters.";
+	}
 
 	@Override
-	public int compareTo(TestParserState parser) {
+	public int compareTo(CribParseState parser) {
 		if (lettersRemaining > parser.getLettersRemaining()) {
 			return 1;
 		}

@@ -13,27 +13,27 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class WordTester {
+public class CribDetector {
 	private Corpus database;
-	private Queue<String> wordList;
-	Deque<TestParserState> stack;
+	private Queue<Crib> wordList;
+	Deque<CribParseState> stack;
 	
-	public WordTester(Corpus corpus) {
+	public CribDetector(Corpus corpus) {
 		database = corpus;
-		wordList = new LinkedList<String>();
-		stack = new LinkedList<TestParserState>();
+		wordList = new LinkedList<Crib>();
+		stack = new LinkedList<CribParseState>();
 	}
 	
-	public PriorityQueue<TestParserState> parseString(String message) {
-		PriorityQueue<TestParserState> candidateList = new PriorityQueue<TestParserState>();
+	public PriorityQueue<CribParseState> parseString(String message) {
+		PriorityQueue<CribParseState> candidateList = new PriorityQueue<CribParseState>();
 		
-		stack.add(new TestParserState(0, 0, wordList, message.length(), message));
+		stack.add(new CribParseState(0, 0, wordList, message.length(), message));
 		
 		while (!stack.isEmpty()) {
-			TestParserState candidate = findWords(stack.pop());
+			CribParseState candidate = findWords(stack.pop());
 			
 			if (candidate.getLettersRemaining() <= 0) {
-				PriorityQueue<TestParserState> result = new PriorityQueue<TestParserState>();
+				PriorityQueue<CribParseState> result = new PriorityQueue<CribParseState>();
 				result.add(candidate);
 				return result;
 			}
@@ -44,7 +44,7 @@ public class WordTester {
 		return candidateList;
 	}
 	
-	private TestParserState findWords(TestParserState state) {
+	private CribParseState findWords(CribParseState state) {
 		String message = state.getMessage();
 		int startPosition = state.getStartPointer();
 		int wordPosition = state.getWordPointer();
@@ -54,7 +54,7 @@ public class WordTester {
 			String word = "";
 			boolean wordFlag = false;
 
-			for (int index = startPosition; index < message.length(); index++) {
+			for (int index = wordPosition; index < message.length(); index++) {
 				word += "" + message.charAt(index);
 				
 				if (database.hasWord(word)) {
@@ -64,8 +64,8 @@ public class WordTester {
 				else {
 					if (wordFlag) {
 						wordFlag = false;
-						stack.addFirst(new TestParserState(wordPosition + 1, wordPosition + 1, wordList, letterCount, message));
-						wordList.add(message.substring(startPosition, wordPosition + 1));
+						stack.addFirst(new CribParseState(startPosition, wordPosition + 1, wordList, letterCount, message));
+						wordList.add(new Crib(message.substring(startPosition, wordPosition + 1), startPosition, wordPosition + 1));
 						message = removeWord(message, startPosition, wordPosition + 1);
 						letterCount -= wordPosition - startPosition + 1;
 						startPosition = wordPosition + 1;
@@ -78,7 +78,7 @@ public class WordTester {
 			// Once a pass-through is complete,
 			if (database.hasWord(word)) {
 				wordFlag = false;
-				wordList.add(message.substring(startPosition, wordPosition));
+				wordList.add(new Crib(message.substring(startPosition, wordPosition + 1), startPosition, wordPosition + 1));
 				message = removeWord(message, startPosition, wordPosition + 1);
 				letterCount -= wordPosition - startPosition + 1;
 				startPosition = wordPosition + 1;
@@ -90,7 +90,7 @@ public class WordTester {
 			}
 		} while (letterCount > 0 && startPosition < message.length());
 		
-		return new TestParserState(startPosition, startPosition, wordList, letterCount, message);
+		return new CribParseState(startPosition, startPosition, wordList, letterCount, message);
 	}
 	
 	private String removeWord(String string, int start, int end) {

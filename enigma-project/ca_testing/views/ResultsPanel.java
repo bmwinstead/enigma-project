@@ -7,16 +7,22 @@
  */
 package views;
 
+import java.awt.Dimension;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import main.java.cryptanalysis.nlp.Crib;
+import main.java.cryptanalysis.nlp.CribParseState;
 import main.java.enigma.EnigmaSettings;
-import javax.swing.JList;
-import javax.swing.JComboBox;
-import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ResultsPanel extends JPanel {
 	private JTextField leftRotorTextField;
@@ -33,7 +39,7 @@ public class ResultsPanel extends JPanel {
 	private JTextArea outputTextArea;
 	private JPanel solutionsPanel;
 	private JLabel lblNewLabel;
-	private JComboBox solutionsComboBox;
+	private JComboBox<CribParseState> solutionsComboBox;
 	
 	public ResultsPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -44,7 +50,30 @@ public class ResultsPanel extends JPanel {
 		lblNewLabel = new JLabel("Solutions:");
 		solutionsPanel.add(lblNewLabel);
 		
-		solutionsComboBox = new JComboBox();
+		solutionsComboBox = new JComboBox<CribParseState>();
+		
+		// Shows selected solution in text box.
+		solutionsComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CribParseState item = (CribParseState)solutionsComboBox.getSelectedItem();
+				
+				if (item != null) {
+					Queue<Crib> wordList = item.getWordList();
+					String message = "";
+					
+					while (!wordList.isEmpty()) {
+						message += wordList.remove().getCrib();
+						
+						if (!wordList.isEmpty()) {
+							message += " ";
+						}
+					}
+					
+					outputTextArea.setText(message);
+				}
+			}
+		});
+		
 		solutionsComboBox.setPreferredSize(new Dimension(200, 20));
 		solutionsComboBox.setMinimumSize(new Dimension(40, 20));
 		solutionsComboBox.setMaximumRowCount(10);
@@ -117,13 +146,20 @@ public class ResultsPanel extends JPanel {
 		resultsPanel.add(plugboardTextField);
 	}
 	
-	public void printSettings(EnigmaSettings settings, String message) {
-		String result = message;
+	public void loadSolutions(PriorityQueue<CribParseState> list) {
+		solutionsComboBox.removeAllItems();
+		
+		for (CribParseState solution: list) {
+			solutionsComboBox.addItem(solution);
+		}
+		
+		solutionsComboBox.setSelectedIndex(0);
+	}
+	
+	public void printSettings(EnigmaSettings settings) {
 		int[] wheel = settings.getRotors();
 		char[] ring = settings.getRingSettings();
 		char[] indicator = settings.getIndicatorSettings();
-		
-		outputTextArea.setText(result);
 		
 		leftRotorTextField.setText("" + (wheel[0] + 1));
 		middleRotorTextField.setText("" + (wheel[1] + 1));

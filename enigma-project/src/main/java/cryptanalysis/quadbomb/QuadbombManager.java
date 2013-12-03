@@ -39,8 +39,9 @@ import java.util.concurrent.Executors;
 import javax.swing.SwingWorker;
 
 import main.java.cryptanalysis.nlp.Corpus;
+import main.java.cryptanalysis.nlp.CribDetector;
+import main.java.cryptanalysis.nlp.CribParseState;
 import main.java.cryptanalysis.nlp.StatisticsGenerator;
-import main.java.cryptanalysis.nlp.WordTester;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 import misc.Logger;
@@ -51,7 +52,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private static int NUM_ROTORS = 3;		// Debugging line to speed up testing.
 	
 	private final StatisticsGenerator statGenerator;
-	private final WordTester tester;
+	private final CribDetector tester;
 	private final String message;
 	private String decryptedMessage;
 	
@@ -64,6 +65,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private PriorityQueue<EnigmaSettings> candidateList;
+	private PriorityQueue<CribParseState> solutionList;
 	
 	private Logger log;
 	
@@ -80,7 +82,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		candidateList = new PriorityQueue<EnigmaSettings>();
 		
 		statGenerator = new StatisticsGenerator(database, statTest);
-		tester = new WordTester(database);
+		tester = new CribDetector(database);
 		
 		// Create a log file with the timestamp.
 		Calendar date = Calendar.getInstance();
@@ -219,7 +221,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		EnigmaMachine decoder = result.createEnigmaMachine();
 		decryptedMessage = decoder.encryptString(message);
 		
-		tester.parseString(decryptedMessage);
+		solutionList = tester.parseString(decryptedMessage);
 		
 		long endSearchTime = System.currentTimeMillis();
 		log.makeEntry("Search completed in " + (endSearchTime - startSearchTime) + " milliseconds.", true);
@@ -244,7 +246,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
-		resultsPanel.printSettings(result, decryptedMessage);
+		resultsPanel.printSettings(result);
+		resultsPanel.loadSolutions(solutionList);
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.
