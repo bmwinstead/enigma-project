@@ -42,27 +42,7 @@ public class WordParser {
 				// Reject words with any punctuation for now.
 				// TODO: add special processing for various punctuation.
 				if (!punctuationMatcher.find()) {
-					// Check for a number.
-					if (currentWord.matches("\\d*(\\.\\d+)?")) {	// Matches a number, with or without a decimal point.
-						char[] characters = currentWord.toCharArray();
-						
-						// Process each digit individually.
-						for (char character: characters) {
-							// Skip decimal points for now, until a decision on how to handle them is made.
-							// TODO: Incorporate decimal point handling, if necessary.
-							if (Character.isDigit(character)) {
-								processNextWord(String.valueOf(character));
-							} // End if
-						} // End for
-						
-						// Clear buffers.
-						thirdWord = "";
-						secondWord = "";
-						firstWord = "";
-					} // End if
-					else { // Word input.
-						processNextWord(currentWord);
-					} // End else
+					processNextWord(currentWord);
 				} // End if
 			} // End while
 			

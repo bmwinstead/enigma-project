@@ -14,6 +14,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import main.java.enigma.EnigmaSettings;
+import javax.swing.JList;
+import javax.swing.JComboBox;
+import java.awt.Dimension;
 
 public class ResultsPanel extends JPanel {
 	private JTextField leftRotorTextField;
@@ -28,9 +31,24 @@ public class ResultsPanel extends JPanel {
 	private JTextField rightIndicatorTextField;
 	private JTextField plugboardTextField;
 	private JTextArea outputTextArea;
+	private JPanel solutionsPanel;
+	private JLabel lblNewLabel;
+	private JComboBox solutionsComboBox;
 	
 	public ResultsPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		solutionsPanel = new JPanel();
+		add(solutionsPanel);
+		
+		lblNewLabel = new JLabel("Solutions:");
+		solutionsPanel.add(lblNewLabel);
+		
+		solutionsComboBox = new JComboBox();
+		solutionsComboBox.setPreferredSize(new Dimension(200, 20));
+		solutionsComboBox.setMinimumSize(new Dimension(40, 20));
+		solutionsComboBox.setMaximumRowCount(10);
+		solutionsPanel.add(solutionsComboBox);
 		
 		outputTextArea = new JTextArea();
 		outputTextArea.setLineWrap(true);
@@ -39,64 +57,64 @@ public class ResultsPanel extends JPanel {
 		outputTextArea.setRows(10);
 		add(outputTextArea);
 		
-		JPanel panel = new JPanel();
-		add(panel);
+		JPanel resultsPanel = new JPanel();
+		add(resultsPanel);
 		
 		JLabel label = new JLabel("rotors:");
-		panel.add(label);
+		resultsPanel.add(label);
 		
 		leftRotorTextField = new JTextField();
 		leftRotorTextField.setColumns(2);
-		panel.add(leftRotorTextField);
+		resultsPanel.add(leftRotorTextField);
 		
 		middleRotorTextField = new JTextField();
 		middleRotorTextField.setColumns(2);
-		panel.add(middleRotorTextField);
+		resultsPanel.add(middleRotorTextField);
 		
 		rightRotorTextField = new JTextField();
 		rightRotorTextField.setColumns(2);
-		panel.add(rightRotorTextField);
+		resultsPanel.add(rightRotorTextField);
 		
 		JLabel label_1 = new JLabel("reflector:");
-		panel.add(label_1);
+		resultsPanel.add(label_1);
 		
 		reflectorTextField = new JTextField();
 		reflectorTextField.setColumns(2);
-		panel.add(reflectorTextField);
+		resultsPanel.add(reflectorTextField);
 		
 		JLabel label_2 = new JLabel("rings:");
-		panel.add(label_2);
+		resultsPanel.add(label_2);
 		
 		leftRingTextField = new JTextField();
 		leftRingTextField.setColumns(2);
-		panel.add(leftRingTextField);
+		resultsPanel.add(leftRingTextField);
 		
 		middleRingTextField = new JTextField();
 		middleRingTextField.setColumns(2);
-		panel.add(middleRingTextField);
+		resultsPanel.add(middleRingTextField);
 		
 		rightRingTextField = new JTextField();
 		rightRingTextField.setColumns(2);
-		panel.add(rightRingTextField);
+		resultsPanel.add(rightRingTextField);
 		
 		JLabel label_3 = new JLabel("indicators:");
-		panel.add(label_3);
+		resultsPanel.add(label_3);
 		
 		leftIndicatorTextField = new JTextField(2);
-		panel.add(leftIndicatorTextField);
+		resultsPanel.add(leftIndicatorTextField);
 		
 		middleIndicatorTextField = new JTextField(2);
-		panel.add(middleIndicatorTextField);
+		resultsPanel.add(middleIndicatorTextField);
 		
 		rightIndicatorTextField = new JTextField(2);
-		panel.add(rightIndicatorTextField);
+		resultsPanel.add(rightIndicatorTextField);
 		
 		JLabel label_4 = new JLabel("plugboard:");
-		panel.add(label_4);
+		resultsPanel.add(label_4);
 		
 		plugboardTextField = new JTextField();
 		plugboardTextField.setColumns(30);
-		panel.add(plugboardTextField);
+		resultsPanel.add(plugboardTextField);
 	}
 	
 	public void printSettings(EnigmaSettings settings, String message) {

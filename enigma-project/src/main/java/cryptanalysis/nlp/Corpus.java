@@ -1,32 +1,27 @@
 package main.java.cryptanalysis.nlp;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-// This class represents a corpus (word database) containing unigram, bigram, trigram, and quadgram words.
+// This class represents a corpus (character database) containing unigrams, bigrams, trigrams, and quadgrams.
 // Counts of each type of gram are kept for future statistical use.
-// PriorityQueues are also provided with sorts by word count.
+// PriorityQueues are also provided with sorts by gram count.
 // It is intended that all words are first loaded into HashMaps (fast lookup with counts),
 // and then sortDatabase() is called to load priority queues with the entered words in descending word count order.
 // Then each call to get(n-gram)TestQueue() returns a shallow copy of each queue for word processing.
 
 public class Corpus implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2096305067100712292L;
+	private static final long serialVersionUID = -6995615626048870170L;
+	//private static final long serialVersionUID = -2096305067100712292L;
 	// Statistic databases.
 	private Map<String, Integer> unigramTable;
 	private Map<String, Integer> bigramTable;
 	private Map<String, Integer> trigramTable;
 	private Map<String, Integer> quadgramTable;
+	private Map<String, Integer> wordTable;
 	
 	// Sorted databases.
 	private PriorityQueue<String> unigramQueue;
@@ -38,6 +33,7 @@ public class Corpus implements Serializable {
 	private int bigramCount;
 	private int trigramCount;
 	private int quadgramCount;
+	private int wordCount;
 	
 	// Constructor.
 	public Corpus() {
@@ -45,6 +41,7 @@ public class Corpus implements Serializable {
 		bigramTable = new HashMap<String, Integer>();
 		trigramTable = new HashMap<String, Integer>();
 		quadgramTable = new HashMap<String, Integer>();
+		wordTable = new HashMap<String, Integer>();
 		
 		unigramQueue = new PriorityQueue<String>(11, new GramComparator(unigramTable));
 		bigramQueue = new PriorityQueue<String>(11, new GramComparator(bigramTable));
@@ -66,6 +63,10 @@ public class Corpus implements Serializable {
 	
 	public int getTotalQuadgramCount() {
 		return quadgramCount;
+	}
+	
+	public int getTotalWordCount() {
+		return wordCount;
 	}
 	
 	public int getUnigramCount(String gram) {
@@ -95,6 +96,14 @@ public class Corpus implements Serializable {
 	public int getQuadgramCount(String gram) {
 		if (quadgramTable.containsKey(gram.toUpperCase())) {
 			return quadgramTable.get(gram.toUpperCase());
+		}
+		
+		return 0;
+	}
+	
+	public int getWordCount(String word) {
+		if (quadgramTable.containsKey(word.toUpperCase())) {
+			return quadgramTable.get(word.toUpperCase());
 		}
 		
 		return 0;
@@ -180,6 +189,22 @@ public class Corpus implements Serializable {
 		quadgramCount++;
 	}
 	
+	public void addWord(String word) {
+		if (wordTable.containsKey(word)) {
+			int count = wordTable.get(word);
+			wordTable.put(word, count + 1);
+		}
+		else {
+			wordTable.put(word, 1);
+		}
+		
+		wordCount++;
+	}
+	
+	public boolean hasWord(String word) {
+		return wordTable.containsKey(word);
+	}
+	
 	// This method is intended to be called after all words are sorted.
 	public void sortDatabase() {
 		unigramQueue.clear();
@@ -202,33 +227,6 @@ public class Corpus implements Serializable {
 		for (String quadgram : quadgramTable.keySet()) {
 			quadgramQueue.add(quadgram);
 		}
-	}
-	
-	public void dumpDatabaseToText() {
-		try {
-			PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("quadgrams.txt", true)));
-			
-			for (String gram: quadgramTable.keySet()) {
-				output.append(gram + "\t" + quadgramTable.get(gram) + "\r\n");
-			}
-			
-			output.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	// Test a series of words split by whitespace for unigram matches.
-	public boolean testString(String test) {
-		String[] words = test.split("\\s");
-		
-		for (int index = 0; index < words.length; index++) {
-			if (!unigramTable.keySet().contains(words[index].toLowerCase()))
-				return false;
-		}
-		
-		return true;
 	}
 	
 	// Inner class to sort database words in descending count order.

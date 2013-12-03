@@ -35,6 +35,7 @@ import javax.swing.UIManager;
 
 import main.java.cryptanalysis.nlp.CharacterParser;
 import main.java.cryptanalysis.nlp.Corpus;
+import main.java.cryptanalysis.nlp.TextParser;
 import main.java.cryptanalysis.quadbomb.QuadbombManager;
 import main.java.enigma.EnigmaMachine;
 import misc.Logger;
@@ -179,7 +180,7 @@ public class TestPanel extends JFrame {
 				
 				long startTime = System.currentTimeMillis();
 				
-				CharacterParser parser = new CharacterParser(database);
+				TextParser parser = new TextParser(database);
 				parser.parseFile(file);
 				
 				long endTime = System.currentTimeMillis();
@@ -191,6 +192,7 @@ public class TestPanel extends JFrame {
 				log.makeEntry(database.getTotalBigramCount() + " bigrams.", true);
 				log.makeEntry(database.getTotalTrigramCount() + " trigrams.", true);
 				log.makeEntry(database.getTotalQuadgramCount() + " quadgrams.", true);
+				log.makeEntry(database.getTotalWordCount() + " words.", true);
 			}
 		});
 		browseButton.addActionListener(new ActionListener() {

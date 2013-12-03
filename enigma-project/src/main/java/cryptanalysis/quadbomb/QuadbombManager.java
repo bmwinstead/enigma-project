@@ -40,6 +40,7 @@ import javax.swing.SwingWorker;
 
 import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.nlp.StatisticsGenerator;
+import main.java.cryptanalysis.nlp.WordTester;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 import misc.Logger;
@@ -50,7 +51,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private static int NUM_ROTORS = 3;		// Debugging line to speed up testing.
 	
 	private final StatisticsGenerator statGenerator;
-	
+	private final WordTester tester;
 	private final String message;
 	private String decryptedMessage;
 	
@@ -79,6 +80,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		candidateList = new PriorityQueue<EnigmaSettings>();
 		
 		statGenerator = new StatisticsGenerator(database, statTest);
+		tester = new WordTester(database);
 		
 		// Create a log file with the timestamp.
 		Calendar date = Calendar.getInstance();
@@ -99,8 +101,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Start Fitness Score: " + statGenerator.computeFitnessScore(message), true);
 		
 		long startTime = System.currentTimeMillis();
-		
-		int operationCount = 0;
 		
 		// Step 1: Determine possible rotor, reflector, and indicator orders.
 		// Create tasks segregated by rotor / reflector configuration and submit to threadManager.
@@ -219,6 +219,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		EnigmaMachine decoder = result.createEnigmaMachine();
 		decryptedMessage = decoder.encryptString(message);
 		
+		tester.parseString(decryptedMessage);
+		
 		long endSearchTime = System.currentTimeMillis();
 		log.makeEntry("Search completed in " + (endSearchTime - startSearchTime) + " milliseconds.", true);
 		
@@ -243,7 +245,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
 		resultsPanel.printSettings(result, decryptedMessage);
-		
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.
