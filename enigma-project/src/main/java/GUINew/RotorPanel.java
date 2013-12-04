@@ -20,6 +20,16 @@ import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * 
+ * @author Team Enigma
+ * @version 0.9
+ * @date Nov 30, 2013
+ * 
+ * Panel for rotor/reflector settings
+ * 
+ */
+
 @SuppressWarnings("serial")
 public class RotorPanel extends JPanel implements Observer {
 	// Constants

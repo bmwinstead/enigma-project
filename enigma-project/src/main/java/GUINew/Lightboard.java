@@ -8,6 +8,16 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Team Enigma
+ * @version 0.9
+ * @date Nov 30, 2013
+ * 
+ * Light board
+ * 
+ */
+
 @SuppressWarnings("serial")
 public class Lightboard extends JPanel {
 	private JLabel lightA, lightB, lightC, lightD, lightE, lightF, lightG,

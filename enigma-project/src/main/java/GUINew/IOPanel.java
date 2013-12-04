@@ -1,6 +1,16 @@
 package main.java.GUINew;
 
 import java.awt.Color;
+
+/**
+ * 
+ * @author Team Enigma
+ * @version 0.9
+ * @date Nov 30, 2013
+ * 
+ * Panel for file input/output and encrypt button
+ * 
+ */
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;

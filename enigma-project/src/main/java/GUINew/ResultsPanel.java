@@ -14,8 +14,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import main.java.enigma.EnigmaSettings;
+
 import javax.swing.JList;
 import javax.swing.JComboBox;
+
+import java.awt.Color;
 import java.awt.Dimension;
 
 public class ResultsPanel extends JPanel {
@@ -40,9 +43,13 @@ public class ResultsPanel extends JPanel {
 		
 		solutionsPanel = new JPanel();
 		add(solutionsPanel);
+		solutionsPanel.setBackground(Color.black);
+		solutionsPanel.setForeground(Color.white);
 		
 		lblNewLabel = new JLabel("Solutions:");
 		solutionsPanel.add(lblNewLabel);
+		lblNewLabel.setBackground(Color.black);
+		lblNewLabel.setForeground(Color.white);
 		
 		solutionsComboBox = new JComboBox();
 		solutionsComboBox.setPreferredSize(new Dimension(200, 20));
@@ -59,9 +66,13 @@ public class ResultsPanel extends JPanel {
 		
 		JPanel resultsPanel = new JPanel();
 		add(resultsPanel);
+		resultsPanel.setBackground(Color.black);
+		resultsPanel.setForeground(Color.white);
 		
 		JLabel label = new JLabel("rotors:");
 		resultsPanel.add(label);
+		label.setBackground(Color.black);
+		label.setForeground(Color.white);
 		
 		leftRotorTextField = new JTextField();
 		leftRotorTextField.setColumns(2);
@@ -77,6 +88,8 @@ public class ResultsPanel extends JPanel {
 		
 		JLabel label_1 = new JLabel("reflector:");
 		resultsPanel.add(label_1);
+		label_1.setBackground(Color.black);
+		label_1.setForeground(Color.white);
 		
 		reflectorTextField = new JTextField();
 		reflectorTextField.setColumns(2);
@@ -84,6 +97,8 @@ public class ResultsPanel extends JPanel {
 		
 		JLabel label_2 = new JLabel("rings:");
 		resultsPanel.add(label_2);
+		label_2.setBackground(Color.black);
+		label_2.setForeground(Color.white);
 		
 		leftRingTextField = new JTextField();
 		leftRingTextField.setColumns(2);
@@ -99,6 +114,8 @@ public class ResultsPanel extends JPanel {
 		
 		JLabel label_3 = new JLabel("indicators:");
 		resultsPanel.add(label_3);
+		label_3.setBackground(Color.black);
+		label_3.setForeground(Color.white);
 		
 		leftIndicatorTextField = new JTextField(2);
 		resultsPanel.add(leftIndicatorTextField);
@@ -111,6 +128,8 @@ public class ResultsPanel extends JPanel {
 		
 		JLabel label_4 = new JLabel("plugboard:");
 		resultsPanel.add(label_4);
+		label_4.setBackground(Color.black);
+		label_4.setForeground(Color.white);
 		
 		plugboardTextField = new JTextField();
 		plugboardTextField.setColumns(30);
