@@ -46,7 +46,7 @@ public class IOPanel extends JPanel {
 		JPanel topPanel = setUpTopPanel();
 		JPanel bottomPanel = setUpBottomPanel();
 		lightboard = buildLightboardPanel();
-		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup()
+		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(lightboard)
 				.addComponent(topPanel)							
 				.addComponent(bottomPanel));
@@ -73,6 +73,9 @@ public class IOPanel extends JPanel {
 		manualInputLabel.setForeground(Color.white);
 		manualInput = new JTextField(tapeLength);
 		manualInput.getDocument().addDocumentListener(new FieldListener());
+		int tapeMin = 350;
+		int tapePref = 400;
+		int tapeMax = 500;
 		panel1Layout.setHorizontalGroup(panel1Layout.createSequentialGroup()
 				.addGroup(
 						panel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -80,8 +83,8 @@ public class IOPanel extends JPanel {
 								.addComponent(manualInputLabel))
 				.addGroup(
 						panel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(outputTape)
-								.addComponent(manualInput)));
+								.addComponent(outputTape,tapeMin,tapePref,tapeMax)
+								.addComponent(manualInput,tapeMin,tapePref,tapeMax)));
 		panel1Layout.setVerticalGroup(panel1Layout.createSequentialGroup()
 				.addGroup(
 						panel1Layout.createParallelGroup()
@@ -115,14 +118,17 @@ public class IOPanel extends JPanel {
 		bulkEncryptButton = new JButton("Encrypt");
 		bulkEncryptButton.addActionListener(new EncryptButtonListener());
 		
+		int textAreaMin = 155;
+		int textAreaPref = 255;
+		int textAreaMax = 305;
 		panel2Layout.setHorizontalGroup(panel2Layout.createSequentialGroup()
 				.addGroup(
 						panel2Layout.createParallelGroup()
-								.addComponent(inputScrollPane)
-								.addComponent(fileTextField))
+								.addComponent(inputScrollPane,textAreaMin,textAreaPref,textAreaMax)
+								.addComponent(fileTextField,textAreaMin,textAreaPref,textAreaMax))
 				.addGroup(
 						panel2Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(outputScrollPane)
+								.addComponent(outputScrollPane,textAreaMin,textAreaPref,textAreaMax)
 								.addGroup(panel2Layout.createSequentialGroup()
 												.addComponent(browseButton)
 												.addComponent(bulkEncryptButton))));

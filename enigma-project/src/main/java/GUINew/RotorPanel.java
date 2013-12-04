@@ -43,10 +43,10 @@ public class RotorPanel extends JPanel implements Observer {
 	private char[] rotorPositions = { '!', 'A', 'A', 'A' };
 	private String pbString = null;
 	// Components
-	private JLabel fourthRotor;
-	private JLabel leftRotor;
-	private JLabel middleRotor;
-	private JLabel rightRotor;
+	private JLabel fourthRotorLabel;
+	private JLabel leftRotorLabel;
+	private JLabel middleRotorLabel;
+	private JLabel rightRotorLabel;
 	private JLabel reflectorLabel;
 	private JLabel ringSettingsLabel;
 	private JLabel rotorPositionsLabel;
@@ -79,10 +79,13 @@ public class RotorPanel extends JPanel implements Observer {
 		JPanel plugboardPanel = buildPlugboardPanel();
 		GroupLayout thisLayout = new GroupLayout(this);
 		this.setLayout(thisLayout);
-		thisLayout.setHorizontalGroup(thisLayout.createParallelGroup()
-				.addComponent(topPanel).addComponent(plugboardPanel));
+		this.setBackground(Color.black);
+		thisLayout.setHorizontalGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(topPanel)
+				.addComponent(plugboardPanel));
 		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
-				.addComponent(topPanel).addComponent(plugboardPanel));
+				.addComponent(topPanel)
+				.addComponent(plugboardPanel));
 	}
 
 	private JPanel buildTopPanel() {
@@ -97,21 +100,21 @@ public class RotorPanel extends JPanel implements Observer {
 		reflectorLabel.setForeground(Color.white);
 		reflectorLabel.setBackground(Color.black);
 
-		fourthRotor = new JLabel("Rotor 4");
-		fourthRotor.setForeground(Color.white);
-		fourthRotor.setBackground(Color.black);
+		fourthRotorLabel = new JLabel("Rotor 4");
+		fourthRotorLabel.setForeground(Color.white);
+		fourthRotorLabel.setBackground(Color.black);
 
-		leftRotor = new JLabel("Rotor 3");
-		leftRotor.setForeground(Color.white);
-		leftRotor.setBackground(Color.black);
+		leftRotorLabel = new JLabel("Rotor 3");
+		leftRotorLabel.setForeground(Color.white);
+		leftRotorLabel.setBackground(Color.black);
 
-		middleRotor = new JLabel("Rotor 2");
-		middleRotor.setForeground(Color.white);
-		middleRotor.setBackground(Color.black);
+		middleRotorLabel = new JLabel("Rotor 2");
+		middleRotorLabel.setForeground(Color.white);
+		middleRotorLabel.setBackground(Color.black);
 
-		rightRotor = new JLabel("Rotor 1");
-		rightRotor.setForeground(Color.white);
-		rightRotor.setBackground(Color.black);
+		rightRotorLabel = new JLabel("Rotor 1");
+		rightRotorLabel.setForeground(Color.white);
+		rightRotorLabel.setBackground(Color.black);
 
 		// Reflector Box
 		reflectorChoice = new JComboBox<String>(reflectorChoices);
@@ -193,9 +196,13 @@ public class RotorPanel extends JPanel implements Observer {
 		rightRotorPosition.addChangeListener(new PositionsListener());
 		rightRotorPosition.identifier = "rightRotorPosition";
 
-		int min = 20;
-		int pref = 30;
-		int max = 40;
+		int smallMin = 20;
+		int smallPref = 30;
+		int smallMax = 40;
+		
+		int medMin = 75;
+		int medPref = 100;
+		int medMax = 120;
 		// LAYOUT CODE AWWW YEAH
 		topLayout
 				.setHorizontalGroup(topLayout
@@ -203,59 +210,59 @@ public class RotorPanel extends JPanel implements Observer {
 						.addGroup(
 								topLayout.createParallelGroup()
 										.addComponent(reflectorLabel)
-										.addComponent(reflectorChoice)
+										.addComponent(reflectorChoice,medMin,medPref,medMax)
 										.addComponent(ringSettingsLabel)
 										.addComponent(rotorPositionsLabel))
 						.addGroup(
 								topLayout
 										.createParallelGroup(
 												GroupLayout.Alignment.CENTER)
-										.addComponent(fourthRotor)
-										.addComponent(fourthRotorChoice)
+										.addComponent(fourthRotorLabel)
+										.addComponent(fourthRotorChoice,medMin,medPref,medMax)
 										.addComponent(fourthRotorRingSetting,
-												min, pref, max)
-										.addComponent(fourthRotorPosition, min,
-												pref, max))
+												smallMin, smallPref, smallMax)
+										.addComponent(fourthRotorPosition, smallMin,
+												smallPref, smallMax))
 						.addGroup(
 								topLayout
 										.createParallelGroup(
 												GroupLayout.Alignment.CENTER)
-										.addComponent(leftRotor)
-										.addComponent(leftRotorChoice)
+										.addComponent(leftRotorLabel)
+										.addComponent(leftRotorChoice,medMin,medPref,medMax)
 										.addComponent(leftRotorRingSetting,
-												min, pref, max)
-										.addComponent(leftRotorPosition, min,
-												pref, max))
+												smallMin, smallPref, smallMax)
+										.addComponent(leftRotorPosition, smallMin,
+												smallPref, smallMax))
 						.addGroup(
 								topLayout
 										.createParallelGroup(
 												GroupLayout.Alignment.CENTER)
-										.addComponent(middleRotor)
-										.addComponent(middleRotorChoice)
+										.addComponent(middleRotorLabel)
+										.addComponent(middleRotorChoice,medMin,medPref,medMax)
 										.addComponent(middleRotorRingSetting,
-												min, pref, max)
-										.addComponent(middleRotorPosition, min,
-												pref, max))
+												smallMin, smallPref, smallMax)
+										.addComponent(middleRotorPosition, smallMin,
+												smallPref, smallMax))
 						.addGroup(
 								topLayout
 										.createParallelGroup(
 												GroupLayout.Alignment.CENTER)
-										.addComponent(rightRotor)
-										.addComponent(rightRotorChoice)
+										.addComponent(rightRotorLabel)
+										.addComponent(rightRotorChoice,medMin,medPref,medMax)
 										.addComponent(rightRotorRingSetting,
-												min, pref, max)
-										.addComponent(rightRotorPosition, min,
-												pref, max)));
+												smallMin, smallPref, smallMax)
+										.addComponent(rightRotorPosition, smallMin,
+												smallPref, smallMax)));
 		topLayout
 				.setVerticalGroup(topLayout
 						.createSequentialGroup()
 						.addGroup(
 								topLayout.createParallelGroup()
 										.addComponent(reflectorLabel)
-										.addComponent(fourthRotor)
-										.addComponent(leftRotor)
-										.addComponent(middleRotor)
-										.addComponent(rightRotor))
+										.addComponent(fourthRotorLabel)
+										.addComponent(leftRotorLabel)
+										.addComponent(middleRotorLabel)
+										.addComponent(rightRotorLabel))
 						.addGroup(
 								topLayout.createParallelGroup()
 										.addComponent(reflectorChoice)
@@ -269,26 +276,26 @@ public class RotorPanel extends JPanel implements Observer {
 												GroupLayout.Alignment.CENTER)
 										.addComponent(ringSettingsLabel)
 										.addComponent(fourthRotorRingSetting,
-												min, pref, max)
+												smallMin, smallPref, smallMax)
 										.addComponent(leftRotorRingSetting,
-												min, pref, max)
+												smallMin, smallPref, smallMax)
 										.addComponent(middleRotorRingSetting,
-												min, pref, max)
+												smallMin, smallPref, smallMax)
 										.addComponent(rightRotorRingSetting,
-												min, pref, max))
+												smallMin, smallPref, smallMax))
 						.addGroup(
 								topLayout
 										.createParallelGroup(
 												GroupLayout.Alignment.CENTER)
 										.addComponent(rotorPositionsLabel)
-										.addComponent(fourthRotorPosition, min,
-												pref, max)
-										.addComponent(leftRotorPosition, min,
-												pref, max)
-										.addComponent(middleRotorPosition, min,
-												pref, max)
-										.addComponent(rightRotorPosition, min,
-												pref, max)));
+										.addComponent(fourthRotorPosition, smallMin,
+												smallPref, smallMax)
+										.addComponent(leftRotorPosition, smallMin,
+												smallPref, smallMax)
+										.addComponent(middleRotorPosition, smallMin,
+												smallPref, smallMax)
+										.addComponent(rightRotorPosition, smallMin,
+												smallPref, smallMax)));
 		return topPanel;
 	}
 
@@ -304,13 +311,14 @@ public class RotorPanel extends JPanel implements Observer {
 		resetButton.addActionListener(new ButtonListener());
 		resetButton.setActionCommand("Reset");
 		GroupLayout plugboardLayout = new GroupLayout(plugboardPanel);
-
-		plugboardLayout.setHorizontalGroup(plugboardLayout
-				.createParallelGroup().addComponent(pbField)
-				.addComponent(pbButton).addComponent(resetButton));
-		plugboardLayout.setVerticalGroup(plugboardLayout
-				.createSequentialGroup().addComponent(pbField)
-				.addComponent(pbButton).addComponent(resetButton));
+		plugboardLayout.setHorizontalGroup(plugboardLayout.createParallelGroup()
+				.addComponent(pbField,400,450,500)
+				.addComponent(pbButton)
+				.addComponent(resetButton));
+		plugboardLayout.setVerticalGroup(plugboardLayout.createSequentialGroup()
+				.addComponent(pbField)
+				.addComponent(pbButton)
+				.addComponent(resetButton));
 		plugboardLayout.linkSize(pbButton, resetButton);
 		return plugboardPanel;
 	}

@@ -1,7 +1,11 @@
 package main.java.GUINew;
 
+import java.awt.Color;
+
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  * 
@@ -14,21 +18,35 @@ import javax.swing.JFrame;
  */
 public class EnigmaGUI {
 	private static RotorPanel rotorPanel;
+	private static JPanel mainPanel;
 	private static JFrame mainFrame;
 	private static IOPanel ioPanel;
+	private static JTabbedPane tabs;
+	private static CaGuiPrototype caGUI;
+	private static JPanel tabsPanel;
 	public static void main(String[] args){
-		mainFrame = new JFrame();
-		GroupLayout frameLayout = new GroupLayout(mainFrame.getContentPane());
-		mainFrame.getContentPane().setLayout(frameLayout);
-		
 		rotorPanel = new RotorPanel();
 		ioPanel = new IOPanel();
-		frameLayout.setHorizontalGroup(frameLayout.createParallelGroup()
+		mainPanel = new JPanel();
+		mainFrame = new JFrame();
+		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+		mainPanel.setLayout(mainPanelLayout);
+		mainPanel.setBackground(Color.black);
+		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
 				.addComponent(rotorPanel)
 				.addComponent(ioPanel));
-		frameLayout.setVerticalGroup(frameLayout.createSequentialGroup()
+		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup()
 				.addComponent(rotorPanel)
 				.addComponent(ioPanel));
+		
+		tabs = new JTabbedPane();
+		caGUI = new CaGuiPrototype();
+		tabs.addTab("Main",mainPanel);
+		tabs.addTab("Cryptanalysis",caGUI);
+		tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabsPanel = new JPanel();
+		tabsPanel.add(tabs);
+		mainFrame.add(tabsPanel);
 		mainFrame.setTitle("CMSC495 Enigma Machine");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.pack();
