@@ -14,8 +14,9 @@ import java.util.PriorityQueue;
 // Then each call to get(n-gram)TestQueue() returns a shallow copy of each queue for word processing.
 
 public class Corpus implements Serializable {
-	private static final long serialVersionUID = -6995615626048870170L;
-	//private static final long serialVersionUID = -2096305067100712292L;
+	private static final long serialVersionUID = 3170587046915875517L;
+	//private static final long serialVersionUID = -6995615626048870170L;
+	
 	// Statistic databases.
 	private Map<String, Integer> unigramTable;
 	private Map<String, Integer> bigramTable;
@@ -227,6 +228,51 @@ public class Corpus implements Serializable {
 		for (String quadgram : quadgramTable.keySet()) {
 			quadgramQueue.add(quadgram);
 		}
+	}
+	
+	// Grooms the databases with a variety of methods.
+	public void trimCorpus() {
+		// Load queues to avoid ConcurrentModificationExceptions.
+		sortDatabase();
+		
+		int countThreshold = getTotalBigramCount() / 1000000 + 1;
+		
+		// Remove all entries with a frequency of less than 1 / 1,000,000 of the total gram count.
+		for (String gram: getBigramTestQueue()) {	// Use the priority queue to allow modification of the underlying table.
+			int count = bigramTable.get(gram);
+			
+			if (count < countThreshold) {
+				bigramTable.remove(gram);
+				bigramCount -= count;
+			}
+		}
+		
+		countThreshold = getTotalTrigramCount() / 1000000 + 1;
+		
+		// Remove all entries with a frequency of less than 1 / 1,000,000 of the total gram count.
+		for (String gram: getTrigramTestQueue()) {	// Use the priority queue to allow modification of the underlying table.
+			int count = trigramTable.get(gram);
+			
+			if (count < countThreshold) {
+				trigramTable.remove(gram);
+				trigramCount -= count;
+			}
+		}
+		
+		countThreshold = getTotalTrigramCount() / 1000000 + 1;
+		
+		// Remove all entries with a frequency of less than 1 / 1,000,000 of the total gram count.
+		for (String gram: getQuadgramTestQueue()) {	// Use the priority queue to allow modification of the underlying table.
+			int count = quadgramTable.get(gram);
+			
+			if (count < countThreshold) {
+				quadgramTable.remove(gram);
+				quadgramCount -= count;
+			}
+		}
+		
+		// Re-sort the database.
+		sortDatabase();
 	}
 	
 	// Inner class to sort database words in descending count order.

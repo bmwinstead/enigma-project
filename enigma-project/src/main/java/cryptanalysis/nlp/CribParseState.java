@@ -79,4 +79,13 @@ public class CribParseState implements Comparable<CribParseState> {
 			return 0;
 		}
 	}
+	
+	// Two states are equal if they have the same message state.
+	public boolean equals(CribParseState state) {
+		if (message.equals(state.getMessage())) {
+			return true;
+		}
+		
+		return false;
+	}
 }

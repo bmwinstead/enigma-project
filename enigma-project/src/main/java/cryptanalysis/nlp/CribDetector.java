@@ -18,6 +18,8 @@ public class CribDetector {
 	private Queue<Crib> wordList;
 	Deque<CribParseState> stack;
 	
+	private static int CANDIDATE_SIZE = 10;
+	
 	public CribDetector(Corpus corpus) {
 		database = corpus;
 		wordList = new LinkedList<Crib>();
@@ -32,15 +34,22 @@ public class CribDetector {
 		while (!stack.isEmpty()) {
 			CribParseState candidate = findWords(stack.pop());
 			
-			if (candidate.getLettersRemaining() <= 0) {
+			if (candidate.getLettersRemaining() > 0) {	// Should be <= 0; short-circuited until resource issues are resolved.
 				PriorityQueue<CribParseState> result = new PriorityQueue<CribParseState>();
 				result.add(candidate);
 				return result;
 			}
 			
-			candidateList.add(candidate);
+			if (candidateList.contains(candidate)) {
+				candidateList.add(candidate);
+			}
 		}
 		
+		PriorityQueue<CribParseState> result = new PriorityQueue<CribParseState>();
+		
+		for (int index = 0; index < CANDIDATE_SIZE && index < candidateList.size(); index++) {
+			result.add(candidateList.remove());
+		}
 		return candidateList;
 	}
 	

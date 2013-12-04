@@ -31,7 +31,7 @@ public class WordParser {
 	public void parseFile(File file) {
 		try {
 			Scanner scanner = new Scanner(file);
-			Pattern nonAlphanumeric = Pattern.compile("[\\W^_]");	// Pattern to find non-alphanumeric characters.
+			Pattern nonAlphanumeric = Pattern.compile("[^a-z^A-Z^0-9]");	// Pattern to find non-alphanumeric characters.
 			
 			// Parse words.
 			while (scanner.hasNext()) {

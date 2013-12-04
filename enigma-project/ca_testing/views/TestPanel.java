@@ -131,6 +131,8 @@ public class TestPanel extends JFrame {
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					try {
 						log.makeEntry("Saving corpus...", true);
+						database.trimCorpus();
+						
 						ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileChooser.getSelectedFile() + ".corpus"));
 						output.writeObject(database);
 						output.close();
