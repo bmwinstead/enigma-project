@@ -188,9 +188,10 @@ public class IOPanel extends JPanel {
 			} catch (IOException e) {
 				String s = bulkInput.getText();
 				s = machine.encryptString(s);
+				lightboard.turnOnLight(s); //Activate Lightboard
 				bulkOutput.setText(s);
 				if(s.equals("") || s.equals(null))
-					bulkOutput.setText("What have you done?");
+					bulkOutput.setText("Input text must contain at least one letter or number.");
 			} 
 		}
 	}
@@ -209,7 +210,7 @@ public class IOPanel extends JPanel {
 			} catch (BadLocationException e) {
 			}
 			char encrypted = machine.encryptChar(c);
-			lightboard.turnOnLight(String.valueOf(encrypted));
+			lightboard.turnOnLight(String.valueOf(encrypted)); //Activate Lightboard
 			String curText = outputTape.getText();
 			outputTape.setText(curText + encrypted);
 		}
