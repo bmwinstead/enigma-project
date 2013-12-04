@@ -13,6 +13,7 @@ import main.java.enigma.EnigmaMachine;
  * changed and stuff.
  * 
  * @author bwinstead
+ * @author Team Enigma
  * @version 0.9
  * @date 30 Nov 2013
  * 
@@ -22,7 +23,6 @@ public class EnigmaSingleton extends Observable {
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
-
 	private EnigmaSingleton() {
 		// No constructor for you.
 	}
@@ -105,10 +105,12 @@ public class EnigmaSingleton extends Observable {
 	/**
 	 * 
 	 * @param c
-	 * @return
+	 * @return encryptedChar
 	 */
 	public char encryptChar(char c) {
 		System.out.println("Encrypting char " + c);
+		c = output.configure(c); //Text error checking
+		System.out.println("Text Error Checking and Conversion");
 		notifyObservers();
 		return machine.encryptChar(c);
 	}
@@ -120,9 +122,9 @@ public class EnigmaSingleton extends Observable {
 	 */
 	public String encryptString(String s) {
 		System.out.println("Encrypting string " + s);
-		notifyObservers();
 		s = output.configure(s); //Text error checking
 		System.out.println("Text Error Checking and Conversion");
+		notifyObservers();
 		return machine.encryptString(s);
 	}
 	
@@ -137,4 +139,5 @@ public class EnigmaSingleton extends Observable {
 			obs.update(this, String.valueOf(machine.getPositions()));
 		}
 	}
+
 } // end EnigmaSingleton class
