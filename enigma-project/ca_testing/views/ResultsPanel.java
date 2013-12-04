@@ -60,12 +60,20 @@ public class ResultsPanel extends JPanel {
 				if (item != null) {
 					Queue<Crib> wordList = item.getWordList();
 					String message = "";
+					Crib word = wordList.remove();
+					char[] letters = item.getMessage().toCharArray();
 					
-					while (!wordList.isEmpty()) {
-						message += wordList.remove().getCrib();
-						
-						if (!wordList.isEmpty()) {
-							message += " ";
+					for (int index = 0; index < item.getMessage().length(); index++) {
+						if (word.getStart() == index) {
+							message += word.getCrib();
+							
+							if (!wordList.isEmpty()) {
+								word = wordList.remove();
+								message += " ";
+							}
+						}
+						else if (letters[index] != '!') {
+							message += "" + letters[index];
 						}
 					}
 					
