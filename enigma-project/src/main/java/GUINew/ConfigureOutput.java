@@ -1,13 +1,13 @@
 package main.java.GUINew;
 
 /**
- * 
+ * @Author Ellen Ohlmacher
  * @author Team Enigma
  * @version 0.8
- * @date - 30 Nov 2013
+ * @date  30 Nov 2013
  * 
  * Class to format the input for processing. Automatically replaces
- * numbers with their "code" letters, removes all other non-letter
+ * numbers with their "code" letters, removes all other nonletter
  * characters, and converts everything to upper case. 
  *
  */
@@ -19,10 +19,10 @@ public class ConfigureOutput {
 	/**
 	 * Accepts a string and converts it to the proper format for encryption.
 	 * Converts all digits to their corresponding letters and strips out all
-	 * other non-letter characters. Converts all letters to uppercase.
+	 * other nonletter characters. Converts all letters to uppercase.
 	 * 
 	 * @param getString
-	 *            Input string to be pre-processed for encryption
+	 *            Input string to be preprocessed for encryption
 	 * @return Properly processed input string.
 	 */
 	public String configure(String getString){
@@ -82,4 +82,53 @@ public class ConfigureOutput {
         	return getString;
         }
     } // end configure method
+	/**
+	 * Accepts a character and converts it to the proper format for encryption.
+	 * Converts all digits to their corresponding letters and strips out all
+	 * other nonletter characters.
+	 * 
+	 * @param getChar
+	 *            Input char to be preprocessed for encryption
+	 * @return Properly processed input char.
+	 */
+	public char configure(char getChar){
+		char setChar = ' ';
+		if (Character.isLetter(getChar)){
+			setChar = getChar;
+		}
+		else if(Character.isDigit(getChar)){
+			if(getChar == '0'){
+				setChar = 'P';
+			}
+			else if(getChar == '1'){
+				setChar = 'Q';
+			}
+			else if(getChar == '2'){
+			    setChar = 'W';
+			 }
+			 else if(getChar == '3'){
+			    setChar = 'E';
+			 }
+			 else if(getChar == '4'){
+			    setChar = 'R';
+			 }
+			 else if(getChar == '5'){
+			    setChar = 'T';
+			 }
+			 else if(getChar == '6'){
+			    setChar = 'Z';
+			 }
+			 else if(getChar == '7'){
+			    setChar = 'U';
+			 }
+			 else if(getChar == '8'){
+			    setChar = 'I';
+			 }
+			 else if(getChar == '9'){
+			    setChar = 'O';
+			 }
+		} // end if(Character.isDigit(getChar))
+		return setChar;
+	}// end configure method
+
 } // end ConfigureOutput class
