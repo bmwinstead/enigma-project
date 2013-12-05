@@ -7,22 +7,13 @@
  */
 package views;
 
-import java.awt.Dimension;
-import java.util.PriorityQueue;
-import java.util.Queue;
-
 import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import main.java.cryptanalysis.nlp.Crib;
-import main.java.cryptanalysis.nlp.CribParseState;
 import main.java.enigma.EnigmaSettings;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class ResultsPanel extends JPanel {
 	private JTextField leftRotorTextField;
@@ -37,55 +28,9 @@ public class ResultsPanel extends JPanel {
 	private JTextField rightIndicatorTextField;
 	private JTextField plugboardTextField;
 	private JTextArea outputTextArea;
-	private JPanel solutionsPanel;
-	private JLabel lblNewLabel;
-	private JComboBox<CribParseState> solutionsComboBox;
 	
 	public ResultsPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		solutionsPanel = new JPanel();
-		add(solutionsPanel);
-		
-		lblNewLabel = new JLabel("Solutions:");
-		solutionsPanel.add(lblNewLabel);
-		
-		solutionsComboBox = new JComboBox<CribParseState>();
-		
-		// Shows selected solution in text box.
-		solutionsComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				CribParseState item = (CribParseState)solutionsComboBox.getSelectedItem();
-				
-				if (item != null) {
-					Queue<Crib> wordList = item.getWordList();
-					String message = "";
-					Crib word = wordList.remove();
-					char[] letters = item.getMessage().toCharArray();
-					
-					for (int index = 0; index < item.getMessage().length(); index++) {
-						if (word.getStart() == index) {
-							message += word.getCrib();
-							
-							if (!wordList.isEmpty()) {
-								word = wordList.remove();
-								message += " ";
-							}
-						}
-						else if (letters[index] != '!') {
-							message += "" + letters[index];
-						}
-					}
-					
-					outputTextArea.setText(message);
-				}
-			}
-		});
-		
-		solutionsComboBox.setPreferredSize(new Dimension(200, 20));
-		solutionsComboBox.setMinimumSize(new Dimension(40, 20));
-		solutionsComboBox.setMaximumRowCount(10);
-		solutionsPanel.add(solutionsComboBox);
 		
 		outputTextArea = new JTextArea();
 		outputTextArea.setLineWrap(true);
@@ -154,14 +99,9 @@ public class ResultsPanel extends JPanel {
 		resultsPanel.add(plugboardTextField);
 	}
 	
-	public void loadSolutions(PriorityQueue<CribParseState> list) {
-		solutionsComboBox.removeAllItems();
-		
-		for (CribParseState solution: list) {
-			solutionsComboBox.addItem(solution);
-		}
-		
-		solutionsComboBox.setSelectedIndex(0);
+	public void printSolution(EnigmaSettings settings, String message) {
+		outputTextArea.setText(message);
+		printSettings(settings);
 	}
 	
 	public void printSettings(EnigmaSettings settings) {

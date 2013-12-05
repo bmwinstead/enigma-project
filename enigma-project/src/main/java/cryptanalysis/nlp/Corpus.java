@@ -15,7 +15,6 @@ import java.util.PriorityQueue;
 
 public class Corpus implements Serializable {
 	private static final long serialVersionUID = 3170587046915875517L;
-	//private static final long serialVersionUID = -6995615626048870170L;
 	
 	// Statistic databases.
 	private Map<String, Integer> unigramTable;
@@ -23,12 +22,6 @@ public class Corpus implements Serializable {
 	private Map<String, Integer> trigramTable;
 	private Map<String, Integer> quadgramTable;
 	private Map<String, Integer> wordTable;
-	
-	// Sorted databases.
-	private PriorityQueue<String> unigramQueue;
-	private PriorityQueue<String> bigramQueue;
-	private PriorityQueue<String> trigramQueue;
-	private PriorityQueue<String> quadgramQueue;
 
 	private int unigramCount;
 	private int bigramCount;
@@ -43,11 +36,6 @@ public class Corpus implements Serializable {
 		trigramTable = new HashMap<String, Integer>();
 		quadgramTable = new HashMap<String, Integer>();
 		wordTable = new HashMap<String, Integer>();
-		
-		unigramQueue = new PriorityQueue<String>(11, new GramComparator(unigramTable));
-		bigramQueue = new PriorityQueue<String>(11, new GramComparator(bigramTable));
-		trigramQueue = new PriorityQueue<String>(11, new GramComparator(trigramTable));
-		quadgramQueue = new PriorityQueue<String>(11, new GramComparator(quadgramTable));
 	}
 	
 	public int getTotalUnigramCount() {
@@ -103,8 +91,8 @@ public class Corpus implements Serializable {
 	}
 	
 	public int getWordCount(String word) {
-		if (quadgramTable.containsKey(word.toUpperCase())) {
-			return quadgramTable.get(word.toUpperCase());
+		if (wordTable.containsKey(word.toUpperCase())) {
+			return wordTable.get(word.toUpperCase());
 		}
 		
 		return 0;
@@ -138,6 +126,14 @@ public class Corpus implements Serializable {
 	public PriorityQueue<String> getQuadgramTestQueue() {
 		PriorityQueue<String> result = new PriorityQueue<String>(quadgramTable.size(), new GramComparator(quadgramTable));
 		result.addAll(quadgramTable.keySet());
+		
+		return result;
+	}
+	
+	// Returns shallow copy of test queue.
+	public PriorityQueue<String> getWordTestQueue() {
+		PriorityQueue<String> result = new PriorityQueue<String>(wordTable.size(), new GramComparator(wordTable));
+		result.addAll(wordTable.keySet());
 		
 		return result;
 	}
@@ -206,35 +202,8 @@ public class Corpus implements Serializable {
 		return wordTable.containsKey(word);
 	}
 	
-	// This method is intended to be called after all words are sorted.
-	public void sortDatabase() {
-		unigramQueue.clear();
-		bigramQueue.clear();
-		trigramQueue.clear();
-		quadgramQueue.clear();
-		
-		for (String unigram : unigramTable.keySet()) {
-			unigramQueue.add(unigram);
-		}
-		
-		for (String bigram : bigramTable.keySet()) {
-			bigramQueue.add(bigram);
-		}
-		
-		for (String trigram : trigramTable.keySet()) {
-			trigramQueue.add(trigram);
-		}
-		
-		for (String quadgram : quadgramTable.keySet()) {
-			quadgramQueue.add(quadgram);
-		}
-	}
-	
 	// Grooms the databases with a variety of methods.
 	public void trimCorpus() {
-		// Load queues to avoid ConcurrentModificationExceptions.
-		sortDatabase();
-		
 		int countThreshold = getTotalBigramCount() / 1000000 + 1;
 		
 		// Remove all entries with a frequency of less than 1 / 1,000,000 of the total gram count.
@@ -259,7 +228,7 @@ public class Corpus implements Serializable {
 			}
 		}
 		
-		countThreshold = getTotalTrigramCount() / 1000000 + 1;
+		countThreshold = getTotalQuadgramCount() / 1000000 + 1;
 		
 		// Remove all entries with a frequency of less than 1 / 1,000,000 of the total gram count.
 		for (String gram: getQuadgramTestQueue()) {	// Use the priority queue to allow modification of the underlying table.
@@ -271,8 +240,20 @@ public class Corpus implements Serializable {
 			}
 		}
 		
-		// Re-sort the database.
-		sortDatabase();
+		countThreshold = getTotalWordCount() / 1000000 + 1;
+		
+		HashMap<String, Integer> table = new HashMap<String, Integer>();
+		table.putAll(wordTable);
+		
+		// Remove all entries with a frequency of less than 1 / 1,000,000 of the total gram count.
+		for (String gram: table.keySet()) {	// Use a shallow copy to allow modification of the underlying table.
+			int count = wordTable.get(gram);
+			
+			if (count < countThreshold) {
+				wordTable.remove(gram);
+				wordCount -= count;
+			}
+		}
 	}
 	
 	// Inner class to sort database words in descending count order.

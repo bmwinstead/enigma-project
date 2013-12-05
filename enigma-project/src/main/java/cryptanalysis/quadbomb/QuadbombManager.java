@@ -40,7 +40,6 @@ import javax.swing.SwingWorker;
 
 import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.nlp.CribDetector;
-import main.java.cryptanalysis.nlp.CribParseState;
 import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
@@ -65,7 +64,6 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private PriorityQueue<EnigmaSettings> candidateList;
-	private PriorityQueue<CribParseState> solutionList;
 	
 	private Logger log;
 	
@@ -221,7 +219,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		EnigmaMachine decoder = result.createEnigmaMachine();
 		decryptedMessage = decoder.encryptString(message);
 		
-		solutionList = tester.parseString(decryptedMessage);
+		decryptedMessage = tester.parseMessage(decryptedMessage);
 		
 		long endSearchTime = System.currentTimeMillis();
 		log.makeEntry("Search completed in " + (endSearchTime - startSearchTime) + " milliseconds.", true);
@@ -246,8 +244,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
-		resultsPanel.printSettings(result);
-		resultsPanel.loadSolutions(solutionList);
+		resultsPanel.printSolution(result, decryptedMessage);
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.

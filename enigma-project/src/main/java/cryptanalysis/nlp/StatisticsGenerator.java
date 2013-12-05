@@ -439,8 +439,6 @@ public class StatisticsGenerator {
 			}
 		}
 		
-		iocCounter.sortDatabase();
-		
 		// Compute Index of Coincidences.
 		for (String gram: iocCounter.getUnigramTestQueue()) {
 			long count = iocCounter.getUnigramCount(gram);

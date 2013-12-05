@@ -3,114 +3,114 @@
  * @author - Walter Adolph
  * @author - Team Enigma
  * @date - Dec 1, 2013
- * This parser searches for valid and invalid words in a string.
- * Reporting is made on both valid and invalid words, with locations kept.
+ * 
+ * TODO: Add attribution here.
+ * http://stackoverflow.com/questions/4580877/text-segmentation-dictionary-based-word-splitting
+ * https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxkanBkZnN0b3JlfGd4OjQ1YmFiZTNhODVjMzY2MmY
+ * 
  */
 package main.java.cryptanalysis.nlp;
 
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
+
 
 public class CribDetector {
 	private Corpus database;
-	private Queue<Crib> wordList;
-	Deque<CribParseState> stack;
-	
-	private static int CANDIDATE_SIZE = 10;
+	private HashMap<String, IndexScorePair> probList;
 	
 	public CribDetector(Corpus corpus) {
 		database = corpus;
-		wordList = new LinkedList<Crib>();
-		stack = new LinkedList<CribParseState>();
+		probList = new HashMap<String, IndexScorePair>();
 	}
 	
-	public PriorityQueue<CribParseState> parseString(String message) {
-		PriorityQueue<CribParseState> candidateList = new PriorityQueue<CribParseState>();
+	public String parseMessage(String message) {
+		Deque<Integer> breaks = splitWord(message, 0).index;
+		breaks.removeLast();	// Remove the zero index break.
 		
-		stack.add(new CribParseState(0, 0, wordList, message.length(), message));
+		String result = "";
+		int startIndex = 0;
 		
-		while (!stack.isEmpty()) {
-			CribParseState candidate = findWords(stack.pop());
+		while (!breaks.isEmpty()) {
+			int endIndex = breaks.removeLast();
+			result += message.substring(startIndex, endIndex) + " ";
 			
-			if (candidate.getLettersRemaining() > 0) {	// Should be <= 0; short-circuited until resource issues are resolved.
-				PriorityQueue<CribParseState> result = new PriorityQueue<CribParseState>();
-				result.add(candidate);
-				return result;
-			}
+			startIndex = endIndex;
 			
-			if (candidateList.contains(candidate)) {
-				candidateList.add(candidate);
+			if (breaks.isEmpty()) {
+				result += message.substring(startIndex);
 			}
 		}
-		
-		PriorityQueue<CribParseState> result = new PriorityQueue<CribParseState>();
-		
-		for (int index = 0; index < CANDIDATE_SIZE && index < candidateList.size(); index++) {
-			result.add(candidateList.remove());
-		}
-		return candidateList;
-	}
-	
-	private CribParseState findWords(CribParseState state) {
-		String message = state.getMessage();
-		int startPosition = state.getStartPointer();
-		int wordPosition = state.getWordPointer();
-		int letterCount = state.getLettersRemaining();
-		
-		do {
-			String word = "";
-			boolean wordFlag = false;
-
-			for (int index = wordPosition; index < message.length(); index++) {
-				word += "" + message.charAt(index);
-				
-				if (database.hasWord(word)) {
-					wordFlag = true;
-					wordPosition = index;
-				}
-				else {
-					if (wordFlag) {
-						wordFlag = false;
-						stack.addFirst(new CribParseState(startPosition, wordPosition + 1, wordList, letterCount, message));
-						wordList.add(new Crib(message.substring(startPosition, wordPosition + 1), startPosition, wordPosition + 1));
-						message = removeWord(message, startPosition, wordPosition + 1);
-						letterCount -= wordPosition - startPosition + 1;
-						startPosition = wordPosition + 1;
-						word = "";
-						index--;
-					}
-				}
-			}
-			
-			// Once a pass-through is complete,
-			if (database.hasWord(word)) {
-				wordFlag = false;
-				wordList.add(new Crib(message.substring(startPosition, wordPosition + 1), startPosition, wordPosition + 1));
-				message = removeWord(message, startPosition, wordPosition + 1);
-				letterCount -= wordPosition - startPosition + 1;
-				startPosition = wordPosition + 1;
-			}
-			
-			if (letterCount > 0) {
-				startPosition++;
-				wordPosition = startPosition;
-			}
-		} while (letterCount > 0 && startPosition < message.length());
-		
-		return new CribParseState(startPosition, startPosition, wordList, letterCount, message);
-	}
-	
-	private String removeWord(String string, int start, int end) {
-		String result = string.substring(0, start);
-		
-		for (int index = 0; index < end - start; index++) {
-			result += "" + "!";
-		}
-		
-		result += string.substring(end);
 		
 		return result;
+	}
+	
+	private IndexScorePair splitWord(String message, int beginIndex) {
+		// Base case.
+		if (message.length() == 0) {
+			return new IndexScorePair(0.0);
+		}
+		
+		// If the message section has already been computed just return the probability value.
+		if (probList.containsKey(message)) {
+			return probList.get(message);
+		}
+		
+		IndexScorePair bestIndex = new IndexScorePair(Double.NEGATIVE_INFINITY);
+		
+		for (int index = 1; index <= message.length(); index++) {
+			String testFirstString = message.substring(0, index);
+			int count = database.getWordCount(message.substring(0, index));
+			double probability;
+			
+			probability = Math.log10((double)count / database.getTotalWordCount());
+			
+			// Recursive case.
+			String testSecondString = message.substring(index);
+			IndexScorePair testValue = splitWord(message.substring(index), beginIndex + index);
+			
+			if (probability + testValue.score > bestIndex.score) {
+				bestIndex = new IndexScorePair(testValue);
+				bestIndex.index.add(beginIndex);
+				bestIndex.score = probability + testValue.score;
+			} // End best case test.
+		} // Message traverse.
+		
+		probList.put(message, bestIndex);
+		return bestIndex;
+	}
+	
+	private class IndexScorePair {
+		private double score;
+		private Deque<Integer> index;
+		
+		private IndexScorePair(IndexScorePair pair) {
+			this(pair.score, pair.index);
+		}
+		
+		private IndexScorePair(double score, Queue<Integer> index) {
+			this(score);
+			
+			this.index.addAll(index);
+		}
+		
+		private IndexScorePair(double score) {
+			this.score = score;
+			this.index = new LinkedList<Integer>();
+		}
+		
+		public String toString() {
+			String result = "[";
+			
+			for (Integer value : index) {
+				result += value + " ";
+			}
+			
+			result += "] - " + score;
+			
+			return result;
+		}
 	}
 }

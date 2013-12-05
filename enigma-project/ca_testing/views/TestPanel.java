@@ -10,9 +10,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -33,7 +35,6 @@ import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 
-import main.java.cryptanalysis.nlp.CharacterParser;
 import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.nlp.TextParser;
 import main.java.cryptanalysis.quadbomb.QuadbombManager;
@@ -172,6 +173,65 @@ public class TestPanel extends JFrame {
 			}
 		});
 		buttonPanel.add(loadCorpusButton);
+		
+		JButton dumpToTextButton = new JButton("Dump to Text File...");
+		dumpToTextButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				try {
+					BufferedWriter out = new BufferedWriter(new FileWriter("Words.txt"));
+					
+					for (String word : database.getWordTestQueue())
+					{
+						out.append(word + "\t\t" + database.getWordCount(word) + "\r\n");
+					}
+					
+					out.close();
+					
+					out = new BufferedWriter(new FileWriter("Unigrams.txt"));
+					
+					for (String gram : database.getUnigramTestQueue())
+					{
+						out.append(gram + "\t\t" + database.getUnigramCount(gram) + "\r\n");
+					}
+					
+					out.close();
+					
+					out = new BufferedWriter(new FileWriter("Bigrams.txt"));
+					
+					for (String gram : database.getBigramTestQueue())
+					{
+						out.append(gram + "\t\t" + database.getBigramCount(gram) + "\r\n");
+					}
+					
+					out.close();
+					
+					out = new BufferedWriter(new FileWriter("Trigrams.txt"));
+					
+					for (String gram : database.getTrigramTestQueue())
+					{
+						out.append(gram + "\t\t" + database.getTrigramCount(gram) + "\r\n");
+					}
+					
+					out.close();
+					
+					out = new BufferedWriter(new FileWriter("Quadgrams.txt"));
+					
+					for (String gram : database.getQuadgramTestQueue())
+					{
+						out.append(gram + "\t\t" + database.getQuadgramCount(gram) + "\r\n");
+					}
+					
+					out.close();
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		buttonPanel.add(dumpToTextButton);
 		
 		// Parse a text file and display results..
 		parseButton.addActionListener(new ActionListener() {

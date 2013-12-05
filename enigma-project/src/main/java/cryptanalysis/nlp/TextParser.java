@@ -33,6 +33,8 @@ public class TextParser {
 			char thirdgram = '\0';
 			char fourthgram = '\0';
 			
+			
+			
 			// Parse words.
 			while (scanner.hasNext()) {
 				String word = scanner.next().trim().toUpperCase();
@@ -81,9 +83,6 @@ public class TextParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		// Parsing complete; sort for ready use.
-		database.sortDatabase();
 	}
 	
 	// Performs a variety of tests to help ensure only properly formatted words are entered.
