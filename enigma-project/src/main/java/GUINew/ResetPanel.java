@@ -1,0 +1,52 @@
+/**
+ * ResetPanel.java
+ * @author - Jessica Ikley
+ * @author - Team Enigma
+ * @version - 0.9
+ * @date - Dec 5, 2013
+ */
+package main.java.GUINew;
+
+import java.awt.Color;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+public class ResetPanel extends JPanel {
+	private JButton defaultConfigButton;
+	private JButton resetIndicatorsButton;
+	private JButton clearTextButton;
+	
+	public ResetPanel() {
+		GroupLayout mainLayout = new GroupLayout(this);
+		setLayout(mainLayout);
+		setBackground(Color.black);
+		
+		JLabel optionsLabel = new JLabel("Reset Options");
+		optionsLabel.setForeground(Color.white);
+		
+		defaultConfigButton = new JButton("Default Configuration");
+        // defaultConfigButton.addActionListener(new BrowseButtonListener());
+		resetIndicatorsButton = new JButton("Reset Indicators");
+		clearTextButton = new JButton("Clear Text");
+		
+		mainLayout.setAutoCreateGaps(true);
+		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(optionsLabel)
+				.addComponent(defaultConfigButton)
+				.addComponent(resetIndicatorsButton)							
+				.addComponent(clearTextButton));
+		mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
+				.addComponent(optionsLabel)
+				.addComponent(defaultConfigButton)
+				.addComponent(resetIndicatorsButton)
+				.addComponent(clearTextButton));
+		mainLayout.linkSize(SwingConstants.HORIZONTAL, defaultConfigButton,
+				resetIndicatorsButton, clearTextButton);
+	} // end constructor
+
+} // end ResetPanel class

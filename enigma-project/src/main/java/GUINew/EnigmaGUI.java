@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -18,26 +19,47 @@ import javax.swing.JTabbedPane;
  */
 public class EnigmaGUI {
 	private static RotorPanel rotorPanel;
+	private static ResetPanel resetPanel;
 	private static JPanel mainPanel;
 	private static JFrame mainFrame;
 	private static IOPanel ioPanel;
 	private static JTabbedPane tabs;
 	private static CaGuiPrototype caGUI;
 	private static JPanel tabsPanel;
+	
 	public static void main(String[] args){
 		rotorPanel = new RotorPanel();
 		ioPanel = new IOPanel();
+		resetPanel = new ResetPanel();
 		mainPanel = new JPanel();
 		mainFrame = new JFrame();
+		JLabel spacer = new JLabel("                 ");
+		
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
 		mainPanel.setBackground(Color.black);
-		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
-				.addComponent(rotorPanel)
-				.addComponent(ioPanel));
-		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup()
-				.addComponent(rotorPanel)
-				.addComponent(ioPanel));
+		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createSequentialGroup()
+				.addGroup(mainPanelLayout.createParallelGroup()
+						.addComponent(resetPanel)
+				)
+				.addGroup(mainPanelLayout.createParallelGroup()
+						.addComponent(rotorPanel)
+						.addComponent(ioPanel)
+				)
+				.addComponent(spacer)
+		);
+		mainPanelLayout.setVerticalGroup(mainPanelLayout.createParallelGroup()
+				.addGroup(mainPanelLayout.createSequentialGroup()
+						.addComponent(resetPanel)
+				)
+				.addGroup(mainPanelLayout.createSequentialGroup()
+						.addComponent(rotorPanel)
+						.addComponent(ioPanel)
+				)
+				.addComponent(spacer)
+		);
+		mainPanelLayout.setAutoCreateContainerGaps(true);
+		mainPanelLayout.setAutoCreateGaps(true);
 		
 		tabs = new JTabbedPane();
 		caGUI = new CaGuiPrototype();
