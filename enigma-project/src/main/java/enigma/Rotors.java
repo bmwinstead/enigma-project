@@ -173,7 +173,7 @@ public class Rotors {
 	} // end encrypt method
 	
 	/**
-	 * Returns the Rotor Positions to EnigmMachine, which then passes them on to
+	 * Returns the Rotor Positions to EnigmaMachine, which then passes them on to
 	 * the GUI
 	 * 
 	 * @return A 3-4 character array representing the current positions of the
