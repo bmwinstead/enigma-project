@@ -40,6 +40,7 @@ public class ResetPanel extends JPanel {
 		defaultConfigButton = new JButton("Default Configuration");
         defaultConfigButton.addActionListener(new DefaultConfigListener());
 		resetIndicatorsButton = new JButton("Reset Indicators");
+		resetIndicatorsButton.addActionListener(new ResetIndicatorsListener());
 		clearTextButton = new JButton("Clear Text");
 		
 		mainLayout.setAutoCreateGaps(true);
@@ -67,6 +68,12 @@ public class ResetPanel extends JPanel {
 					defaultPlugboard);
 			machine.notifyObservers();
 
+		}
+	}
+	
+	private class ResetIndicatorsListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			machine.indicatorReset();
 		}
 	}
 

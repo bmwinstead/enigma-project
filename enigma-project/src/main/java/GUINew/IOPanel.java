@@ -205,6 +205,9 @@ public class IOPanel extends JPanel implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String possibleFile = fileTextField.getText();
+			// Set the machine's "initial" positions. Useful for encrypting
+			// multiple messages using the same key and starting indicators. 
+			machine.setInitPositions();
 			try{
 				Path file = Paths.get(possibleFile);
 				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
@@ -244,6 +247,10 @@ public class IOPanel extends JPanel implements Observer {
 			try {
 				c = doc.getText((doc.getLength() - 1), 1).charAt(0); //get latest character.
 			} catch (BadLocationException e) {
+			}
+			// If this is the first character typed, set the init Rotor Positions
+			if (doc.getLength() == 1) {
+				machine.setInitPositions();
 			}
 			char encrypted = machine.encryptChar(c);
 			lightboard.turnOnLight(String.valueOf(encrypted)); //Activate Lightboard

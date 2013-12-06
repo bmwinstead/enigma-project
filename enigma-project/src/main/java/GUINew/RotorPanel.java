@@ -496,7 +496,8 @@ public class RotorPanel extends JPanel implements Observer {
 				}
 				break;
 			case "leftRotorChoice":
-				if (leftIndex == middleIndex || leftIndex == rightIndex) {
+				if (rotorCheck && 
+						(leftIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"You cannot reuse rotor choices");
 					leftRotorChoice.setSelectedIndex(rotors[1]);
@@ -504,7 +505,8 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[1] = temp.getSelectedIndex();
 				break;
 			case "middleRotorChoice":
-				if (leftIndex == middleIndex || middleIndex == rightIndex) {
+				if (rotorCheck && 
+						(leftIndex == middleIndex || middleIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"You cannot reuse rotor choices");
 					middleRotorChoice.setSelectedIndex(rotors[2]);

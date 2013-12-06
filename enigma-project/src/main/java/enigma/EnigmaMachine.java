@@ -128,6 +128,15 @@ public class EnigmaMachine {
 	} // end setPositions method
 	
 	/**
+	 * Resets the initial positions. 
+	 * 
+	 * @param newInit
+	 */
+	public void setInitPositions(char[] newInit) {
+		initPositions = newInit;
+	}
+	
+	/**
 	 * Changes the Rotor and Reflector choices of the Enigma.
 	 * 
 	 * @param rotorChoices

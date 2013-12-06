@@ -96,6 +96,15 @@ public class EnigmaSingleton extends Observable {
 		System.out.println("Setting rotor positions to: " + String.valueOf(rotorPositions));
 		machine.setPositions(rotorPositions);
 	}
+	
+	/**
+	 * Sets the machine's current rotor positions to its "initial" positions
+	 * Useful for the Indicator Reset when encrypting multiple messages of the
+	 * same key and starting indicators. 
+	 */
+	public void setInitPositions() {
+		machine.setInitPositions(machine.getPositions());
+	}
 
 	/**
 	 * 
@@ -104,6 +113,19 @@ public class EnigmaSingleton extends Observable {
 	public void setPlugboard(String pbMap) {
 		System.out.println("Singleton: Setting plugboard to: " + pbMap);
 		machine.setPlugboard(pbMap);
+	}
+	
+	/**
+	 * 
+	 * @param newUpdateType
+	 */
+	public void setUpdateType(int newUpdateType) {
+		updateType = newUpdateType;
+	}
+	
+	public void indicatorReset() {
+		machine.reset();
+		notifyObservers();
 	}
 
 	/**
@@ -119,10 +141,6 @@ public class EnigmaSingleton extends Observable {
 		return machine.encryptChar(c);
 	}
 	
-	public void setUpdateType(int newUpdateType) {
-		updateType = newUpdateType;
-	}
-
 	/**
 	 * 
 	 * @param s
