@@ -79,6 +79,7 @@ public class RotorPanel extends JPanel implements Observer {
 	private EnigmaSpinner middleRotorPosition;
 	private EnigmaSpinner rightRotorPosition;
 	private PlugboardDialog pbDialog;
+	private boolean rotorCheck = true;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 
 	// Constructor... puts the thing together.
@@ -405,6 +406,14 @@ public class RotorPanel extends JPanel implements Observer {
 		reflectorChoice.setSelectedIndex(reflectorNum);
 	}
 	
+	private void rotorCheckOn() {
+		rotorCheck = true;
+	}
+	
+	private void rotorCheckOff() {
+		rotorCheck = false;
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 //		String s = (String) arg1;
@@ -413,10 +422,12 @@ public class RotorPanel extends JPanel implements Observer {
 		setRotorPositions(settings.getIndicatorSettings());
 		
 		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET ) {
+			rotorCheckOff();
 			setPlugboard(settings.getPlugboardMap());
 			setRingSettings(settings.getRingSettings());	
 			setRotorChoices(settings.getRotors());
 			setReflector(settings.getReflector());
+			rotorCheckOn();
 		}
 	}
 	
@@ -429,7 +440,7 @@ public class RotorPanel extends JPanel implements Observer {
 			printState();
 			switch (temp.getActionCommand()) {
 			case "fourthRotorRingSetting":
-				if (fourthRotorChoice.getSelectedIndex() == 0) {
+				if (rotorCheck && (fourthRotorChoice.getSelectedIndex() == 0)) {
 					// no fourth rotor
 					fourthRotorRingSetting.setSelectedIndex(0);
 					ringSettings[0] = '!';
@@ -501,7 +512,8 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[2] = temp.getSelectedIndex();
 				break;
 			case "rightRotorChoice":
-				if (rightIndex == middleIndex || leftIndex == rightIndex) {
+				if (rotorCheck && 
+						(rightIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"You cannot reuse rotor choices");
 					rightRotorChoice.setSelectedIndex(rotors[3]);
@@ -510,9 +522,9 @@ public class RotorPanel extends JPanel implements Observer {
 				break;
 			case "reflectorChoice":
 				if (fourthRotorChoice.getSelectedIndex() == 0) {
-					// no fourth rotor, need 0 or 1.
-					if (temp.getSelectedIndex() == 2
-							|| temp.getSelectedIndex() == 3) {
+					// no fourth rotor, need 0 or 1, if we're checking rotors.
+					if (rotorCheck && (temp.getSelectedIndex() == 2
+							|| temp.getSelectedIndex() == 3)) {
 						JOptionPane
 								.showMessageDialog(tempFrame,
 										"With the fourth rotor inactive, you can only choose reflector B or C");
@@ -523,9 +535,9 @@ public class RotorPanel extends JPanel implements Observer {
 					} // end else
 				} // end if
 				else {
-					// fourth rotor, need 2 or 3
-					if (temp.getSelectedIndex() == 0
-							|| temp.getSelectedIndex() == 1) {
+					// fourth rotor, need 2 or 3, if we're checking rotors
+					if (rotorCheck && (temp.getSelectedIndex() == 0
+							|| temp.getSelectedIndex() == 1)) {
 						JOptionPane
 								.showMessageDialog(tempFrame,
 										"With the fourth rotor active, you can only choose reflector B thin or C thin");
