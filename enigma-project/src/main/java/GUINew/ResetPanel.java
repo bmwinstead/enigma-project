@@ -59,7 +59,6 @@ public class ResetPanel extends JPanel {
 	
 	private class DefaultConfigListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-        	System.out.println("Look at me! I'm typing things!");
         	System.out.println("ResetPanel: Rotors: " + Arrays.toString(defaultRotors));
         	machine.setState(defaultRotors, defaultReflector, defefaultRingSettings, defaultRotorPositions, defaultPlugboard);
         	machine.notifyObservers();
