@@ -9,7 +9,7 @@ package main.java.enigma;
  * 
  * Contains 3-4 instances of the Rotor class. Also acts as the reflector in an
  * Enigma machine. Fully encrypts a character (except for Plugboard
- * substititions) and handles the proper cycling of the individual Rotor
+ * Substitutions) and handles the proper cycling of the individual Rotor
  * instances. 
  *
  */
@@ -55,7 +55,7 @@ public class Rotors {
 	private int reflectorChoice;
 
 	/**
-	 * Constructor. Accepts an array representing 3-4 Engima rotor choices, plus
+	 * Constructor. Accepts an array representing 3-4 Enigma rotor choices, plus
 	 * an integer indicating the reflector. Ring settings and initial position
 	 * have to be set separately. The Reflector itself is actually a Rotor that
 	 * is never rotated. 
@@ -111,9 +111,9 @@ public class Rotors {
 	 * 
 	 * @param choices
 	 *            An array of 3-4 letters indicating the ring settings. On the
-	 *            Enigma Machine, these would be adjusted by aligining the
+	 *            Enigma Machine, these would be adjusted by aligning the
 	 *            indicated letter with a mark on the rotor before the rotor is
-	 *            insalled in the Enigma.
+	 *            installed in the Enigma.
 	 */
 	public void setRingSettings(char[] choices) {
 		if(choices.length == 3 || choices[0] == '!'){
