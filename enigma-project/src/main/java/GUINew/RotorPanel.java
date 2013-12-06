@@ -20,6 +20,8 @@ import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import main.java.enigma.EnigmaSettings;
+
 /**
  * 
  * @author Team Enigma
@@ -345,7 +347,7 @@ public class RotorPanel extends JPanel implements Observer {
 		System.out.println("Plugboard: " + pbString);
 	}
 
-	public void setRotorPositions(char[] positions) {
+	private void setRotorPositions(char[] positions) {
 		System.out.println(String.valueOf(positions));
 		if (positions.length == 4 && positions[0] != '!') {
 			System.out.println("4");
@@ -361,11 +363,54 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 	
+	private void setPlugboard(String pbmap) {
+		pbField.setText(pbmap);
+		machine.setPlugboard(pbmap);
+		System.out.println("RotorPanel: Changing plugboard to: " + pbmap);
+	}
+	
+	private void setRotorChoices(int[] rotors) {
+		if (rotors.length == 4) {
+			if (rotors[0] == -1) {
+				fourthRotorChoice.setSelectedIndex(0);
+			} 
+			else {
+				fourthRotorChoice.setSelectedIndex(rotors[0] - 7);
+			}
+			leftRotorChoice.setSelectedIndex(rotors[1]);
+			middleRotorChoice.setSelectedIndex(rotors[2]);
+			rightRotorChoice.setSelectedIndex(rotors[3]);
+		}
+		else {
+			leftRotorChoice.setSelectedIndex(rotors[0]);
+			middleRotorChoice.setSelectedIndex(rotors[1]);
+			rightRotorChoice.setSelectedIndex(rotors[2]);
+		}
+	}
+	
+	private void setRingSettings(char[] ringSettings) {
+		if (ringSettings.length == 4 && ringSettings[0] != '!') {
+			fourthRotorRingSetting.setSelectedIndex('A' - ringSettings[0]);
+			leftRotorRingSetting.setSelectedIndex('A' - ringSettings[1]);
+			middleRotorRingSetting.setSelectedIndex('A' - ringSettings[2]);
+			rightRotorRingSetting.setSelectedIndex('A' - ringSettings[3]);
+		} else {
+			leftRotorRingSetting.setSelectedIndex('A' - ringSettings[0]);
+			middleRotorRingSetting.setSelectedIndex('A' - ringSettings[1]);
+			rightRotorRingSetting.setSelectedIndex('A' - ringSettings[2]);
+		}
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		String s = (String) arg1;
-		System.out.println("Changing rotors to " + s);
-		setRotorPositions(s.toCharArray());
+//		String s = (String) arg1;
+		EnigmaSettings settings = (EnigmaSettings) arg1;
+		System.out.println("Changing rotors to " + String.valueOf(settings.getIndicatorSettings()));
+		setRotorPositions(settings.getIndicatorSettings());
+		// setPlugboard(settings.getPlugboardMap());
+		// setRotorChoices(settings.getRotors());
+		// setRingSettings(settings.getRingSettings());	
+		
 	}
 	
 	private class RingSettingsListener implements ActionListener {
@@ -536,10 +581,7 @@ public class RotorPanel extends JPanel implements Observer {
 				System.out.println("Changing plugboard to: ");
 			} else if (message.equals("Plugboard")) {
 				pbString = pbDialog.displayDialog();
-				pbField.setText(pbString);
-				// JLI Wasn't setting the machine's plugboard.
-				machine.setPlugboard(pbString);
-				System.out.println("RotorPanel: Changing plugboard to: " + pbString);
+				setPlugboard(pbString); 
 			}
 		}
 	}

@@ -90,6 +90,15 @@ public class Rotor {
 	} // end getNotchPosition method
 	
 	/**
+	 * Getter for the ringSetting.
+	 * 
+	 * @return Character indicating the ring setting. 
+	 */
+	public char getRingSetting() {
+		return (char) (ringSetting + 'A');
+	}
+	
+	/**
 	 * Getter for the current position of the rotor.
 	 * 
 	 * @return A character representing the current position of the rotor. This
@@ -112,7 +121,7 @@ public class Rotor {
 	public void setRingPosition(char newPosition) {
 		ringSetting = Character.toUpperCase(newPosition) - 'A';
 	} // end setRingPosition method
-	
+
 	/**
 	 * Sets the starting position of the rotor.
 	 * 

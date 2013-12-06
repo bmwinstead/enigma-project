@@ -63,6 +63,20 @@ public class Plugboard {
 	}
 	
 	/**
+	 * Returns the current plugboard map to the machine, which then passes it
+	 * where needed. 
+	 * 
+	 * @return String representing the current plugboard map. 
+	 */
+	public String getPlugboardMap() {
+		String map = "";
+		for (int i = 0; i < plugboard.length; i++) {
+			map += String.valueOf(plugboard[i]);
+		}
+		return map;
+	}
+	
+	/**
 	 * Checks a character to see if it's a swap-character. If so, it returns the
 	 * substitution character. If not, it returns the initial character.
 	 * 

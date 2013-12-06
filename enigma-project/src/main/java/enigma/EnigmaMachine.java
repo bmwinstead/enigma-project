@@ -14,6 +14,7 @@ package main.java.enigma;
 public class EnigmaMachine {
 
 	private Rotors rotors;
+	private int[] rotorArray;
 	private Plugboard plugboard;
 	private char[] initPositions;
 	
@@ -35,6 +36,7 @@ public class EnigmaMachine {
 	 */
 	public EnigmaMachine(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions){
 		initPositions = initialPositions;
+		rotorArray = rotorChoices;
 		rotors = new Rotors(rotorChoices, reflectorChoice);
 		rotors.setRingSettings(ringSettings);
 		rotors.setPositions(initialPositions);
@@ -61,6 +63,7 @@ public class EnigmaMachine {
 	 */
 	public EnigmaMachine(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap){
 		initPositions = initialPositions;
+		rotorArray = rotorChoices;
 		rotors = new Rotors(rotorChoices, reflectorChoice);
 		rotors.setRingSettings(ringSettings);
 		rotors.setPositions(initialPositions);
@@ -135,6 +138,7 @@ public class EnigmaMachine {
 	 *            reflectors to include.
 	 */
 	public void setRotorChoices(int[] rotorChoices,int reflectorChoice){
+		rotorArray = rotorChoices;
 		rotors = new Rotors(rotorChoices,reflectorChoice);
 	} // end setRotorChoices
 	
@@ -156,19 +160,51 @@ public class EnigmaMachine {
 	 *            String indicating the plugboard replacement mapping.
 	 */
 	public void setPlugboard(String pbMap){
-		System.out.println("EnigmaMachine: Setting Plugboard to: " + pbMap);
 		plugboard = new Plugboard(pbMap);
 	} // end setPlugboard
 	
 	/**
 	 * Returns the Rotor Positions to the GUI so that it will accurately
 	 * reflect the current settings after encryption.
-	 * 
-	 * @param newPositions
-	 *            3-4 character array representing the new positions the rotors
-	 *            are to be set to.
 	 */
 	public char[] getPositions() {
 		return rotors.getPositions();
 	} // end getPositions method
+	
+	/**
+	 * Returns Rotors so the reset panel can notify the GUI that they've
+	 * changed. 
+	 * 
+	 * @return	Array of ints representing the rotors being used. 
+	 */
+	public int[] getRotors() {
+		return rotorArray;
+	}
+	
+	/**
+	 * Returns ring settings for resets. 
+	 * 
+	 * @return Array of 3-4 chars representing the ring positions.
+	 */
+	public char[] getRingSettings() {
+		return rotors.getRingSettings();
+	}
+	
+	/**
+	 * Returns the reflector settings for resets. 
+	 * 
+	 * @return int representing the reflector choice. 
+	 */
+	public int getReflector() {
+		return rotors.getReflector();
+	}
+	
+	public String getPlugboard() {
+		if (plugboard == null) {
+			return "";
+		}
+		else {
+			return plugboard.getPlugboardMap();
+		}
+	}
 } // end EnigmaMachine class

@@ -52,6 +52,7 @@ public class Rotors {
 	private Rotor right;
 	private Rotor fourth;  // Used only by the Navy
 	private Rotor reflector;
+	private int reflectorChoice;
 
 	/**
 	 * Constructor. Accepts an array representing 3-4 Engima rotor choices, plus
@@ -68,6 +69,7 @@ public class Rotors {
 	 * 
 	 */
 	public Rotors(int[] rotorChoices, int reflectorChoice){
+		this.reflectorChoice = reflectorChoice;
 		if(rotorChoices.length == 3 || rotorChoices[0] == -1){
 		left = new Rotor(rotorWirings[rotorChoices[0]],rotorNotches[rotorChoices[0]]);
 		middle = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
@@ -195,4 +197,38 @@ public class Rotors {
 			return threePositions;
 		}
 	} // end getPositions method
+	
+	/**
+	 * Returns the reflector choice to EnigmaMachine, which then passes where
+	 * it's needed.
+	 * 
+	 * @return An integer representing the reflector choice. 
+	 */
+	public int getReflector() {
+		return reflectorChoice;
+	}
+	
+	/**
+	 * Returns the ring settings to the EnigmaMachine, which then passes it
+	 * where it's needed.
+	 * 
+	 * @return 3-4 character array representing the ring settings.
+	 */
+	public char[] getRingSettings() {
+		char[] threeSettings = new char[3];
+		char[] fourSettings = new char[4];
+		if(fourth != null){
+			fourSettings[0] = fourth.getRingSetting();
+			fourSettings[1] = left.getRingSetting();
+			fourSettings[2] = middle.getRingSetting();
+			fourSettings[3] = right.getRingSetting();
+			return fourSettings;
+		}
+		else{
+			threeSettings[0] = left.getRingSetting();
+			threeSettings[1] = middle.getRingSetting();
+			threeSettings[2] = right.getRingSetting();
+			return threeSettings;
+		}
+	}
 } // end Rotors class

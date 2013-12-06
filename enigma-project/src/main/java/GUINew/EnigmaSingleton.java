@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import main.java.enigma.EnigmaMachine;
+import main.java.enigma.EnigmaSettings;
 
 /**
  * Used to share the EnigmaMachine across various components of the GUI.
@@ -56,7 +57,7 @@ public class EnigmaSingleton extends Observable {
 				+ String.valueOf(ringSettings));
 		System.out.println("Changing rotor positions to: "
 				+ String.valueOf(initialPositions));
-		System.out.println("Singleton: Changing plugboard to: " + plugboardMap);
+		System.out.println("Changing plugboard to: " + plugboardMap);
 	} // end setState
 
 	/**
@@ -134,9 +135,12 @@ public class EnigmaSingleton extends Observable {
 	}
 	@Override
 	public void notifyObservers(){
+		EnigmaSettings settings = new EnigmaSettings(machine.getRotors(), machine.getRingSettings(),
+				machine.getPositions(), machine.getReflector(), machine.getPlugboard());
 		System.out.println("Notifying, rotors are currently " + String.valueOf(machine.getPositions()));
 		for(Observer obs : observers){
-			obs.update(this, String.valueOf(machine.getPositions()));
+//			obs.update(this, String.valueOf(machine.getPositions()));
+			obs.update(this, settings);
 		}
 	}
 
