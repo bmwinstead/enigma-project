@@ -232,6 +232,8 @@ public class IOPanel extends JPanel implements Observer {
 				if(s.equals("") || s.equals(null))
 					bulkOutput.setText("Input text must contain at least one letter or number.");
 			} 
+			// Force the Singleton to verify that GUI matches Enigma. 
+			machine.notifyObservers();
 		}
 	}
 	private class FieldListener implements  DocumentListener{
