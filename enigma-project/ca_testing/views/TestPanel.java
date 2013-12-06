@@ -70,7 +70,7 @@ public class TestPanel extends JFrame {
 	
 	private Logger log;
 	private JSpinner threadCountSpinner;
-	private ResultsPanel resultsPanel;
+	private main.java.GUINew.ResultsPanel resultsPanel;
 	private JProgressBar decryptProgressBar;
 	private JButton breakCodeButton;
 	private JSpinner candidateSpinner;
@@ -491,7 +491,7 @@ public class TestPanel extends JFrame {
 					int candidateSize = (int)(candidateSpinner.getValue());
 					
 					int statTest = testComboBox.getSelectedIndex();	// debugging to select stat test.
-					QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, resultsPanel);
+					QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, null, resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {
@@ -512,13 +512,13 @@ public class TestPanel extends JFrame {
 		getContentPane().add(outputPanel, BorderLayout.SOUTH);
 		outputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		resultsPanel = new ResultsPanel();
+		resultsPanel = new main.java.GUINew.ResultsPanel();
 		outputPanel.add(resultsPanel);
 		
 		log.makeEntry("TestPanel initialized.", true);
 	}
 	
-	public int getReflectorIndex(String reflector) {
+	private int getReflectorIndex(String reflector) {
 		switch(reflector) {
 		case "B":
 			return 0;

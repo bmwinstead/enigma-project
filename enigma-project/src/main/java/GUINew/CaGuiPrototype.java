@@ -3,31 +3,73 @@
  */
 package main.java.GUINew;
 
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
 import java.awt.Color;
-import java.awt.SystemColor;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JSpinner;
-
-import java.awt.Dimension;
-
-import javax.swing.JTextField;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SpinnerListModel;
 import javax.swing.border.TitledBorder;
 
-import java.awt.FlowLayout;
+import main.java.cryptanalysis.nlp.Corpus;
+import main.java.cryptanalysis.quadbomb.QuadbombManager;
+import main.java.enigma.EnigmaSettings;
 
 public class CaGuiPrototype extends JPanel {
+	private Corpus database;
+	
+	
 	private JTextField plugboardTextField;
+	private JSpinner threadCountSpinner;
+	private JSpinner candidateSizeSpinner;
+	private ResultsPanel resultsPanel;
+	private JProgressBar decryptProgressBar;
+	private JTextArea cipherTextInputTextArea;
+	private JComboBox<String> fourthRotorComboBox;
+	private JComboBox<String> leftRotorComboBox;
+	private JComboBox<String> middleRotorComboBox;
+	private JComboBox<String> rightRotorComboBox;
+	private JComboBox<String> reflectorComboBox;
+	private JComboBox<String> fourthRingComboBox;
+	private JComboBox<String> leftRingComboBox;
+	private JComboBox<String> middleRingComboBox;
+	private JComboBox<String> rightRingComboBox;
+	private JComboBox<String> fourthIndicatorComboBox;
+	private JComboBox<String> leftIndicatorComboBox;
+	private JComboBox<String> middleIndicatorComboBox;
+	private JComboBox<String> rightIndicatorComboBox;
+	
 	public CaGuiPrototype() {
+		// Load the corpus from the default project location.
+		FileInputStream fileStream;
+		try {
+			fileStream = new FileInputStream("training.corpus");
+			ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+			database = (Corpus) objectStream.readObject();
+			objectStream.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Automatically generated code.
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JTextArea instructionTextArea = new JTextArea();
@@ -56,7 +98,7 @@ public class CaGuiPrototype extends JPanel {
 		inputLeftPanel.setBackground(Color.black);
 		inputLeftPanel.setForeground(Color.white);
 		
-		JTextArea cipherTextInputTextArea = new JTextArea();
+		cipherTextInputTextArea = new JTextArea();
 		inputLeftPanel.add(cipherTextInputTextArea);
 		cipherTextInputTextArea.setWrapStyleWord(true);
 		cipherTextInputTextArea.setRows(5);
@@ -71,6 +113,39 @@ public class CaGuiPrototype extends JPanel {
 		inputControlPanel.setForeground(Color.white);
 		
 		JButton decryptButton = new JButton("Decrypt...");
+		
+		// Decrypts an encrypted messaging using QuadBomb.
+		decryptButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (database.getTotalQuadgramCount() > 0) {
+					//String[] ciphers = cipherTextInputTextArea.getText().split("\\s");	// Split on whitespace.
+					//String cipher = "";
+					String cipher = cipherTextInputTextArea.getText().toUpperCase().replace(" ", "");
+					// Remove whitespace.
+					//for (String word: ciphers) {
+					//	cipher += word;
+					//}
+
+					int threadLimit = (int)(threadCountSpinner.getValue());
+					int candidateSize = (int)(candidateSizeSpinner.getValue());
+					
+					// TODO: Set static statistic tests in QuadbombManager (pending testing).
+					int statTest = 3;	// Default to Sinkov's Quadgrams.
+					QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, getConstraints(), resultsPanel);
+					
+					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent event) {
+							if (event.getPropertyName().equals("progress")) {
+								decryptProgressBar.setValue((Integer)event.getNewValue());
+							}
+						}
+					});
+					
+					analyzer.execute();
+				}
+			}
+		});
+		
 		inputControlPanel.add(decryptButton);
 		
 		JLabel label_4 = new JLabel("Thread Limit:");
@@ -78,7 +153,7 @@ public class CaGuiPrototype extends JPanel {
 		label_4.setBackground(Color.black);
 		label_4.setForeground(Color.white);
 		
-		JSpinner threadCountSpinner = new JSpinner();
+		threadCountSpinner = new JSpinner();
 		threadCountSpinner.setModel(new SpinnerNumberModel(2, 1, 16, 1));
 		inputControlPanel.add(threadCountSpinner);
 		
@@ -87,7 +162,7 @@ public class CaGuiPrototype extends JPanel {
 		label_5.setBackground(Color.black);
 		label_5.setForeground(Color.white);
 		
-		JSpinner candidateSizeSpinner = new JSpinner();
+		candidateSizeSpinner = new JSpinner();
 		candidateSizeSpinner.setModel(new SpinnerNumberModel(100, 100, 5000, 100));
 		inputControlPanel.add(candidateSizeSpinner);
 		
@@ -96,8 +171,8 @@ public class CaGuiPrototype extends JPanel {
 		label_7.setBackground(Color.black);
 		label_7.setForeground(Color.white);
 		
-		JProgressBar progressBar = new JProgressBar();
-		inputControlPanel.add(progressBar);
+		decryptProgressBar = new JProgressBar();
+		inputControlPanel.add(decryptProgressBar);
 		
 		JPanel inputSettingsPanel = new JPanel();
 		inputPanel.add(inputSettingsPanel);
@@ -117,25 +192,21 @@ public class CaGuiPrototype extends JPanel {
 		label.setBackground(Color.black);
 		label.setForeground(Color.white);
 		
-		JSpinner fourthRotorSpinner = new JSpinner();
-		fourthRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 8, 1));
-		fourthRotorSpinner.setPreferredSize(new Dimension(35, 20));
-		rotorOrderPanel.add(fourthRotorSpinner);
+		fourthRotorComboBox = new JComboBox<String>();
+		fourthRotorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"None", "Any", "Beta", "Gamma"}));
+		rotorOrderPanel.add(fourthRotorComboBox);
 		
-		JSpinner leftRotorSpinner = new JSpinner();
-		leftRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 8, 1));
-		leftRotorSpinner.setPreferredSize(new Dimension(35, 20));
-		rotorOrderPanel.add(leftRotorSpinner);
+		leftRotorComboBox = new JComboBox<String>();
+		leftRotorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "I", "II", "III", "IV", "V", "VI", "VII", "VIII"}));
+		rotorOrderPanel.add(leftRotorComboBox);
 		
-		JSpinner middleRotorSpinner = new JSpinner();
-		middleRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 8, 1));
-		middleRotorSpinner.setPreferredSize(new Dimension(35, 20));
-		rotorOrderPanel.add(middleRotorSpinner);
+		middleRotorComboBox = new JComboBox<String>();
+		middleRotorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "I", "II", "III", "IV", "V", "VI", "VII", "VIII"}));
+		rotorOrderPanel.add(middleRotorComboBox);
 		
-		JSpinner rightRotorSpinner = new JSpinner();
-		rightRotorSpinner.setModel(new SpinnerNumberModel(1, 1, 8, 1));
-		rightRotorSpinner.setPreferredSize(new Dimension(35, 20));
-		rotorOrderPanel.add(rightRotorSpinner);
+		rightRotorComboBox = new JComboBox<String>();
+		rightRotorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "I", "II", "III", "IV", "V", "VI", "VII", "VIII"}));
+		rotorOrderPanel.add(rightRotorComboBox);
 		
 		JPanel reflectorPanel = new JPanel();
 		FlowLayout flowLayout_2 = (FlowLayout) reflectorPanel.getLayout();
@@ -149,37 +220,9 @@ public class CaGuiPrototype extends JPanel {
 		label_1.setBackground(Color.black);
 		label_1.setForeground(Color.white);
 		
-		JSpinner reflectorSpinner = new JSpinner();
-		reflectorPanel.add(reflectorSpinner);
-		reflectorSpinner.setModel(new SpinnerListModel(new String[] {"B", "C", "B Thin", "C Thin"}));
-		reflectorSpinner.setPreferredSize(new Dimension(60, 20));
-		
-		JPanel indicatorPanel = new JPanel();
-		FlowLayout flowLayout_3 = (FlowLayout) indicatorPanel.getLayout();
-		flowLayout_3.setAlignment(FlowLayout.LEFT);
-		inputSettingsPanel.add(indicatorPanel);
-		indicatorPanel.setBackground(Color.black);
-		indicatorPanel.setForeground(Color.white);
-		
-		JLabel lblIndicatorSettings = new JLabel("Indicator Settings:");
-		indicatorPanel.add(lblIndicatorSettings);
-		lblIndicatorSettings.setBackground(Color.black);
-		lblIndicatorSettings.setForeground(Color.white);
-		
-		JSpinner leftIndicatorPanel = new JSpinner();
-		leftIndicatorPanel.setModel(new SpinnerListModel(new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
-		leftIndicatorPanel.setPreferredSize(new Dimension(35, 20));
-		indicatorPanel.add(leftIndicatorPanel);
-		
-		JSpinner middleIndicatorPanel = new JSpinner();
-		middleIndicatorPanel.setModel(new SpinnerListModel(new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
-		middleIndicatorPanel.setPreferredSize(new Dimension(35, 20));
-		indicatorPanel.add(middleIndicatorPanel);
-		
-		JSpinner rightIndicatorPanel = new JSpinner();
-		rightIndicatorPanel.setModel(new SpinnerListModel(new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
-		rightIndicatorPanel.setPreferredSize(new Dimension(35, 20));
-		indicatorPanel.add(rightIndicatorPanel);
+		reflectorComboBox = new JComboBox<String>();
+		reflectorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "B", "C", "B Thin", "C Thin"}));
+		reflectorPanel.add(reflectorComboBox);
 		
 		JPanel ringPanel = new JPanel();
 		FlowLayout flowLayout_4 = (FlowLayout) ringPanel.getLayout();
@@ -193,20 +236,49 @@ public class CaGuiPrototype extends JPanel {
 		label_2.setBackground(Color.black);
 		label_2.setForeground(Color.white);
 		
-		JSpinner leftRingSpinner = new JSpinner();
-		leftRingSpinner.setModel(new SpinnerListModel(new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
-		leftRingSpinner.setPreferredSize(new Dimension(35, 20));
-		ringPanel.add(leftRingSpinner);
+		fourthRingComboBox = new JComboBox<String>();
+		fourthRingComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		ringPanel.add(fourthRingComboBox);
 		
-		JSpinner middleRingSpinner = new JSpinner();
-		middleRingSpinner.setModel(new SpinnerListModel(new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
-		middleRingSpinner.setPreferredSize(new Dimension(35, 20));
-		ringPanel.add(middleRingSpinner);
+		leftRingComboBox = new JComboBox<String>();
+		leftRingComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		ringPanel.add(leftRingComboBox);
 		
-		JSpinner rightRingSpinner = new JSpinner();
-		rightRingSpinner.setModel(new SpinnerListModel(new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
-		rightRingSpinner.setPreferredSize(new Dimension(35, 20));
-		ringPanel.add(rightRingSpinner);
+		middleRingComboBox = new JComboBox<String>();
+		middleRingComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		ringPanel.add(middleRingComboBox);
+		
+		rightRingComboBox = new JComboBox<String>();
+		rightRingComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		ringPanel.add(rightRingComboBox);
+		
+		JPanel indicatorPanel = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) indicatorPanel.getLayout();
+		flowLayout_3.setAlignment(FlowLayout.LEFT);
+		inputSettingsPanel.add(indicatorPanel);
+		indicatorPanel.setBackground(Color.black);
+		indicatorPanel.setForeground(Color.white);
+		
+		JLabel lblIndicatorSettings = new JLabel("Indicator Settings:");
+		indicatorPanel.add(lblIndicatorSettings);
+		lblIndicatorSettings.setBackground(Color.black);
+		lblIndicatorSettings.setForeground(Color.white);
+		
+		fourthIndicatorComboBox = new JComboBox<String>();
+		fourthIndicatorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		indicatorPanel.add(fourthIndicatorComboBox);
+		
+		leftIndicatorComboBox = new JComboBox<String>();
+		leftIndicatorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		indicatorPanel.add(leftIndicatorComboBox);
+		
+		middleIndicatorComboBox = new JComboBox<String>();
+		middleIndicatorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		indicatorPanel.add(middleIndicatorComboBox);
+		
+		rightIndicatorComboBox = new JComboBox<String>();
+		rightIndicatorComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Any", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}));
+		indicatorPanel.add(rightIndicatorComboBox);
 		
 		JPanel plugboardPanel = new JPanel();
 		FlowLayout flowLayout_5 = (FlowLayout) plugboardPanel.getLayout();
@@ -224,7 +296,7 @@ public class CaGuiPrototype extends JPanel {
 		plugboardTextField.setColumns(20);
 		plugboardPanel.add(plugboardTextField);
 		
-		ResultsPanel resultsPanel = new ResultsPanel();
+		resultsPanel = new ResultsPanel();
 		add(resultsPanel);
 		
 		JPanel cribTestPanel = new JPanel();
@@ -245,5 +317,97 @@ public class CaGuiPrototype extends JPanel {
 		JButton cribCheckButton = new JButton("Check Cribs...");
 		cribControlPanel.add(cribCheckButton);
 	}
-
+	
+	private EnigmaSettings getConstraints() {
+		int[] rotors = new int[4];
+		int reflector;
+		char[] ringSettings = new char[4];
+		char[] indicatorSettings = new char[4];
+		String plugboardMap;
+		
+		// Three-rotor test.
+		boolean isThreeRotor = fourthRotorComboBox.getSelectedIndex() == 0 || (reflectorComboBox.getSelectedIndex() == 1 && reflectorComboBox.getSelectedIndex() == 2);
+		
+		if (isThreeRotor) {	
+			rotors[3] = -2;	// Flag to indicate not to test for fourth rotor configurations.
+			ringSettings[3] = '!';
+			indicatorSettings[3] = '!';
+		}
+		else { // Is possibly four-rotor.
+			if (fourthRotorComboBox.getSelectedIndex() == 1) {
+				rotors[3] = -1;	// Flag to test for any combination.
+			}
+			else {
+				rotors[3] = fourthRotorComboBox.getSelectedIndex() + 6;	// Index adjust.
+			}
+			
+			if (fourthRingComboBox.getSelectedIndex() == 0) {
+				ringSettings[3] = '!';	// Flag to test for any combination.
+			}
+			else {
+				ringSettings[3] = (char) (fourthRotorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+			}
+			
+			if (fourthIndicatorComboBox.getSelectedIndex() == 0) {
+				indicatorSettings[3] = '!';	// Flag to test for any combination.
+			}
+			else {
+				indicatorSettings[3] = (char) (fourthIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+			}
+		} // End four-rotor test.
+		
+		// Get settings for other three rotors.
+		if (leftRingComboBox.getSelectedIndex() == 0) {
+			ringSettings[0] = '!';	// Flag to test for any combination.
+		}
+		else {
+			ringSettings[0] = (char) (leftRingComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+		}
+		
+		if (middleRingComboBox.getSelectedIndex() == 0) {
+			ringSettings[1] = '!';	// Flag to test for any combination.
+		}
+		else {
+			ringSettings[1] = (char) (middleRingComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+		}
+		
+		if (rightRingComboBox.getSelectedIndex() == 0) {
+			ringSettings[2] = '!';	// Flag to test for any combination.
+		}
+		else {
+			ringSettings[2] = (char) (rightRingComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+		}
+		
+		if (leftIndicatorComboBox.getSelectedIndex() == 0) {
+			indicatorSettings[0] = '!';	// Flag to test for any combination.
+		}
+		else {
+			indicatorSettings[0] = (char) (leftIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+		}
+		
+		if (middleIndicatorComboBox.getSelectedIndex() == 0) {
+			indicatorSettings[1] = '!';	// Flag to test for any combination.
+		}
+		else {
+			indicatorSettings[1] = (char) (middleIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+		}
+		
+		if (rightIndicatorComboBox.getSelectedIndex() == 0) {
+			indicatorSettings[2] = '!';	// Flag to test for any combination.
+		}
+		else {
+			indicatorSettings[2] = (char) (rightIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
+		}
+		// End settings check.
+		
+		// Get other settings.
+		reflector = reflectorComboBox.getSelectedIndex() - 1;
+		
+		rotors[0] = leftRotorComboBox.getSelectedIndex() - 1;	// Index adjust.
+		rotors[1] = middleRotorComboBox.getSelectedIndex() - 1;	// Index adjust.
+		rotors[2] = rightRotorComboBox.getSelectedIndex() - 1;	// Index adjust.
+		plugboardMap = plugboardTextField.getText().toUpperCase().replace(" ", "");	// Strip whitespace.
+		
+		return new EnigmaSettings(rotors, ringSettings, indicatorSettings, reflector, plugboardMap);
+	}
 }

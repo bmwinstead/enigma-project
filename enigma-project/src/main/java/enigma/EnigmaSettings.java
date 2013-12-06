@@ -182,6 +182,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 		return "" + indicatorSettings[0] + indicatorSettings[1] + indicatorSettings[2];
 	}
 	
+	// Prints the reflector setting.
 	public String printReflector() {
 		switch(reflector) {
 		case 0:
@@ -197,6 +198,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 		}
 	}
 	
+	// Prints the plugboard pairs with spaces.
 	public String printPlugboard() {
 		String result = "";
 		char[] value = plugboardMap.toCharArray();
@@ -212,6 +214,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 		return result;
 	}
 	
+	// Prints a string representing the settings, for logging purposes.
 	public String printSettings() {
 		return printWheelOrder() + " " + printReflector() + " " + printRingSettings() + " " + printIndicators() + " [" + printPlugboard() + "] - " + fitnessScore;
 	}

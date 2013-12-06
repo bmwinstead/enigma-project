@@ -7,6 +7,8 @@
  */
 package main.java.GUINew;
 
+import java.awt.Color;
+
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,12 +16,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import main.java.enigma.EnigmaSettings;
-
-import javax.swing.JList;
-import javax.swing.JComboBox;
-
-import java.awt.Color;
-import java.awt.Dimension;
 
 public class ResultsPanel extends JPanel {
 	private JTextField leftRotorTextField;
@@ -34,28 +30,10 @@ public class ResultsPanel extends JPanel {
 	private JTextField rightIndicatorTextField;
 	private JTextField plugboardTextField;
 	private JTextArea outputTextArea;
-	private JPanel solutionsPanel;
-	private JLabel lblNewLabel;
-	private JComboBox solutionsComboBox;
+	private JTextField fourthRotorTextField;
 	
 	public ResultsPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		solutionsPanel = new JPanel();
-		add(solutionsPanel);
-		solutionsPanel.setBackground(Color.black);
-		solutionsPanel.setForeground(Color.white);
-		
-		lblNewLabel = new JLabel("Solutions:");
-		solutionsPanel.add(lblNewLabel);
-		lblNewLabel.setBackground(Color.black);
-		lblNewLabel.setForeground(Color.white);
-		
-		solutionsComboBox = new JComboBox();
-		solutionsComboBox.setPreferredSize(new Dimension(200, 20));
-		solutionsComboBox.setMinimumSize(new Dimension(40, 20));
-		solutionsComboBox.setMaximumRowCount(10);
-		solutionsPanel.add(solutionsComboBox);
 		
 		outputTextArea = new JTextArea();
 		outputTextArea.setLineWrap(true);
@@ -73,6 +51,10 @@ public class ResultsPanel extends JPanel {
 		resultsPanel.add(label);
 		label.setBackground(Color.black);
 		label.setForeground(Color.white);
+		
+		fourthRotorTextField = new JTextField();
+		resultsPanel.add(fourthRotorTextField);
+		fourthRotorTextField.setColumns(2);
 		
 		leftRotorTextField = new JTextField();
 		leftRotorTextField.setColumns(2);
@@ -135,8 +117,9 @@ public class ResultsPanel extends JPanel {
 		plugboardTextField.setColumns(30);
 		resultsPanel.add(plugboardTextField);
 	}
-	
-	public void printSettings(EnigmaSettings settings, String message) {
+
+	// Outputs the decrypted text and discovered settings to the panel.
+	public void printSolution(EnigmaSettings settings, String message) {
 		String result = message;
 		int[] wheel = settings.getRotors();
 		char[] ring = settings.getRingSettings();
@@ -155,5 +138,7 @@ public class ResultsPanel extends JPanel {
 		middleIndicatorTextField.setText("" + indicator[1]);
 		rightIndicatorTextField.setText("" + indicator[2]);
 		plugboardTextField.setText(settings.printPlugboard());
+		
+		outputTextArea.setText(message);
 	}
 }

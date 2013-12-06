@@ -38,13 +38,13 @@ import java.util.concurrent.Executors;
 
 import javax.swing.SwingWorker;
 
+import main.java.GUINew.ResultsPanel;
 import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.nlp.CribDetector;
 import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 import misc.Logger;
-import views.ResultsPanel;
 
 public class QuadbombManager extends SwingWorker<Long, Void> {
 	private static int NUM_REFLECTORS = 1;	// Debugging line to speed up testing.
@@ -55,6 +55,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private final String message;
 	private String decryptedMessage;
 	
+	private EnigmaSettings constraints;
 	private EnigmaSettings result;
 	
 	private int threadSize;
@@ -68,12 +69,13 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private Logger log;
 	
 	// Constructor.
-	public QuadbombManager(Corpus database, String message, int statTest, int threadSize, int candidateSize, ResultsPanel panel) {
+	public QuadbombManager(Corpus database, String message, int statTest, int threadSize, int candidateSize, EnigmaSettings settings, ResultsPanel panel) {
 		this.message = message;
 		
 		this.threadSize = threadSize;
 		this.candidateSize = candidateSize;
 		
+		constraints = settings;
 		resultsPanel = panel;
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
@@ -94,7 +96,13 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	public Long doInBackground() {
 		// Initialize thread list.
 		ExecutorService threadManager = Executors.newFixedThreadPool(threadSize);
-		CountDownLatch doneSignal = new CountDownLatch(NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS);
+		int rotorCount = NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS;
+		
+		if (NUM_REFLECTORS > 1) {	// Add four-rotor combinations.
+			rotorCount += (NUM_REFLECTORS - 2) * 2 * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS;
+		}
+		
+		CountDownLatch doneSignal = new CountDownLatch(rotorCount);
 		
 		log.makeEntry("Starting QuadBomb analysis...", true);
 		log.makeEntry("Encrypted message: " + message, true);
@@ -113,17 +121,26 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 					if (i != j) { // Skip equal rotor selections.
 						for (int k = 0; k < NUM_ROTORS; k++) { // Right rotor.
 							if (i != k && j != k) { // Skip equal rotor selections.
-								
-								int[] rotors = {i, j, k};
-								EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
-								
-								threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
-							} // End rotor check if
-						} // End left rotor for
-					} // End rotor check if
-				} // End middle rotor for
-			} // End right rotor for
-		} // End reflector for
+								if (reflector > 1) {
+									for (int l = 8; l < 10; l++) {	// Test four-rotor configurations.
+										int[] rotors = {i, j, k, l};
+										EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
+										
+										threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
+									}
+								}
+								else {	// Test three-rotor configurations.
+									int[] rotors = {i, j, k};
+									EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
+									
+									threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
+								} // End reflector check.
+							} // End equal rotor check.
+						} // End left rotor loop.
+					} // End equal rotor check.
+				} // End middle rotor loop.
+			} // End right rotor loop.
+		} // End reflector loop.
 		
 		// Wait until all tasks are complete.
 		try {
