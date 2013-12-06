@@ -137,8 +137,10 @@ public class EnigmaSingleton extends Observable {
 		System.out.println("Encrypting char " + c);
 		c = output.configure(c); //Text error checking
 		System.out.println("Text Error Checking and Conversion");
+		// JLI 6Dec13 Was updating the GUI before encryption, not after.
+		char result = machine.encryptChar(c);
 		notifyObservers();
-		return machine.encryptChar(c);
+		return result;
 	}
 	
 	/**
@@ -150,8 +152,10 @@ public class EnigmaSingleton extends Observable {
 		System.out.println("Encrypting string " + s);
 		s = output.configure(s); //Text error checking
 		System.out.println("Text Error Checking and Conversion");
+		String result = machine.encryptString(s);
+		// JLI 6Dec13 Was updating the GUI before enryption, not after.
 		notifyObservers();
-		return machine.encryptString(s);
+		return result;
 	}
 	
 	@Override
