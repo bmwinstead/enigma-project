@@ -57,13 +57,17 @@ public class ResetPanel extends JPanel {
 				resetIndicatorsButton, clearTextButton);
 	} // end constructor
 	
-	private class DefaultConfigListener implements ActionListener{
-        public void actionPerformed(ActionEvent e) {
-        	System.out.println("ResetPanel: Rotors: " + Arrays.toString(defaultRotors));
-        	machine.setState(defaultRotors, defaultReflector, defefaultRingSettings, defaultRotorPositions, defaultPlugboard);
-        	machine.notifyObservers();
+	private class DefaultConfigListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("ResetPanel: Rotors: "
+					+ Arrays.toString(defaultRotors));
+			machine.setUpdateType(EnigmaSingleton.FULLRESET);
+			machine.setState(defaultRotors, defaultReflector,
+					defefaultRingSettings, defaultRotorPositions,
+					defaultPlugboard);
+			machine.notifyObservers();
 
-        }
+		}
 	}
 
 } // end ResetPanel class

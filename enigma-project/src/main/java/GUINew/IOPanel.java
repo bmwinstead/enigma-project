@@ -20,6 +20,8 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -35,7 +37,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-public class IOPanel extends JPanel {
+import main.java.enigma.EnigmaSettings;
+
+public class IOPanel extends JPanel implements Observer {
 	private final int tapeLength = 50;
 	private JTextField outputTape;
 	private JTextField manualInput;
@@ -50,6 +54,7 @@ public class IOPanel extends JPanel {
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
 	private Lightboard lightboard;
 	public IOPanel()  {
+		machine.addObserver(this);
 		GroupLayout mainLayout = new GroupLayout(this);
 		setLayout(mainLayout);
 		setBackground(Color.black);
@@ -162,6 +167,27 @@ public class IOPanel extends JPanel {
 		lightboardPanel.setBackground(Color.black);
 		return lightboardPanel;
 	}
+	
+	public void clearFields() {
+		outputTape.setText("");
+		manualInput.setText("");
+		bulkInput.setText("");
+		bulkOutput.setText("");
+		fileTextField.setText("");
+		lightboard.resetLights();
+	}
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+//		String s = (String) arg1;
+		EnigmaSettings settings = (EnigmaSettings) arg1;
+		System.out.println("Resetting text fields.");
+		
+		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET) {
+			clearFields();
+		}
+	}
+	
 	private class BrowseButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
@@ -229,4 +255,6 @@ public class IOPanel extends JPanel {
 			//Do nothing
 		}
 	}
+	
+	
 }

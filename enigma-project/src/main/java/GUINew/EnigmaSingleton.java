@@ -21,9 +21,12 @@ import main.java.enigma.EnigmaSettings;
  */
 public class EnigmaSingleton extends Observable {
 	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton();
+	public final static int INDICATORONLY = 0;
+	public final static int FULLRESET = 1;
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
+	private int updateType;
 	private EnigmaSingleton() {
 		// No constructor for you.
 	}
@@ -115,6 +118,10 @@ public class EnigmaSingleton extends Observable {
 		notifyObservers();
 		return machine.encryptChar(c);
 	}
+	
+	public void setUpdateType(int newUpdateType) {
+		updateType = newUpdateType;
+	}
 
 	/**
 	 * 
@@ -134,14 +141,17 @@ public class EnigmaSingleton extends Observable {
 		observers.add(obs);
 	}
 	@Override
-	public void notifyObservers(){
-		EnigmaSettings settings = new EnigmaSettings(machine.getRotors(), machine.getRingSettings(),
-				machine.getPositions(), machine.getReflector(), machine.getPlugboard());
-		System.out.println("Notifying, rotors are currently " + String.valueOf(machine.getPositions()));
-		for(Observer obs : observers){
-//			obs.update(this, String.valueOf(machine.getPositions()));
+	public void notifyObservers() {
+		EnigmaSettings settings = new EnigmaSettings(machine.getRotors(),
+				machine.getRingSettings(), machine.getPositions(),
+				machine.getReflector(), machine.getPlugboard(), updateType);
+		System.out.println("Notifying, rotors are currently "
+				+ String.valueOf(machine.getPositions()));
+		for (Observer obs : observers) {
+			// obs.update(this, String.valueOf(machine.getPositions()));
 			obs.update(this, settings);
 		}
+		setUpdateType(INDICATORONLY);
 	}
-
+	
 } // end EnigmaSingleton class

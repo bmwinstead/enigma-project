@@ -17,6 +17,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	private char[] ringSettings;
 	private char[] indicatorSettings;
 	private String plugboardMap;
+	private int updateType;
 	
 	private double fitnessScore;
 	
@@ -56,6 +57,20 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 		indicatorSettings = defaultSettings.clone();
 		reflector = reflectorIndex;
 		plugboardMap = "";
+	}
+	
+	// Constructor that includes updateType (for setting passing among GUI)
+	public EnigmaSettings(int[] newRotors, char[] newRingSettings,
+			char[] newIndicatorSettings, int reflectorIndex, String newMap,
+			int newUpdateType) {
+		rotors = newRotors.clone();
+		ringSettings = newRingSettings.clone();
+		indicatorSettings = newIndicatorSettings.clone();
+		reflector = reflectorIndex;
+		plugboardMap = newMap;
+		updateType = newUpdateType;
+
+		fitnessScore = Double.NEGATIVE_INFINITY;
 	}
 	
 	// Default settings.
@@ -132,6 +147,14 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 */
 	public String getPlugboardMap() {
 		return plugboardMap;
+	}
+	
+	/**
+	 * 
+	 * @return updateType. Used for passing settings among GUI components.
+	 */
+	public int getUpdateType() {
+		return updateType;
 	}
 
 	/**

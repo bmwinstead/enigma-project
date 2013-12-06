@@ -401,16 +401,23 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 	
+	private void setReflector(int reflectorNum) {
+		reflectorChoice.setSelectedIndex(reflectorNum);
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 //		String s = (String) arg1;
 		EnigmaSettings settings = (EnigmaSettings) arg1;
 		System.out.println("Changing rotors to " + String.valueOf(settings.getIndicatorSettings()));
 		setRotorPositions(settings.getIndicatorSettings());
-		// setPlugboard(settings.getPlugboardMap());
-		// setRotorChoices(settings.getRotors());
-		// setRingSettings(settings.getRingSettings());	
 		
+		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET ) {
+			setPlugboard(settings.getPlugboardMap());
+			setRingSettings(settings.getRingSettings());	
+			setRotorChoices(settings.getRotors());
+			setReflector(settings.getReflector());
+		}
 	}
 	
 	private class RingSettingsListener implements ActionListener {
