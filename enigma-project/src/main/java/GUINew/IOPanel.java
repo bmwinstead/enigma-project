@@ -183,7 +183,8 @@ public class IOPanel extends JPanel implements Observer {
 		EnigmaSettings settings = (EnigmaSettings) arg1;
 		System.out.println("Resetting text fields.");
 		
-		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET) {
+		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET
+				|| settings.getUpdateType() == EnigmaSingleton.CLEARTEXT) {
 			clearFields();
 		}
 	}

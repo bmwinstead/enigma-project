@@ -23,6 +23,7 @@ public class EnigmaSingleton extends Observable {
 	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton();
 	public final static int INDICATORONLY = 0;
 	public final static int FULLRESET = 1;
+	public final static int CLEARTEXT = 2;
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
@@ -123,6 +124,9 @@ public class EnigmaSingleton extends Observable {
 		updateType = newUpdateType;
 	}
 	
+	/**
+	 * Resets the Enigma's indicators, then notifies observers.
+	 */
 	public void indicatorReset() {
 		machine.reset();
 		notifyObservers();

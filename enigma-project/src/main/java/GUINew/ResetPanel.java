@@ -42,7 +42,7 @@ public class ResetPanel extends JPanel {
 		resetIndicatorsButton = new JButton("Reset Indicators");
 		resetIndicatorsButton.addActionListener(new ResetIndicatorsListener());
 		clearTextButton = new JButton("Clear Text");
-		
+		clearTextButton.addActionListener(new ClearTextListener());		
 		mainLayout.setAutoCreateGaps(true);
 		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(optionsLabel)
@@ -69,11 +69,18 @@ public class ResetPanel extends JPanel {
 			machine.notifyObservers();
 
 		}
-	}
+	} // end DefaultConfigListener class
 	
 	private class ResetIndicatorsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			machine.indicatorReset();
+		}
+	} // end ResetIndicatorsListener
+	
+	private class ClearTextListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			machine.setUpdateType(EnigmaSingleton.CLEARTEXT);
+			machine.notifyObservers();
 		}
 	}
 
