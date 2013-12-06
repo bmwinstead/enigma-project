@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -22,6 +23,13 @@ public class ResetPanel extends JPanel {
 	private JButton defaultConfigButton;
 	private JButton resetIndicatorsButton;
 	private JButton clearTextButton;
+	private JComboBox<String> outSpaceDropdown;
+	private static final String[] outSpaceChoices = {
+			"No Spaces",
+			"4 Spaces", 
+			"5 Spaces",
+			"Original Spaces"
+	};
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 	private char[] defaultRotorPositions = { '!', 'A', 'A', 'A' };
 	private char[] defefaultRingSettings = { '!', 'A', 'A', 'A' };
@@ -34,28 +42,39 @@ public class ResetPanel extends JPanel {
 		setLayout(mainLayout);
 		setBackground(Color.black);
 		
+		JLabel outSpaceLabel = new JLabel("Output Space Options");
+		outSpaceLabel.setForeground(Color.white);
 		JLabel optionsLabel = new JLabel("Reset Options");
 		optionsLabel.setForeground(Color.white);
 		
+		outSpaceDropdown = new JComboBox<String>(outSpaceChoices);
+		outSpaceDropdown.setSelectedIndex(0);
 		defaultConfigButton = new JButton("Default Configuration");
         defaultConfigButton.addActionListener(new DefaultConfigListener());
 		resetIndicatorsButton = new JButton("Reset Indicators");
 		resetIndicatorsButton.addActionListener(new ResetIndicatorsListener());
 		clearTextButton = new JButton("Clear Text");
-		clearTextButton.addActionListener(new ClearTextListener());		
+		clearTextButton.addActionListener(new ClearTextListener());	
+		
 		mainLayout.setAutoCreateGaps(true);
 		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(outSpaceLabel)
+				.addComponent(outSpaceDropdown)
 				.addComponent(optionsLabel)
 				.addComponent(defaultConfigButton)
 				.addComponent(resetIndicatorsButton)							
 				.addComponent(clearTextButton));
 		mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
+				.addComponent(outSpaceLabel)
+				.addComponent(outSpaceDropdown)
 				.addComponent(optionsLabel)
 				.addComponent(defaultConfigButton)
 				.addComponent(resetIndicatorsButton)
-				.addComponent(clearTextButton));
+				.addComponent(clearTextButton)				);
 		mainLayout.linkSize(SwingConstants.HORIZONTAL, defaultConfigButton,
-				resetIndicatorsButton, clearTextButton);
+				resetIndicatorsButton, clearTextButton, outSpaceDropdown);
+		mainLayout.linkSize(SwingConstants.VERTICAL, defaultConfigButton,
+				resetIndicatorsButton, clearTextButton, outSpaceDropdown);
 	} // end constructor
 	
 	private class DefaultConfigListener implements ActionListener {

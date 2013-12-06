@@ -33,7 +33,6 @@ public class EnigmaGUI {
 		resetPanel = new ResetPanel();
 		mainPanel = new JPanel();
 		mainFrame = new JFrame();
-		JLabel spacer = new JLabel("                 ");
 		
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
@@ -46,7 +45,6 @@ public class EnigmaGUI {
 						.addComponent(rotorPanel)
 						.addComponent(ioPanel)
 				)
-				.addComponent(spacer)
 		);
 		mainPanelLayout.setVerticalGroup(mainPanelLayout.createParallelGroup()
 				.addGroup(mainPanelLayout.createSequentialGroup()
@@ -56,7 +54,6 @@ public class EnigmaGUI {
 						.addComponent(rotorPanel)
 						.addComponent(ioPanel)
 				)
-				.addComponent(spacer)
 		);
 		mainPanelLayout.setAutoCreateContainerGaps(true);
 		mainPanelLayout.setAutoCreateGaps(true);
