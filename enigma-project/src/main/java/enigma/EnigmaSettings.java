@@ -204,6 +204,10 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 		return new EnigmaMachine(rotors.clone(), reflector, ringSettings.clone(), indicatorSettings.clone(), plugboardMap);
 	}
 	
+	public boolean isThreeRotor() {
+		return (rotors.length == 3) ? true : false;
+	}
+	
 	// Prints out the rotor order in a String.
 	public String printWheelOrder() {
 		String result = "";

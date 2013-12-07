@@ -44,7 +44,7 @@ public class IndicatorDetector implements Runnable {
 	}
 	
 	public void run() {
-		Queue<char[]> testList = settings.getTestingIndicators();
+		Queue<char[]> testList = settings.getTestingIndicators(configuration.isThreeRotor());
 		
 		while(!testList.isEmpty()) {
 			EnigmaSettings candidate = configuration.copy();

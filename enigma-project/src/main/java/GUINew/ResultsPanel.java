@@ -76,7 +76,7 @@ public class ResultsPanel extends JPanel {
 		label_1.setForeground(Color.white);
 		
 		reflectorTextField = new JTextField();
-		reflectorTextField.setColumns(2);
+		reflectorTextField.setColumns(6);
 		resultsPanel.add(reflectorTextField);
 		
 		JLabel label_2 = new JLabel("rings:");
@@ -124,7 +124,7 @@ public class ResultsPanel extends JPanel {
 		label_4.setForeground(Color.white);
 		
 		plugboardTextField = new JTextField();
-		plugboardTextField.setColumns(30);
+		plugboardTextField.setColumns(20);
 		resultsPanel.add(plugboardTextField);
 	}
 

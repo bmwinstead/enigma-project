@@ -72,14 +72,17 @@ public class QuadBombSettings {
 		Queue<Integer> reflectors = getTestingReflectors();
 		
 		while (!reflectors.isEmpty()) {
-			Queue<int[]> rotors = getTestingRotors();
 			int reflector = reflectors.poll();
+			
+			boolean threeRotorReflector = (reflector < 2) ? true : false;
+			
+			Queue<int[]> rotors = getTestingRotors(threeRotorReflector);
 			
 			while (!rotors.isEmpty()) {
 				int[] rotor = rotors.poll();
 				char[] rings = new char[rotor.length];
 				
-				if (isThreeRotor) {
+				if (threeRotorReflector) {
 					rings[0] = (ringSettings[1] == '?') ? 'A' : ringSettings[1];
 					rings[1] = (ringSettings[2] == '?') ? 'A' : ringSettings[2];
 					rings[2] = (ringSettings[3] == '?') ? 'A' : ringSettings[3];
@@ -130,7 +133,7 @@ public class QuadBombSettings {
 			rotorCount *= threeReflector;
 		}
 		else {
-			rotorCount *= fourReflector * ((rotorSettings[0] == -1) ? 2 : 1) + threeReflector;
+			rotorCount *= fourReflector * ((rotorSettings[0] == -1) ? 2 : 1) + ((rotorSettings[0] == -1) ? threeReflector : 0);
 		}
 		
 		return rotorCount;
@@ -172,15 +175,15 @@ public class QuadBombSettings {
 	}
 	
 	// Gets a queue of rotor values to test.
-	private Queue<int[]> getTestingRotors() {
+	private Queue<int[]> getTestingRotors(boolean threeRotorsOnly) {
 		Queue<int[]> result = new LinkedList<int[]>();
 		
-		int fourthStart = (rotorSettings[0] == -1) ? 0 : rotorSettings[0];
+		int fourthStart = (rotorSettings[0] == -1) ? 8 : rotorSettings[0];
 		int leftStart = (rotorSettings[1] == -1) ? 0 : rotorSettings[1];
 		int middleStart = (rotorSettings[2] == -1) ? 0 : rotorSettings[2];
 		int rightStart = (rotorSettings[3] == -1) ? 0 : rotorSettings[3];
 		
-		int fourthEnd = (rotorSettings[0] == -1) ? 2 : rotorSettings[0] + 1;
+		int fourthEnd = (rotorSettings[0] == -1) ? 10 : rotorSettings[0] + 1;
 		int leftEnd = (rotorSettings[1] == -1) ? NUM_ROTORS : rotorSettings[1] + 1;
 		int middleEnd = (rotorSettings[2] == -1) ? NUM_ROTORS : rotorSettings[2] + 1;
 		int rightEnd = (rotorSettings[3] == -1) ? NUM_ROTORS : rotorSettings[3] + 1;
@@ -190,7 +193,7 @@ public class QuadBombSettings {
 				if (i != j) { // Skip equal rotor selections.
 					for (int k = rightStart; k < rightEnd; k++) { // Right rotor.
 						if (i != k && j != k) { // Skip equal rotor selections.
-							if (isThreeRotor) {
+							if (threeRotorsOnly) {
 								int[] rotors = {i, j, k};
 								
 								result.add(rotors);
@@ -218,7 +221,7 @@ public class QuadBombSettings {
 		if (reflectorSetting > -1) {
 			result.add(reflectorSetting);
 		}
-		else if (rotorSettings[0] > -2) {
+		else if (rotorSettings[0] == -1) {
 			for (int i = 0; i < 4; i++) {
 				result.add(i);
 			}
@@ -238,7 +241,7 @@ public class QuadBombSettings {
 	}
 	
 	// Gets a queue of indicator values to test.
-	public Queue<char[]> getTestingIndicators() {
+	public Queue<char[]> getTestingIndicators(boolean threeRotorsOnly) {
 		Queue<char[]> result = new LinkedList<char[]>();
 		
 		int fourthStart = (indicatorSettings[0] == '?') ? 0 : indicatorSettings[0] - 'A';
@@ -254,7 +257,7 @@ public class QuadBombSettings {
 		for (int i = leftStart; i < leftEnd; i++) {
 			for (int j = middleStart; j < middleEnd; j++) {
 				for (int k = rightStart; k < rightEnd; k++) {
-					if (isThreeRotor) {
+					if (threeRotorsOnly) {
 						char[] indicators = {(char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
 						
 						result.add(indicators);
@@ -291,7 +294,7 @@ public class QuadBombSettings {
 		boolean ringTest = ringSettings[1] == '?' && ringSettings[2] == '?' && ringSettings[3] == '?';
 		boolean indicatorTest = indicatorSettings[1] == '?' && indicatorSettings[2] == '?' && indicatorSettings[3] == '?';
 		
-		if (isThreeRotor) {
+		if (candidate.isThreeRotor()) {
 			if (ringTest && indicatorTest) {
 				leftStart = 0;
 				leftEnd = 1;
@@ -308,7 +311,7 @@ public class QuadBombSettings {
 		for (int i = leftStart; i < leftEnd; i++) {
 			for (int j = middleStart; j < middleEnd; j++) {
 				for (int k = rightStart; k < rightEnd; k++) {
-					if (isThreeRotor) {
+					if (candidate.isThreeRotor()) {
 						char[] ringTestSettings = new char[3];
 						char[] indicatorTestSettings = new char[3];
 						
