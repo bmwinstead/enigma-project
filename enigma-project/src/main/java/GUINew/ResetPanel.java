@@ -49,6 +49,7 @@ public class ResetPanel extends JPanel {
 		
 		outSpaceDropdown = new JComboBox<String>(outSpaceChoices);
 		outSpaceDropdown.setSelectedIndex(0);
+		outSpaceDropdown.addActionListener(new SpaceDropdownListener());
 		defaultConfigButton = new JButton("Default Configuration");
         defaultConfigButton.addActionListener(new DefaultConfigListener());
 		resetIndicatorsButton = new JButton("Reset Indicators");
@@ -100,6 +101,14 @@ public class ResetPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			machine.setUpdateType(EnigmaSingleton.CLEARTEXT);
 			machine.notifyObservers();
+		}
+	}
+	
+	private class SpaceDropdownListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Setting space option: " 
+					+ outSpaceDropdown.getSelectedIndex());
+			machine.setSpacesOption(outSpaceDropdown.getSelectedIndex());
 		}
 	}
 

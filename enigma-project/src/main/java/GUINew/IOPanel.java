@@ -51,7 +51,6 @@ public class IOPanel extends JPanel implements Observer {
 	private JLabel tapeLabel;
 	private JLabel manualInputLabel;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
-	private ConfigureOutput output = new ConfigureOutput(); //Configure
 	private Lightboard lightboard;
 	public IOPanel()  {
 		machine.addObserver(this);
@@ -216,13 +215,11 @@ public class IOPanel extends JPanel implements Observer {
 				for(String s : ls){
 					encrypted += machine.encryptString(s) + "\n"; 
 				}
-				encrypted = output.configure(encrypted); //Text error checking
 				System.out.println("Text Error Checking and Conversion");
 				bulkOutput.setText(encrypted);
 			} catch(InvalidPathException e){
 				String s = bulkInput.getText();
 				String encrypted = machine.encryptString(s);
-				encrypted = output.configure(encrypted); //Text error checking
 				System.out.println("Text Error Checking and Conversion");
 				bulkOutput.setText(encrypted);
 			} catch (IOException e) {
@@ -254,9 +251,11 @@ public class IOPanel extends JPanel implements Observer {
 				machine.setInitPositions();
 			}
 			char encrypted = machine.encryptChar(c);
-			lightboard.turnOnLight(String.valueOf(encrypted)); //Activate Lightboard
-			String curText = outputTape.getText();
-			outputTape.setText(curText + encrypted);
+			if (encrypted != '!') {
+				lightboard.turnOnLight(String.valueOf(encrypted)); //Activate Lightboard
+				String curText = outputTape.getText();
+				outputTape.setText(curText + encrypted);
+			} // end if (encrypted != '!')
 		}
 		@Override
 		public void removeUpdate(DocumentEvent arg0) {

@@ -24,10 +24,15 @@ public class EnigmaSingleton extends Observable {
 	public final static int INDICATORONLY = 0;
 	public final static int FULLRESET = 1;
 	public final static int CLEARTEXT = 2;
+	public final static int NOSPACES = 0;
+	public final static int FOURSPACES = 1;
+	public final static int FIVESPACES = 2;
+	public final static int ORIGINALSPACES = 3;
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
 	private int updateType;
+	private int spacesOption;
 	private EnigmaSingleton() {
 		// No constructor for you.
 	}
@@ -125,6 +130,22 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	/**
+	 * 
+	 * @param option
+	 */
+	public void setSpacesOption(int option) {
+		spacesOption = option;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getSpacesOption() {
+		return spacesOption;
+	}
+	
+	/**
 	 * Resets the Enigma's indicators, then notifies observers.
 	 */
 	public void indicatorReset() {
@@ -138,8 +159,9 @@ public class EnigmaSingleton extends Observable {
 	 * @return encryptedChar
 	 */
 	public char encryptChar(char c) {
-		System.out.println("Encrypting char " + c);
-		c = output.configure(c); //Text error checking
+		System.out.println("Encrypting char \"" + c + "\"");
+		System.out.println("Sending space option to config: " + getSpacesOption());
+		c = output.configure(c, getSpacesOption()); //Text error checking
 		System.out.println("Text Error Checking and Conversion");
 		// JLI 6Dec13 Was updating the GUI before encryption, not after.
 		char result = machine.encryptChar(c);
@@ -154,7 +176,7 @@ public class EnigmaSingleton extends Observable {
 	 */
 	public String encryptString(String s) {
 		System.out.println("Encrypting string " + s);
-		s = output.configure(s); //Text error checking
+		s = output.configure(s, getSpacesOption()); //Text error checking
 		System.out.println("Text Error Checking and Conversion");
 		String result = machine.encryptString(s);
 		// JLI 6Dec13 Was updating the GUI before enryption, not after.
