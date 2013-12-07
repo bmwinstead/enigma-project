@@ -31,7 +31,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import main.java.GUI.EnigmaGUI;
+import main.java.GUINew.EnigmaGUI;
 import main.java.enigma.EnigmaMachine;
 
 /**
