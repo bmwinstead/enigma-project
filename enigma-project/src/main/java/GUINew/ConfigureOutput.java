@@ -25,7 +25,7 @@ public class ConfigureOutput {
 	 *            Input string to be preprocessed for encryption
 	 * @return Properly processed input string.
 	 */
-	public String configure(String getString){
+	public String configure(String getString, int spaceOption){
     	String setString = "";
     	char[] swapChar = getString.toCharArray();
     	if (!getString.isEmpty()){
@@ -75,6 +75,10 @@ public class ConfigureOutput {
     					setString += swapChar[i];
     				}
     			} // end if(Character.isDigit(swapChar[i]))
+    			if ((spaceOption == EnigmaSingleton.ORIGINALSPACES) 
+    					&& (swapChar[i] == ' ')) {
+    				setString += swapChar[i];
+    			} // end if ((spaceOption == EnigmaSingleton.ORIGINALSPACES) 
     		} // end for(int i = 0; i < getString.length(); i++)
     		return setString.toUpperCase();
         } // end if (!getString.isEmpty())
@@ -91,8 +95,8 @@ public class ConfigureOutput {
 	 *            Input char to be preprocessed for encryption
 	 * @return Properly processed input char.
 	 */
-	public char configure(char getChar){
-		char setChar = ' ';
+	public char configure(char getChar, int spaceOption){
+		char setChar = '!';
 		if (Character.isLetter(getChar)){
 			setChar = getChar;
 		}
@@ -128,6 +132,12 @@ public class ConfigureOutput {
 			    setChar = 'O';
 			 }
 		} // end if(Character.isDigit(getChar))
+		if ((spaceOption == EnigmaSingleton.ORIGINALSPACES)
+				&& (getChar == ' ')) 
+		{
+			System.out.println("I am here in this if.");
+			setChar = getChar;
+		} // end if ((spaceOption == EnigmaSingleton.ORIGINALSPACES)... 
 		return setChar;
 	}// end configure method
 
