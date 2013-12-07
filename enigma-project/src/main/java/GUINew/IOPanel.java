@@ -216,20 +216,40 @@ public class IOPanel extends JPanel implements Observer {
 					encrypted += machine.encryptString(s) + "\n"; 
 				}
 				System.out.println("Text Error Checking and Conversion");
+				encrypted = addSpaces(encrypted);
 				bulkOutput.setText(encrypted);
 			} catch(InvalidPathException e){
 				String s = bulkInput.getText();
 				String encrypted = machine.encryptString(s);
 				System.out.println("Text Error Checking and Conversion");
+				encrypted = addSpaces(encrypted);
 				bulkOutput.setText(encrypted);
 			} catch (IOException e) {
 				String s = bulkInput.getText();
 				s = machine.encryptString(s);
 				lightboard.turnOnLight(s); //Activate Lightboard
+				s = addSpaces(s);
 				bulkOutput.setText(s);
 				if(s.equals("") || s.equals(null))
 					bulkOutput.setText("Input text must contain at least one letter or number.");
 			} 
+		} // end actionPerformed method
+		
+		private String addSpaces(String input) {
+			String result = "";
+			char[] inArray = input.toCharArray();
+			
+			for(int i = 0; i < input.length(); i++) {
+				if (((machine.getSpacesOption() == EnigmaSingleton.FOURSPACES)
+						&& (i % 4 == 0)) 
+						|| ((machine.getSpacesOption() == EnigmaSingleton.FIVESPACES)
+								&& (i % 5 == 0))){
+					result += " ";
+				}
+				result += inArray[i];
+			}
+			
+			return result;
 		}
 	}
 	private class FieldListener implements  DocumentListener{
@@ -254,6 +274,12 @@ public class IOPanel extends JPanel implements Observer {
 			if (encrypted != '!') {
 				lightboard.turnOnLight(String.valueOf(encrypted)); //Activate Lightboard
 				String curText = outputTape.getText();
+				if (((machine.getSpacesOption() == EnigmaSingleton.FOURSPACES)
+						&& ((curText.length() + 1) % 5 == 0)) 
+						|| ((machine.getSpacesOption() == EnigmaSingleton.FIVESPACES)
+								&& ((curText.length() + 1) % 6 == 0))){
+					curText += " ";
+				}
 				outputTape.setText(curText + encrypted);
 			} // end if (encrypted != '!')
 		}
