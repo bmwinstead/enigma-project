@@ -491,8 +491,8 @@ public class TestPanel extends JFrame {
 					int candidateSize = (int)(candidateSpinner.getValue());
 					
 					int statTest = testComboBox.getSelectedIndex();	// debugging to select stat test.
-					QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, null, resultsPanel);
-					
+					//QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, null, resultsPanel);
+					/*
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {
 							if (event.getPropertyName().equals("progress")) {
@@ -502,7 +502,7 @@ public class TestPanel extends JFrame {
 					});
 					
 					analyzer.execute();
-					
+					*/
 					log.makeEntry("Quadbomb analysis finished.", false);
 				}
 			}

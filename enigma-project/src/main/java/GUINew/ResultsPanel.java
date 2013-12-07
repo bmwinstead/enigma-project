@@ -31,6 +31,8 @@ public class ResultsPanel extends JPanel {
 	private JTextField plugboardTextField;
 	private JTextArea outputTextArea;
 	private JTextField fourthRotorTextField;
+	private JTextField fourthRingTextField;
+	private JTextField fourthIndicatorTextField;
 	
 	public ResultsPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -82,6 +84,10 @@ public class ResultsPanel extends JPanel {
 		label_2.setBackground(Color.black);
 		label_2.setForeground(Color.white);
 		
+		fourthRingTextField = new JTextField();
+		resultsPanel.add(fourthRingTextField);
+		fourthRingTextField.setColumns(2);
+		
 		leftRingTextField = new JTextField();
 		leftRingTextField.setColumns(2);
 		resultsPanel.add(leftRingTextField);
@@ -98,6 +104,10 @@ public class ResultsPanel extends JPanel {
 		resultsPanel.add(label_3);
 		label_3.setBackground(Color.black);
 		label_3.setForeground(Color.white);
+		
+		fourthIndicatorTextField = new JTextField();
+		resultsPanel.add(fourthIndicatorTextField);
+		fourthIndicatorTextField.setColumns(2);
 		
 		leftIndicatorTextField = new JTextField(2);
 		resultsPanel.add(leftIndicatorTextField);
@@ -120,23 +130,39 @@ public class ResultsPanel extends JPanel {
 
 	// Outputs the decrypted text and discovered settings to the panel.
 	public void printSolution(EnigmaSettings settings, String message) {
-		String result = message;
 		int[] wheel = settings.getRotors();
 		char[] ring = settings.getRingSettings();
 		char[] indicator = settings.getIndicatorSettings();
 		
-		outputTextArea.setText(result);
+		if (wheel.length == 3) {
+			leftRotorTextField.setText("" + (wheel[0] + 1));
+			middleRotorTextField.setText("" + (wheel[1] + 1));
+			rightRotorTextField.setText("" + (wheel[2] + 1));
+			leftRingTextField.setText("" + ring[0]);
+			middleRingTextField.setText("" + ring[1]);
+			rightRingTextField.setText("" + ring[2]);
+			leftIndicatorTextField.setText("" + indicator[0]);
+			middleIndicatorTextField.setText("" + indicator[1]);
+			rightIndicatorTextField.setText("" + indicator[2]);
+		}
+		else {
+			fourthRotorTextField.setText("" + (wheel[0] + 1));
+			leftRotorTextField.setText("" + (wheel[1] + 1));
+			middleRotorTextField.setText("" + (wheel[2] + 1));
+			rightRotorTextField.setText("" + (wheel[3] + 1));
+			
+			fourthRingTextField.setText("" + (ring[0]));
+			leftRingTextField.setText("" + ring[1]);
+			middleRingTextField.setText("" + ring[2]);
+			rightRingTextField.setText("" + ring[3]);
+			
+			fourthIndicatorTextField.setText("" + (indicator[0]));
+			leftIndicatorTextField.setText("" + indicator[1]);
+			middleIndicatorTextField.setText("" + indicator[2]);
+			rightIndicatorTextField.setText("" + indicator[3]);
+		}
 		
-		leftRotorTextField.setText("" + (wheel[0] + 1));
-		middleRotorTextField.setText("" + (wheel[1] + 1));
-		rightRotorTextField.setText("" + (wheel[2] + 1));
-		reflectorTextField.setText("" + settings.getReflector());
-		leftRingTextField.setText("" + ring[0]);
-		middleRingTextField.setText("" + ring[1]);
-		rightRingTextField.setText("" + ring[2]);
-		leftIndicatorTextField.setText("" + indicator[0]);
-		middleIndicatorTextField.setText("" + indicator[1]);
-		rightIndicatorTextField.setText("" + indicator[2]);
+		reflectorTextField.setText("" + settings.printReflector());
 		plugboardTextField.setText(settings.printPlugboard());
 		
 		outputTextArea.setText(message);

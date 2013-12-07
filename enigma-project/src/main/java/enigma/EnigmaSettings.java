@@ -39,8 +39,12 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	
 	// Constructor with no plugboard and default ring settings.
 	public EnigmaSettings(int[] newRotors, char[] newIndicatorSettings, int reflectorIndex) {
-		char[] defaultRings = {'A', 'A', 'A'};
+		char[] defaultRings = new char[newRotors.length];
 
+		for (int i = 0; i < defaultRings.length; i++) {
+			defaultRings[i] = 'A';
+		}
+		
 		rotors = newRotors.clone();
 		ringSettings = defaultRings;
 		indicatorSettings = newIndicatorSettings.clone();
@@ -50,13 +54,23 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	
 	// Constructor with no plugboard and default indicator and ring settings.
 	public EnigmaSettings(int[] newRotors, int reflectorIndex) {
-		char[] defaultSettings = {'A', 'A', 'A'};
+		char[] defaultSettings = new char[newRotors.length];
+
+		for (int i = 0; i < defaultSettings.length; i++) {
+			defaultSettings[i] = 'A';
+		}
 		
 		rotors = newRotors.clone();
 		ringSettings = defaultSettings.clone();
 		indicatorSettings = defaultSettings.clone();
 		reflector = reflectorIndex;
 		plugboardMap = "";
+	}
+	
+	// Constructor with default ring and indicator settings.
+	public EnigmaSettings(int[] newRotors, int reflectorIndex, String newMap) {
+		this (newRotors, reflectorIndex);
+		plugboardMap = newMap;
 	}
 	
 	// Constructor that includes updateType (for setting passing among GUI)
@@ -192,17 +206,32 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	
 	// Prints out the rotor order in a String.
 	public String printWheelOrder() {
-		return "" + (rotors[0] + 1) + (rotors[1] + 1) + (rotors[2] + 1);
+		String result = "";
+		
+		for (int i = 0; i < rotors.length; i++) {
+			result += (rotors[i] + 1);
+		}
+		return result + " ";
 	}
 	
 	// Prints out the ring settings in a String.
 	public String printRingSettings() {
-		return "" + ringSettings[0] + ringSettings[1] + ringSettings[2];
+		String result = "";
+		
+		for (int i = 0; i < ringSettings.length; i++) {
+			result += ringSettings[i];
+		}
+		return result + " ";
 	}
 	
 	// Prints out the rotor indicator offset in a String.
 	public String printIndicators() {
-		return "" + indicatorSettings[0] + indicatorSettings[1] + indicatorSettings[2];
+		String result = "";
+		
+		for (int i = 0; i < indicatorSettings.length; i++) {
+			result += indicatorSettings[i];
+		}
+		return result + " ";
 	}
 	
 	// Prints the reflector setting.
@@ -239,7 +268,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	
 	// Prints a string representing the settings, for logging purposes.
 	public String printSettings() {
-		return printWheelOrder() + " " + printReflector() + " " + printRingSettings() + " " + printIndicators() + " [" + printPlugboard() + "] - " + fitnessScore;
+		return printWheelOrder() + printReflector() + " " + printRingSettings() + printIndicators() + "[" + printPlugboard() + "] - " + fitnessScore;
 	}
 
 	// Allows sorting by fitness score.

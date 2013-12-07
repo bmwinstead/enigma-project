@@ -31,6 +31,7 @@ package main.java.cryptanalysis.quadbomb;
 
 import java.util.Calendar;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -47,19 +48,13 @@ import main.java.enigma.EnigmaSettings;
 import misc.Logger;
 
 public class QuadbombManager extends SwingWorker<Long, Void> {
-	private static int NUM_REFLECTORS = 1;	// Debugging line to speed up testing.
-	private static int NUM_ROTORS = 3;		// Debugging line to speed up testing.
-	
 	private final StatisticsGenerator statGenerator;
 	private final CribDetector tester;
 	private final String message;
 	private String decryptedMessage;
 	
-	private EnigmaSettings constraints;
+	private QuadBombSettings settings;
 	private EnigmaSettings result;
-	
-	private int threadSize;
-	private int candidateSize;
 	
 	private ResultsPanel resultsPanel;
 	
@@ -69,40 +64,31 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private Logger log;
 	
 	// Constructor.
-	public QuadbombManager(Corpus database, String message, int statTest, int threadSize, int candidateSize, EnigmaSettings settings, ResultsPanel panel) {
+	public QuadbombManager(Corpus database, String message, QuadBombSettings settings, ResultsPanel panel) {
 		this.message = message;
 		
-		this.threadSize = threadSize;
-		this.candidateSize = candidateSize;
-		
-		constraints = settings;
+		this.settings = settings;
 		resultsPanel = panel;
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
 		candidateList = new PriorityQueue<EnigmaSettings>();
 		
-		statGenerator = new StatisticsGenerator(database, statTest);
+		statGenerator = new StatisticsGenerator(database, 3);	// TODO: Set best statistics for individual tests.
 		tester = new CribDetector(database);
 		
 		// Create a log file with the timestamp.
 		Calendar date = Calendar.getInstance();
 		
 		String formattedDate = "Quadbomb attempt " + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.YEAR)
-				+ " " + date.get(Calendar.HOUR) + date.get(Calendar.MINUTE) + date.get(Calendar.SECOND) + " " + statTest + " " + threadSize + " " + candidateSize + ".txt";
+				+ " " + date.get(Calendar.HOUR) + date.get(Calendar.MINUTE) + date.get(Calendar.SECOND) + " " + 3 + " " + settings.getThreadCount() + " " + settings.getCandidateSize() + ".txt";
 		
 		log = new Logger(formattedDate);
 	}
 	
 	public Long doInBackground() {
 		// Initialize thread list.
-		ExecutorService threadManager = Executors.newFixedThreadPool(threadSize);
-		int rotorCount = NUM_REFLECTORS * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS;
-		
-		if (NUM_REFLECTORS > 1) {	// Add four-rotor combinations.
-			rotorCount += (NUM_REFLECTORS - 2) * 2 * (NUM_ROTORS - 2) * (NUM_ROTORS - 1) * NUM_ROTORS;
-		}
-		
-		CountDownLatch doneSignal = new CountDownLatch(rotorCount);
+		ExecutorService threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
+		CountDownLatch doneSignal = new CountDownLatch(settings.getLatchCount());
 		
 		log.makeEntry("Starting QuadBomb analysis...", true);
 		log.makeEntry("Encrypted message: " + message, true);
@@ -115,32 +101,11 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Determining rotors, reflectors, and indicator settings...", true);
 		long startDecryptTime = System.currentTimeMillis();
 		
-		for (int reflector = 0; reflector < NUM_REFLECTORS; reflector++) {
-			for (int i = 0; i < NUM_ROTORS; i++) { // Left rotor.
-				for (int j = 0; j < NUM_ROTORS; j++) { // Middle rotor.
-					if (i != j) { // Skip equal rotor selections.
-						for (int k = 0; k < NUM_ROTORS; k++) { // Right rotor.
-							if (i != k && j != k) { // Skip equal rotor selections.
-								if (reflector > 1) {
-									for (int l = 8; l < 10; l++) {	// Test four-rotor configurations.
-										int[] rotors = {i, j, k, l};
-										EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
-										
-										threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
-									}
-								}
-								else {	// Test three-rotor configurations.
-									int[] rotors = {i, j, k};
-									EnigmaSettings candidate = new EnigmaSettings(rotors, reflector);
-									
-									threadManager.execute(new IndicatorDetector(statGenerator, candidate, resultsList, message, doneSignal));
-								} // End reflector check.
-							} // End equal rotor check.
-						} // End left rotor loop.
-					} // End equal rotor check.
-				} // End middle rotor loop.
-			} // End right rotor loop.
-		} // End reflector loop.
+		Queue<EnigmaSettings> testList = settings.getRotorReflectorCandidateList();
+		
+		while (!testList.isEmpty()) {
+			threadManager.execute(new IndicatorDetector(statGenerator, testList.poll(), settings, resultsList, message, doneSignal));
+		}
 		
 		// Wait until all tasks are complete.
 		try {
@@ -162,14 +127,14 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Step 2: Determine possible ring settings.
 		// Initialize thread list.
-		threadManager = Executors.newFixedThreadPool(threadSize);
+		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
 		doneSignal = new CountDownLatch(candidateList.size());
 		
 		log.makeEntry("Determining ring settings...", true);
 		startDecryptTime = System.currentTimeMillis();
 		
 		for (EnigmaSettings candidate: candidateList) {
-			threadManager.execute(new RingDetector(statGenerator, candidate, resultsList, message, doneSignal));
+			threadManager.execute(new RingDetector(statGenerator, candidate, settings, resultsList, message, doneSignal));
 		}
 		
 		// Wait until all tasks are complete.
@@ -192,14 +157,14 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		
 		// Step 3: Determine possible plugboard settings.
 		// Initialize thread list.
-		threadManager = Executors.newFixedThreadPool(threadSize);
+		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
 		doneSignal = new CountDownLatch(candidateList.size());
 		
 		log.makeEntry("Determining plugboard settings...", true);
 		startDecryptTime = System.currentTimeMillis();
 		
 		for (EnigmaSettings candidate: candidateList) {
-			threadManager.execute(new PlugboardDetector(statGenerator, candidate, resultsList, message, doneSignal));
+			threadManager.execute(new PlugboardDetector(statGenerator, candidate, settings, resultsList, message, doneSignal));
 		}
 		
 		// Wait until all tasks are complete.
@@ -265,7 +230,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.
-	public void trimCandidateList() {
+	private void trimCandidateList() {
 		// Trim candidate list.
 		log.makeEntry("Sorting candidate list...", true);
 		long beginSortTime = System.currentTimeMillis();
@@ -273,7 +238,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		candidateList.clear();
 		candidateList.addAll(resultsList);	// Sorts on adding.
 		
-		while (candidateList.size() > candidateSize) {
+		while (candidateList.size() > settings.getCandidateSize()) {
 			candidateList.poll();
 		}
 		
@@ -283,7 +248,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Sorting completed in " + (endSortTime - beginSortTime) + " milliseconds.", true);
 	}
 	
-	public void printCandidateList() {
+	private void printCandidateList() {
 		int count = 1;
 		double bestScore = Double.NEGATIVE_INFINITY;
 		EnigmaSettings bestCandidate = candidateList.peek();

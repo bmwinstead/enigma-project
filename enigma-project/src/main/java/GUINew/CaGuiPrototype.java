@@ -29,8 +29,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
 import main.java.cryptanalysis.nlp.Corpus;
+import main.java.cryptanalysis.quadbomb.QuadBombSettings;
 import main.java.cryptanalysis.quadbomb.QuadbombManager;
-import main.java.enigma.EnigmaSettings;
 
 public class CaGuiPrototype extends JPanel {
 	private Corpus database;
@@ -118,20 +118,15 @@ public class CaGuiPrototype extends JPanel {
 		decryptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (database.getTotalQuadgramCount() > 0) {
-					//String[] ciphers = cipherTextInputTextArea.getText().split("\\s");	// Split on whitespace.
-					//String cipher = "";
-					String cipher = cipherTextInputTextArea.getText().toUpperCase().replace(" ", "");
-					// Remove whitespace.
-					//for (String word: ciphers) {
-					//	cipher += word;
-					//}
-
-					int threadLimit = (int)(threadCountSpinner.getValue());
-					int candidateSize = (int)(candidateSizeSpinner.getValue());
+					String[] words = cipherTextInputTextArea.getText().toUpperCase().split("\\s");	// Split on whitespace.
+					String cipher = "";
 					
-					// TODO: Set static statistic tests in QuadbombManager (pending testing).
-					int statTest = 3;	// Default to Sinkov's Quadgrams.
-					QuadbombManager analyzer = new QuadbombManager(database, cipher, statTest, threadLimit, candidateSize, getConstraints(), resultsPanel);
+					// Remove whitespace.
+					for (String word: words) {
+						cipher += word;
+					}
+
+					QuadbombManager analyzer = new QuadbombManager(database, cipher, getSettings(), resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {
@@ -318,96 +313,29 @@ public class CaGuiPrototype extends JPanel {
 		cribControlPanel.add(cribCheckButton);
 	}
 	
-	private EnigmaSettings getConstraints() {
+	private QuadBombSettings getSettings() {
 		int[] rotors = new int[4];
-		int reflector;
-		char[] ringSettings = new char[4];
-		char[] indicatorSettings = new char[4];
-		String plugboardMap;
+		int[] ringSettings = new int[4];
+		int[] indicatorSettings = new int[4];
 		
-		// Three-rotor test.
-		boolean isThreeRotor = fourthRotorComboBox.getSelectedIndex() == 0 || (reflectorComboBox.getSelectedIndex() == 1 && reflectorComboBox.getSelectedIndex() == 2);
+		rotors[0] = fourthRotorComboBox.getSelectedIndex();
+		rotors[1] = leftRotorComboBox.getSelectedIndex();
+		rotors[2] = middleRotorComboBox.getSelectedIndex();
+		rotors[3] = rightRotorComboBox.getSelectedIndex();
 		
-		if (isThreeRotor) {	
-			rotors[3] = -2;	// Flag to indicate not to test for fourth rotor configurations.
-			ringSettings[3] = '!';
-			indicatorSettings[3] = '!';
-		}
-		else { // Is possibly four-rotor.
-			if (fourthRotorComboBox.getSelectedIndex() == 1) {
-				rotors[3] = -1;	// Flag to test for any combination.
-			}
-			else {
-				rotors[3] = fourthRotorComboBox.getSelectedIndex() + 6;	// Index adjust.
-			}
-			
-			if (fourthRingComboBox.getSelectedIndex() == 0) {
-				ringSettings[3] = '!';	// Flag to test for any combination.
-			}
-			else {
-				ringSettings[3] = (char) (fourthRotorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-			}
-			
-			if (fourthIndicatorComboBox.getSelectedIndex() == 0) {
-				indicatorSettings[3] = '!';	// Flag to test for any combination.
-			}
-			else {
-				indicatorSettings[3] = (char) (fourthIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-			}
-		} // End four-rotor test.
+		ringSettings[0] = fourthRingComboBox.getSelectedIndex();
+		ringSettings[1] = leftRingComboBox.getSelectedIndex();
+		ringSettings[2] = middleRingComboBox.getSelectedIndex();
+		ringSettings[3] = rightRingComboBox.getSelectedIndex();
 		
-		// Get settings for other three rotors.
-		if (leftRingComboBox.getSelectedIndex() == 0) {
-			ringSettings[0] = '!';	// Flag to test for any combination.
-		}
-		else {
-			ringSettings[0] = (char) (leftRingComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-		}
+		indicatorSettings[0] = fourthIndicatorComboBox.getSelectedIndex();
+		indicatorSettings[1] = leftIndicatorComboBox.getSelectedIndex();
+		indicatorSettings[2] = middleIndicatorComboBox.getSelectedIndex();
+		indicatorSettings[3] = rightIndicatorComboBox.getSelectedIndex();
 		
-		if (middleRingComboBox.getSelectedIndex() == 0) {
-			ringSettings[1] = '!';	// Flag to test for any combination.
-		}
-		else {
-			ringSettings[1] = (char) (middleRingComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-		}
+		int threadLimit = (int)(threadCountSpinner.getValue());
+		int candidateSize = (int)(candidateSizeSpinner.getValue());
 		
-		if (rightRingComboBox.getSelectedIndex() == 0) {
-			ringSettings[2] = '!';	// Flag to test for any combination.
-		}
-		else {
-			ringSettings[2] = (char) (rightRingComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-		}
-		
-		if (leftIndicatorComboBox.getSelectedIndex() == 0) {
-			indicatorSettings[0] = '!';	// Flag to test for any combination.
-		}
-		else {
-			indicatorSettings[0] = (char) (leftIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-		}
-		
-		if (middleIndicatorComboBox.getSelectedIndex() == 0) {
-			indicatorSettings[1] = '!';	// Flag to test for any combination.
-		}
-		else {
-			indicatorSettings[1] = (char) (middleIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-		}
-		
-		if (rightIndicatorComboBox.getSelectedIndex() == 0) {
-			indicatorSettings[2] = '!';	// Flag to test for any combination.
-		}
-		else {
-			indicatorSettings[2] = (char) (rightIndicatorComboBox.getSelectedIndex() - 1 + 'A');	// Index adjust.
-		}
-		// End settings check.
-		
-		// Get other settings.
-		reflector = reflectorComboBox.getSelectedIndex() - 1;
-		
-		rotors[0] = leftRotorComboBox.getSelectedIndex() - 1;	// Index adjust.
-		rotors[1] = middleRotorComboBox.getSelectedIndex() - 1;	// Index adjust.
-		rotors[2] = rightRotorComboBox.getSelectedIndex() - 1;	// Index adjust.
-		plugboardMap = plugboardTextField.getText().toUpperCase().replace(" ", "");	// Strip whitespace.
-		
-		return new EnigmaSettings(rotors, ringSettings, indicatorSettings, reflector, plugboardMap);
+		return new QuadBombSettings(rotors, reflectorComboBox.getSelectedIndex(), ringSettings, indicatorSettings, plugboardTextField.getText(), threadLimit, candidateSize);
 	}
 }

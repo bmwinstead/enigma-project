@@ -17,14 +17,17 @@ import main.java.enigma.EnigmaSettings;
 
 public class PlugboardDetector implements Runnable {
 	private StatisticsGenerator tester;
-	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
-	private EnigmaSettings settings;
+	private EnigmaSettings configuration;
+	private QuadBombSettings settings;
 	private final String message;
+	
+	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
 	private CountDownLatch latch;
 	
-	public PlugboardDetector(StatisticsGenerator tester, EnigmaSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
+	public PlugboardDetector(StatisticsGenerator tester, EnigmaSettings configuration, QuadBombSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
 		this.tester = tester;
+		this.configuration = configuration;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
@@ -33,18 +36,22 @@ public class PlugboardDetector implements Runnable {
 	}
 	
 	public void run() {
-		String result = "";
+		String result = settings.getPlugboardSetting();
 		char[] candidates = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 		
 		char bestLeft;
 		char bestRight;
 		double controlValue;
 		
-		EnigmaSettings testSettings = settings.copy();
-		EnigmaSettings candidate = settings.copy();
+		EnigmaSettings testSettings = configuration.copy();
+		EnigmaSettings candidate = configuration.copy();
 		
-		if (settings.getFitnessScore() > -1000)
-			testSettings = settings.copy();
+		testSettings.setPlugboardMap(result);
+		
+		// Remove the constraints.
+		for(char letter : result.toCharArray()) {
+			candidates[letter - 'A'] = '!';
+		}
 		
 		do { // while there are improvements to be found.
 			bestLeft = '!';
@@ -57,8 +64,8 @@ public class PlugboardDetector implements Runnable {
 			String currentPlugboard = testSettings.getPlugboardMap();
 			
 			for (int left = 0; left < 26; left++) {
-				for (int right = 0; right < 26; right++) {
-					if (left != right && candidates[left] != '!' && candidates[right] != '!') {	// Ignore same letter combinations, and previously found steckers.
+				for (int right = left + 1; right < 26; right++) {
+					if (candidates[left] != '!' && candidates[right] != '!') {	// Ignore same letter combinations, and previously found steckers.
 						char testLeft = (char) ('A' + left);
 						char testRight = (char) ('A' + right);
 						
