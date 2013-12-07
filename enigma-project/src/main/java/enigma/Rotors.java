@@ -70,12 +70,15 @@ public class Rotors {
 	 */
 	public Rotors(int[] rotorChoices, int reflectorChoice){
 		this.reflectorChoice = reflectorChoice;
-		if(rotorChoices.length == 3 || rotorChoices[0] == -1){
+		if(rotorChoices.length == 3){
 		left = new Rotor(rotorWirings[rotorChoices[0]],rotorNotches[rotorChoices[0]]);
 		middle = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
 		right = new Rotor(rotorWirings[rotorChoices[2]],rotorNotches[rotorChoices[2]]);
 		}else{
-			fourth = new Rotor(rotorWirings[rotorChoices[0]], rotorNotches[rotorChoices[0]]);
+			if (rotorChoices[0] != -1) {
+				fourth = new Rotor(rotorWirings[rotorChoices[0]], rotorNotches[rotorChoices[0]]);
+			}
+			
 			left = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
 			middle = new Rotor(rotorWirings[rotorChoices[2]],rotorNotches[rotorChoices[2]]);
 			right = new Rotor(rotorWirings[rotorChoices[3]],rotorNotches[rotorChoices[3]]);
@@ -93,12 +96,15 @@ public class Rotors {
 	 *            or decrypt his message.
 	 */
 	public void setPositions(char[] choices) {
-		if(choices.length == 3 || choices[0] == '!'){
+		if(choices.length == 3){
 		left.setStartPosition(choices[0]);
 		middle.setStartPosition(choices[1]);
 		right.setStartPosition(choices[2]);
 		} else{
-			fourth.setStartPosition(choices[0]);
+			if (choices[0] != '!') {
+				fourth.setStartPosition(choices[0]);
+			}
+			
 			left.setStartPosition(choices[1]);
 			middle.setStartPosition(choices[2]);
 			right.setStartPosition(choices[3]);
@@ -116,12 +122,15 @@ public class Rotors {
 	 *            installed in the Enigma.
 	 */
 	public void setRingSettings(char[] choices) {
-		if(choices.length == 3 || choices[0] == '!'){
+		if(choices.length == 3){
 		left.setRingPosition(choices[0]);
 		middle.setRingPosition(choices[1]);
 		right.setRingPosition(choices[2]);
 		} else{
-			fourth.setRingPosition(choices[0]);
+			if (choices[0] != '!') {
+				fourth.setRingPosition(choices[0]);
+			}
+			
 			left.setRingPosition(choices[1]);
 			middle.setRingPosition(choices[2]);
 			right.setRingPosition(choices[3]);
