@@ -13,102 +13,167 @@ package main.java.cryptanalysis.nlp;
 
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 public class CribDetector {
 	private Corpus database;
-	private HashMap<String, IndexScorePair> probList;
+	private HashMap<String, WordCount> wordList;
 	
 	public CribDetector(Corpus corpus) {
 		database = corpus;
-		probList = new HashMap<String, IndexScorePair>();
+		wordList = new HashMap<String, WordCount>();
 	}
 	
 	public String parseMessage(String message) {
-		Deque<Integer> breaks = splitWord(message, 0).index;
-		breaks.removeLast();	// Remove the zero index break.
+		String result = message;
 		
-		String result = "";
-		int startIndex = 0;
+		PriorityQueue<String> words = database.getWordTestQueue();
+		List<String> refList = new LinkedList<String>();
 		
-		while (!breaks.isEmpty()) {
-			int endIndex = breaks.removeLast();
-			result += message.substring(startIndex, endIndex) + " ";
+		// Find all possible word matches.
+		while (!words.isEmpty()) {
+			String word = words.poll();
+			if (message.contains(word)) {
+				refList.add(word);
+			}
+		}
+		
+		WordCount results = splitWord(message, refList);
+		
+		Set<String> wordResults = new HashSet<String>();
+		wordResults.addAll(results.words);
+		
+		Deque<String> reversedWords = new LinkedList<String>();
+		reversedWords.addAll(database.getWordTestQueue());
+		
+		while (!reversedWords.isEmpty()) {
+			String word = reversedWords.removeLast();
 			
-			startIndex = endIndex;
-			
-			if (breaks.isEmpty()) {
-				result += message.substring(startIndex);
+			if (wordResults.contains(word)) {
+				result = result.replace(word, word + " ");
+				wordResults.remove(word);
 			}
 		}
 		
 		return result;
 	}
 	
-	private IndexScorePair splitWord(String message, int beginIndex) {
-		// Base case.
-		if (message.length() == 0) {
-			return new IndexScorePair(0.0);
+	private WordCount splitWord(String message, List<String> referenceList) {
+		if (wordList.containsKey(message)) {
+			return wordList.get(message);
 		}
 		
-		// If the message section has already been computed just return the probability value.
-		if (probList.containsKey(message)) {
-			return probList.get(message);
+		double bestScore = getProbability(message);
+		int bestLetterCount = message.length();
+		
+		WordCount bestWord = new WordCount(message, bestScore, bestLetterCount);
+		
+		for (String word : referenceList) {
+			if (message.contains(word)) {
+				String[] pieces = message.split(word);
+				
+				int missingLetters = 0;
+				double totalScore = 0.0;
+				
+				for (String piece : pieces) {
+					if (piece.length() > 0) {
+						WordCount testWord = splitWord(piece, referenceList);
+						
+						missingLetters += testWord.letters;
+						totalScore += testWord.score;
+					}
+				}
+				
+				double probability = getProbability(word);
+				
+				if (!wordList.containsKey(word)) {
+					WordCount foundWord = new WordCount(word, probability, 0);
+					wordList.put(word, foundWord);
+				}
+				
+				if (pieces.length > 2) {
+					probability *= (pieces.length - 1);
+				}
+				
+				totalScore += probability;
+				
+				if (totalScore > bestScore) {
+					bestScore = totalScore;
+					bestLetterCount = missingLetters;
+					bestWord = new WordCount(pieces, totalScore, missingLetters);
+					bestWord.words.add(word);
+				}
+				else if (missingLetters < bestLetterCount) {
+					bestScore = totalScore;
+					bestLetterCount = missingLetters;
+					bestWord = new WordCount(pieces, totalScore, missingLetters);
+					bestWord.words.add(word);
+				}
+			}
 		}
 		
-		IndexScorePair bestIndex = new IndexScorePair(Double.NEGATIVE_INFINITY);
-		
-		for (int index = 1; index <= message.length(); index++) {
-			String testFirstString = message.substring(0, index);
-			int count = database.getWordCount(message.substring(0, index));
-			double probability;
-			
-			probability = Math.log10((double)count / database.getTotalWordCount());
-			
-			// Recursive case.
-			String testSecondString = message.substring(index);
-			IndexScorePair testValue = splitWord(message.substring(index), beginIndex + index);
-			
-			if (probability + testValue.score > bestIndex.score) {
-				bestIndex = new IndexScorePair(testValue);
-				bestIndex.index.add(beginIndex);
-				bestIndex.score = probability + testValue.score;
-			} // End best case test.
-		} // Message traverse.
-		
-		probList.put(message, bestIndex);
-		return bestIndex;
+		wordList.put(message, bestWord);
+		return bestWord;
 	}
 	
-	private class IndexScorePair {
-		private double score;
-		private Deque<Integer> index;
+	private double getProbability(String word) {
+		int count = database.getWordCount(word);
+		int total = database.getTotalWordCount();
 		
-		private IndexScorePair(IndexScorePair pair) {
-			this(pair.score, pair.index);
+		if (count == 0) {
+			return -3.0 + Math.log10(1.0 / total);
 		}
+		else {
+			return Math.log10((double)count / total);
+		}
+	}
+	
+	private class WordCount {
+		private int letters = 0;
+		private double score = 0.0;
 		
-		private IndexScorePair(double score, Queue<Integer> index) {
-			this(score);
+		private List<String> words;
+		
+		public WordCount(String[] words, double score, int letters) {
+			this();
 			
-			this.index.addAll(index);
+			for (String word : words) {
+				if (word.length() > 0) {
+					this.words.addAll(wordList.get(word).words);
+				}
+			}
+			
+			this.score = score;
+			this.letters = letters;
 		}
 		
-		private IndexScorePair(double score) {
+		public WordCount(String word, double score, int letters) {
+			this();
+			
+			this.words.add(word);
 			this.score = score;
-			this.index = new LinkedList<Integer>();
+			this.letters = letters;
+		}
+		
+		public WordCount() {
+			words = new LinkedList<String>();
 		}
 		
 		public String toString() {
 			String result = "[";
 			
-			for (Integer value : index) {
+			for (String value : words) {
 				result += value + " ";
 			}
 			
-			result += "] - " + score;
+			result += "] - " + letters + " - " + score;
 			
 			return result;
 		}
