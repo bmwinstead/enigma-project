@@ -260,7 +260,10 @@ public class Lightboard extends JPanel {
 	
 	public void turnOnLight(String s) {
 		resetLights();
-		char switchChar = s.toUpperCase().charAt(s.length()-1);
+		char switchChar = ' ';
+		if (!s.isEmpty()){
+			switchChar = s.toUpperCase().charAt(s.length()-1);
+		}
 		switch (switchChar) {
 		case 'A':
 			layeredPane.setLayer(lightA, new Integer(3), 3);
