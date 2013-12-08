@@ -213,7 +213,9 @@ public class IOPanel extends JPanel implements Observer {
 				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
 				String encrypted = "";
 				for(String s : ls){
-					encrypted += machine.encryptString(s) + "\n"; 
+					encrypted += machine.encryptString(s);
+					encrypted = encrypted.replace("\n", "").replace("\r", "");
+					encrypted += "\n"; 
 				}
 				System.out.println("Text Error Checking and Conversion");
 				encrypted = addSpaces(encrypted);
