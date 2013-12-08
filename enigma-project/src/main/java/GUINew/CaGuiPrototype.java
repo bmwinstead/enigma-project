@@ -75,7 +75,8 @@ public class CaGuiPrototype extends JPanel {
 		JTextArea instructionTextArea = new JTextArea();
 		add(instructionTextArea);
 		instructionTextArea.setWrapStyleWord(true);
-		instructionTextArea.setText("Instructions: Click Browse or type in a file path to select a text file for parsing, and select Parse  to break the text into 1, 2, and 3 word groups (unigrams, bigrams, and trigrams). Adding subsequent files will add to the databases. Note: Text may take some time to parse.");
+		instructionTextArea.setText("Note: Text may take some time to decrypt. Decryption time can be decreased if settings are known, more threads are used, or candidate size is decreased. Decreasing candidate size may also decrease likelyhood of accurate decryption.");
+		//instructionTextArea.setText("Instructions: Click Browse or type in a file path to select a text file for parsing, and select Parse  to break the text into 1, 2, and 3 word groups (unigrams, bigrams, and trigrams). Adding subsequent files will add to the databases. Note: Text may take some time to parse.");
 		instructionTextArea.setRows(1);
 		instructionTextArea.setLineWrap(true);
 		instructionTextArea.setFont(new Font("Tahoma", Font.PLAIN, 11));
