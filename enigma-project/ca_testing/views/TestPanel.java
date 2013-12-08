@@ -146,6 +146,33 @@ public class TestPanel extends JFrame {
 				log.makeEntry("Corpus saved.", true);
 			}
 		});
+		
+		JButton parseGoogleFileButton = new JButton("Parse Google File...");
+		parseGoogleFileButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				File file = new File(fileTextField.getText());
+
+				log.makeEntry("Parsing " + file.getAbsolutePath() + "...", true);
+				
+				long startTime = System.currentTimeMillis();
+				
+				TextParser parser = new TextParser(database);
+				parser.parseFile(file);
+				
+				long endTime = System.currentTimeMillis();
+				
+				log.makeEntry("Parsing complete.", true);
+				log.makeEntry("Parsing took " + (endTime - startTime) + " milliseconds.", true);
+				log.makeEntry("Corpus now contains:", true);
+				log.makeEntry(database.getTotalUnigramCount() + " unigrams.", true);
+				log.makeEntry(database.getTotalBigramCount() + " bigrams.", true);
+				log.makeEntry(database.getTotalTrigramCount() + " trigrams.", true);
+				log.makeEntry(database.getTotalQuadgramCount() + " quadgrams.", true);
+				log.makeEntry(database.getTotalWordCount() + " words.", true);
+			}
+		});
+		
+		buttonPanel.add(parseGoogleFileButton);
 		buttonPanel.add(saveCorpusButton);
 		
 		JButton loadCorpusButton = new JButton("Load...");
