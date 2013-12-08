@@ -46,7 +46,7 @@ public class TextParser {
 					Pattern nonalphanumeric = Pattern.compile("[^\\w&&[^_]]");
 					Matcher invalidCharacterMatcher = nonalphanumeric.matcher("" + character);
 					
-					if (!invalidCharacterMatcher.find()) {	// Skip punctuation.
+					if (!invalidCharacterMatcher.find() && character != '_') {	// Skip punctuation.
 						fourthgram = thirdgram;
 						thirdgram = secondgram;
 						secondgram = firstgram;
