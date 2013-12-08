@@ -94,6 +94,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Encrypted message: " + message, true);
 		log.makeEntry("Start Fitness Score: " + statGenerator.computeFitnessScore(message), true);
 		
+		setProgress(0);
 		long startTime = System.currentTimeMillis();
 		
 		// Step 1: Determine possible rotor, reflector, and indicator orders.

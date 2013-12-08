@@ -45,6 +45,7 @@ public class RingDetector implements Runnable {
 	
 	public void run() {
 		Queue<EnigmaSettings> testList = settings.getTestingRings(configuration);
+		tester.selectFitnessTest(3);
 		
 		while(!testList.isEmpty()) {
 			EnigmaSettings candidate = testList.poll();

@@ -27,7 +27,7 @@ import main.java.enigma.EnigmaSettings;
 
 
 public class QuadBombSettings {
-	private static int NUM_ROTORS = 5;	// Used for debugging and rapid testing only.
+	private static int NUM_ROTORS = 8;	// Used for debugging and rapid testing only.
 	
 	// User-defined constraints.
 	private boolean isThreeRotor;

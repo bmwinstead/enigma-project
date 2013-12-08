@@ -36,6 +36,8 @@ public class PlugboardDetector implements Runnable {
 	}
 	
 	public void run() {
+		tester.selectFitnessTest(3);
+		
 		String result = settings.getPlugboardSetting();
 		char[] candidates = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 		

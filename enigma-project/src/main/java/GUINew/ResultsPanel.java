@@ -128,6 +128,29 @@ public class ResultsPanel extends JPanel {
 		resultsPanel.add(plugboardTextField);
 	}
 
+	// Clears the result area.
+	public void clearSolution() {
+		fourthRotorTextField.setText("");
+		leftRotorTextField.setText("");
+		middleRotorTextField.setText("");
+		rightRotorTextField.setText("");
+		
+		fourthRingTextField.setText("");
+		leftRingTextField.setText("");
+		middleRingTextField.setText("");
+		rightRingTextField.setText("");
+		
+		fourthIndicatorTextField.setText("");
+		leftIndicatorTextField.setText("");
+		middleIndicatorTextField.setText("");
+		rightIndicatorTextField.setText("");
+		
+		reflectorTextField.setText("");
+		plugboardTextField.setText("");
+		
+		outputTextArea.setText("");
+	}
+	
 	// Outputs the decrypted text and discovered settings to the panel.
 	public void printSolution(EnigmaSettings settings, String message) {
 		int[] wheel = settings.getRotors();

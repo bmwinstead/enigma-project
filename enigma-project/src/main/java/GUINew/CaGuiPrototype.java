@@ -126,6 +126,9 @@ public class CaGuiPrototype extends JPanel {
 						cipher += word;
 					}
 
+					decryptProgressBar.setValue(0);
+					resultsPanel.clearSolution();
+					
 					QuadbombManager analyzer = new QuadbombManager(database, cipher, getSettings(), resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {

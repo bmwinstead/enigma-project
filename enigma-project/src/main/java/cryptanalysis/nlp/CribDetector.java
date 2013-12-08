@@ -4,9 +4,6 @@
  * @author - Team Enigma
  * @date - Dec 1, 2013
  * 
- * TODO: Add attribution here.
- * http://stackoverflow.com/questions/4580877/text-segmentation-dictionary-based-word-splitting
- * https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxkanBkZnN0b3JlfGd4OjQ1YmFiZTNhODVjMzY2MmY
  * 
  */
 package main.java.cryptanalysis.nlp;
@@ -17,9 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Set;
-import java.util.TreeSet;
 
 
 public class CribDetector {
@@ -33,7 +28,7 @@ public class CribDetector {
 	
 	public String parseMessage(String message) {
 		String result = message;
-		
+		/*
 		PriorityQueue<String> words = database.getWordTestQueue();
 		List<String> refList = new LinkedList<String>();
 		
@@ -61,7 +56,7 @@ public class CribDetector {
 				wordResults.remove(word);
 			}
 		}
-		
+		*/
 		return result;
 	}
 	
