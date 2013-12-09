@@ -68,6 +68,10 @@ public class PlugboardDetector implements Callable<Boolean> {
 			
 			for (int left = 0; left < 26; left++) {
 				for (int right = left + 1; right < 26; right++) {
+					if (Thread.currentThread().isInterrupted()) {
+						return false;
+					}
+					
 					if (candidates[left] != '!' && candidates[right] != '!') {	// Ignore same letter combinations, and previously found steckers.
 						char testLeft = (char) ('A' + left);
 						char testRight = (char) ('A' + right);

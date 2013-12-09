@@ -43,6 +43,10 @@ public class IndicatorDetector implements Callable<Boolean> {
 		tester.selectFitnessTest(3);
 		
 		while(!testList.isEmpty()) {
+			if (Thread.currentThread().isInterrupted()) {
+				return false;
+			}
+			
 			EnigmaSettings candidate = baseCandidate.copy();
 			candidate.setIndicatorSettings(testList.poll());
 			

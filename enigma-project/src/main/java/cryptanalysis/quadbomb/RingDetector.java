@@ -43,6 +43,10 @@ public class RingDetector implements Callable<Boolean> {
 		tester.selectFitnessTest(3);
 		
 		while(!testList.isEmpty()) {
+			if (Thread.currentThread().isInterrupted()) {
+				return false;
+			}
+			
 			EnigmaSettings candidate = testList.poll();
 			
 			EnigmaMachine bomb = candidate.createEnigmaMachine();

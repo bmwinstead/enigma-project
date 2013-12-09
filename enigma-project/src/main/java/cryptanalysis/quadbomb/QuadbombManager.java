@@ -124,11 +124,15 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
 			
 			for (Future<Boolean> thread : threadList) {
-				if (thread.isDone()) {
+				if (thread.isDone() && !thread.isCancelled()) {
 					operationCount++;
 					updateProgress(operationCount);
 					publish(operationCount);
 					removeList.add(thread);
+				}
+				else if (Thread.currentThread().isInterrupted()) {
+					updateProgress(0);
+					return -1L;
 				}
 			}
 			
@@ -161,11 +165,15 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
 			
 			for (Future<Boolean> thread : threadList) {
-				if (thread.isDone()) {
+				if (thread.isDone() && !thread.isCancelled()) {
 					operationCount++;
 					updateProgress(operationCount);
 					publish(operationCount);
 					removeList.add(thread);
+				}
+				else if (Thread.currentThread().isInterrupted()) {
+					updateProgress(0);
+					return -1L;
 				}
 			}
 			
@@ -198,11 +206,15 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
 			
 			for (Future<Boolean> thread : threadList) {
-				if (thread.isDone()) {
+				if (thread.isDone() && !thread.isCancelled()) {
 					operationCount++;
 					updateProgress(operationCount);
 					publish(operationCount);
 					removeList.add(thread);
+				}
+				else if (Thread.currentThread().isInterrupted()) {
+					updateProgress(0);
+					return -1L;
 				}
 			}
 			
@@ -260,21 +272,24 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 	
 	// Updates the status label and the progressbar on the Event Dispatch Thread.
 	protected void process(List<Integer> list) {
-		for (Integer count : list) {
-			statusLabel.setText("Completed operation " + count + " of " + settings.getTotalOperationCount());
+		if (!threadManager.isTerminated()) {
+			for (Integer count : list) {
+				statusLabel.setText("Completed operation " + count + " of " + settings.getTotalOperationCount());
+			}
 		}
 	}
 	
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
-		resultsPanel.printSolution(result, decryptedMessage);
+		if (result != null && decryptedMessage != null) {
+			resultsPanel.printSolution(result, decryptedMessage);
+			statusLabel.setText("Completed");
+		}
 	}
 	
 	// Stops all work on the worker threads.
 	public void abort() {
-		if (threadManager != null) {
-			threadManager.shutdownNow();
-		}
+		threadManager.shutdownNow();
 	}
 	
 	private void updateProgress(int count) {

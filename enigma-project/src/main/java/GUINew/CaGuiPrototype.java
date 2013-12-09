@@ -14,6 +14,7 @@ import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -143,6 +144,9 @@ public class CaGuiPrototype extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if (analyzer != null) {
 					analyzer.abort();
+					analyzer.cancel(true);
+					
+					statusTextField.setText("Aborted...");
 				}
 			}
 		});
