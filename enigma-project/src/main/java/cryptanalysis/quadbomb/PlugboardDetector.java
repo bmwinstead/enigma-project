@@ -8,14 +8,14 @@
  */
 package main.java.cryptanalysis.quadbomb;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
 
 import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
-public class PlugboardDetector implements Runnable {
+public class PlugboardDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;
 	private EnigmaSettings configuration;
 	private QuadBombSettings settings;
@@ -23,19 +23,20 @@ public class PlugboardDetector implements Runnable {
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
-	private CountDownLatch latch;
-	
-	public PlugboardDetector(StatisticsGenerator tester, EnigmaSettings configuration, QuadBombSettings settings, ConcurrentLinkedQueue<EnigmaSettings> resultsList, String message, CountDownLatch latch) {
+	public PlugboardDetector(StatisticsGenerator tester, 
+			EnigmaSettings configuration, 
+			QuadBombSettings settings, 
+			ConcurrentLinkedQueue<EnigmaSettings> resultsList, 
+			String message) 
+	{
 		this.tester = tester;
 		this.configuration = configuration;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
-		
-		this.latch = latch;
 	}
 	
-	public void run() {
+	public Boolean call() {
 		tester.selectFitnessTest(3);
 		
 		String result = settings.getPlugboardSetting();
@@ -105,6 +106,6 @@ public class PlugboardDetector implements Runnable {
 		// Save best indicator result into list for further processing.
 		resultsList.add(candidate);
 		
-		latch.countDown();
+		return true;
 	} // End run()
 }

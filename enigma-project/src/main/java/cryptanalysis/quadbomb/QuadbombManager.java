@@ -30,13 +30,14 @@
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
@@ -96,7 +97,6 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 	public Long doInBackground() {
 		// Initialize thread list.
 		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
-		CountDownLatch doneSignal = new CountDownLatch(settings.getLatchCount());
 		
 		log.makeEntry("Starting QuadBomb analysis...", true);
 		log.makeEntry("Encrypted message: " + message, true);
@@ -113,23 +113,32 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 		long startDecryptTime = System.currentTimeMillis();
 		
 		Queue<EnigmaSettings> testList = settings.getRotorReflectorCandidateList();
+		LinkedList<Future<Boolean>> threadList = new LinkedList<Future<Boolean>>();
 		
 		while (!testList.isEmpty()) {
-			threadManager.execute(new IndicatorDetector(statGenerator, testList.poll(), settings, resultsList, message, doneSignal));
+			threadList.add(threadManager.submit(new IndicatorDetector(statGenerator, testList.poll(), settings, resultsList, message)));
 		}
 		
 		// Wait until all tasks are complete.
-		try {
-			doneSignal.await();
-			threadManager.shutdown();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (!threadList.isEmpty()) {
+			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
+			
+			for (Future<Boolean> thread : threadList) {
+				if (thread.isDone()) {
+					operationCount++;
+					updateProgress(operationCount);
+					publish(operationCount);
+					removeList.add(thread);
+				}
+			}
+			
+			threadList.removeAll(removeList);
 		}
 		
+		threadManager.shutdown();
+
 		long endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
-		setProgress(33);
 		
 		// Trim candidate list.
 		trimCandidateList();
@@ -139,27 +148,34 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 		// Step 2: Determine possible ring settings.
 		// Initialize thread list.
 		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
-		doneSignal = new CountDownLatch(candidateList.size());
-		
+
 		log.makeEntry("Determining ring settings...", true);
 		startDecryptTime = System.currentTimeMillis();
 		
 		for (EnigmaSettings candidate: candidateList) {
-			threadManager.execute(new RingDetector(statGenerator, candidate, settings, resultsList, message, doneSignal));
+			threadList.add(threadManager.submit(new RingDetector(statGenerator, candidate, settings, resultsList, message)));
 		}
 		
 		// Wait until all tasks are complete.
-		try {
-			doneSignal.await();
-			threadManager.shutdown();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (!threadList.isEmpty()) {
+			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
+			
+			for (Future<Boolean> thread : threadList) {
+				if (thread.isDone()) {
+					operationCount++;
+					updateProgress(operationCount);
+					publish(operationCount);
+					removeList.add(thread);
+				}
+			}
+			
+			threadList.removeAll(removeList);
 		}
+			
+		threadManager.shutdown();
 		
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
-		setProgress(67);
 		
 		// Trim candidate list.
 		trimCandidateList();
@@ -169,25 +185,32 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 		// Step 3: Determine possible plugboard settings.
 		// Initialize thread list.
 		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
-		doneSignal = new CountDownLatch(candidateList.size());
 		
 		log.makeEntry("Determining plugboard settings...", true);
 		startDecryptTime = System.currentTimeMillis();
 		
 		for (EnigmaSettings candidate: candidateList) {
-			threadManager.execute(new PlugboardDetector(statGenerator, candidate, settings, resultsList, message, doneSignal));
+			threadList.add(threadManager.submit(new PlugboardDetector(statGenerator, candidate, settings, resultsList, message)));
 		}
 		
 		// Wait until all tasks are complete.
-		try {
-			doneSignal.await();
-			threadManager.shutdown();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (!threadList.isEmpty()) {
+			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
+			
+			for (Future<Boolean> thread : threadList) {
+				if (thread.isDone()) {
+					operationCount++;
+					updateProgress(operationCount);
+					publish(operationCount);
+					removeList.add(thread);
+				}
+			}
+			
+			threadList.removeAll(removeList);
 		}
+				
+		threadManager.shutdown();
 		
-		setProgress(100);
 		endDecryptTime = System.currentTimeMillis();
 		log.makeEntry("Process completed in " + (endDecryptTime - startDecryptTime) + " milliseconds.", true);
 		
@@ -237,23 +260,9 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 	
 	// Updates the status label and the progressbar on the Event Dispatch Thread.
 	protected void process(List<Integer> list) {
-		int statusFlag = 0;
-		
-		for (Integer flag : list) {
-			operationCount++;
-			statusFlag = flag;
+		for (Integer count : list) {
+			statusLabel.setText("Completed operation " + count + " of " + settings.getTotalOperationCount());
 		}
-		
-		switch ((int)statusFlag) {
-			case 1:
-				statusLabel.setText("Testing Reflectors and Rotors...");
-			case 2:
-				statusLabel.setText("Testing Indicator and Ring settings...");
-			case 3:
-				statusLabel.setText("Testing plugboard settings...");
-		}
-		
-		setProgress(operationCount / settings.getTotalOperationCount());
 	}
 	
 	// Prints results on the Event Dispatch Thread once complete.
@@ -266,6 +275,11 @@ public class QuadbombManager extends SwingWorker<Long, Integer> {
 		if (threadManager != null) {
 			threadManager.shutdownNow();
 		}
+	}
+	
+	private void updateProgress(int count) {
+		int percent = (int)(100 * (double)count / settings.getTotalOperationCount());
+		setProgress(percent);
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.
