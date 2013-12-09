@@ -227,6 +227,7 @@ public class CaGuiPrototype extends JPanel {
 
 					decryptProgressBar.setValue(0);
 					resultsPanel.clearSolution();
+					statusTextField.setText("Starting...");
 					
 					analyzer = new QuadbombManager(database, cipher, getSettings(), statusTextField, resultsPanel);
 					
