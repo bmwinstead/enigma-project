@@ -20,6 +20,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
@@ -65,7 +66,7 @@ public class CaGuiPrototype extends JPanel {
 			database = (Corpus) objectStream.readObject();
 			objectStream.close();
 		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Corpus not found!");
 			e.printStackTrace();
 		}
 		

@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 public class CribDetector {
@@ -28,7 +29,8 @@ public class CribDetector {
 	
 	public String parseMessage(String message) {
 		String result = message;
-		/*
+		String messageMarker = message;
+		
 		PriorityQueue<String> words = database.getWordTestQueue();
 		List<String> refList = new LinkedList<String>();
 		
@@ -48,15 +50,40 @@ public class CribDetector {
 		Deque<String> reversedWords = new LinkedList<String>();
 		reversedWords.addAll(database.getWordTestQueue());
 		
+		TreeSet<Integer> wordStarts = new TreeSet<Integer>();
+		
 		while (!reversedWords.isEmpty()) {
 			String word = reversedWords.removeLast();
 			
 			if (wordResults.contains(word)) {
-				result = result.replace(word, word + " ");
+				String blackout = word;
+				blackout = blackout.replaceAll(".", "!");
+				
+				for (int start = -1; start < message.length(); start += word.length()) {
+					start = messageMarker.indexOf(word, start);
+					
+					if (start != -1) {
+						wordStarts.add(start);
+					}
+					else {
+						break;
+					}
+				}
+				
+				messageMarker = messageMarker.replaceAll(word, blackout);
+				
 				wordResults.remove(word);
 			}
 		}
-		*/
+		
+		while (!wordStarts.isEmpty()) {
+			int index = wordStarts.pollLast();
+			
+			String first = result.substring(0, index);
+			
+			result = first + " " + result.substring(index);
+		}
+		
 		return result;
 	}
 	
@@ -100,16 +127,16 @@ public class CribDetector {
 				totalScore += probability;
 				
 				if (totalScore > bestScore) {
-					bestScore = totalScore;
-					bestLetterCount = missingLetters;
 					bestWord = new WordCount(pieces, totalScore, missingLetters);
 					bestWord.words.add(word);
+					bestScore = totalScore;
+					bestLetterCount = missingLetters;
 				}
 				else if (missingLetters < bestLetterCount) {
-					bestScore = totalScore;
-					bestLetterCount = missingLetters;
 					bestWord = new WordCount(pieces, totalScore, missingLetters);
 					bestWord.words.add(word);
+					bestScore = totalScore;
+					bestLetterCount = missingLetters;
 				}
 			}
 		}
