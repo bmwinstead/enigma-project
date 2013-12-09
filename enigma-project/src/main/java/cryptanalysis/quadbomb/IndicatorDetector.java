@@ -19,7 +19,7 @@ import main.java.enigma.EnigmaSettings;
 
 public class IndicatorDetector implements Runnable {
 	private StatisticsGenerator tester;
-	private EnigmaSettings configuration;
+	private EnigmaSettings baseCandidate;
 	private QuadBombSettings settings;
 	private final String message;
 	
@@ -28,14 +28,14 @@ public class IndicatorDetector implements Runnable {
 	private CountDownLatch latch;
 	
 	public IndicatorDetector(StatisticsGenerator tester, 
-			EnigmaSettings configuration, 
+			EnigmaSettings candidate, 
 			QuadBombSettings settings, 
 			ConcurrentLinkedQueue<EnigmaSettings> resultsList, 
 			String message, 
 			CountDownLatch latch) 
 	{
 		this.tester = tester;
-		this.configuration = configuration;
+		this.baseCandidate = candidate;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
@@ -44,11 +44,11 @@ public class IndicatorDetector implements Runnable {
 	}
 	
 	public void run() {
-		Queue<char[]> testList = settings.getTestingIndicators(configuration.isThreeRotor());
+		Queue<char[]> testList = settings.getTestingIndicators(baseCandidate.isThreeRotor());
 		tester.selectFitnessTest(3);
 		
 		while(!testList.isEmpty()) {
-			EnigmaSettings candidate = configuration.copy();
+			EnigmaSettings candidate = baseCandidate.copy();
 			candidate.setIndicatorSettings(testList.poll());
 			
 			EnigmaMachine bomb = candidate.createEnigmaMachine();

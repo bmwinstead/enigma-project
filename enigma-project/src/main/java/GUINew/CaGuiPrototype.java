@@ -32,10 +32,12 @@ import javax.swing.border.TitledBorder;
 import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.quadbomb.QuadBombSettings;
 import main.java.cryptanalysis.quadbomb.QuadbombManager;
+import java.awt.GridLayout;
+import java.awt.Dimension;
 
 public class CaGuiPrototype extends JPanel {
 	private Corpus database;
-	
+	private QuadbombManager analyzer;
 	
 	private JTextField plugboardTextField;
 	private JSpinner threadCountSpinner;
@@ -56,6 +58,15 @@ public class CaGuiPrototype extends JPanel {
 	private JComboBox<String> leftIndicatorComboBox;
 	private JComboBox<String> middleIndicatorComboBox;
 	private JComboBox<String> rightIndicatorComboBox;
+	private JPanel buttonInputPanel;
+	private JButton abortButton;
+	private JPanel spinnerInputPanel;
+	private JPanel statusInputPanel;
+	private JPanel statusLabelPanel;
+	private JLabel lblNewLabel;
+	private JTextField statusTextField;
+	private JPanel progressBarPanel;
+	private JPanel inputFlowPanel;
 	
 	public CaGuiPrototype() {
 		// Load the corpus from the default project location.
@@ -108,13 +119,95 @@ public class CaGuiPrototype extends JPanel {
 		cipherTextInputTextArea.setColumns(50);
 		
 		JPanel inputControlPanel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) inputControlPanel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
 		inputLeftPanel.add(inputControlPanel);
 		inputControlPanel.setBackground(Color.black);
 		inputControlPanel.setForeground(Color.white);
+		inputControlPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		inputFlowPanel = new JPanel();
+		inputFlowPanel.setBackground(Color.BLACK);
+		inputControlPanel.add(inputFlowPanel);
+		inputFlowPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		buttonInputPanel = new JPanel();
+		inputFlowPanel.add(buttonInputPanel);
+		buttonInputPanel.setBackground(Color.BLACK);
+		buttonInputPanel.setLayout(new GridLayout(2, 1, 2, 2));
 		
 		JButton decryptButton = new JButton("Decrypt...");
+		buttonInputPanel.add(decryptButton);
+		
+		abortButton = new JButton("Abort");
+		
+		abortButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (analyzer != null) {
+					analyzer.abort();
+				}
+			}
+		});
+		
+		buttonInputPanel.add(abortButton);
+		
+		spinnerInputPanel = new JPanel();
+		inputFlowPanel.add(spinnerInputPanel);
+		spinnerInputPanel.setBackground(Color.BLACK);
+		spinnerInputPanel.setLayout(new GridLayout(0, 2, 2, 2));
+		
+		JLabel label_4 = new JLabel("Thread Limit:");
+		spinnerInputPanel.add(label_4);
+		label_4.setBackground(Color.black);
+		label_4.setForeground(Color.white);
+		
+		threadCountSpinner = new JSpinner();
+		spinnerInputPanel.add(threadCountSpinner);
+		threadCountSpinner.setModel(new SpinnerNumberModel(2, 1, 16, 1));
+		
+		JLabel label_5 = new JLabel("Candidate Size:");
+		spinnerInputPanel.add(label_5);
+		label_5.setBackground(Color.black);
+		label_5.setForeground(Color.white);
+		
+		candidateSizeSpinner = new JSpinner();
+		spinnerInputPanel.add(candidateSizeSpinner);
+		candidateSizeSpinner.setModel(new SpinnerNumberModel(100, 100, 5000, 100));
+		
+		statusInputPanel = new JPanel();
+		statusInputPanel.setBackground(Color.BLACK);
+		inputFlowPanel.add(statusInputPanel);
+		statusInputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		statusLabelPanel = new JPanel();
+		statusLabelPanel.setBackground(Color.BLACK);
+		statusInputPanel.add(statusLabelPanel);
+		statusLabelPanel.setLayout(new GridLayout(2, 1, 2, 2));
+		
+		lblNewLabel = new JLabel("Status:");
+		lblNewLabel.setForeground(Color.WHITE);
+		statusLabelPanel.add(lblNewLabel);
+		
+		JLabel label_7 = new JLabel("Progress:");
+		statusLabelPanel.add(label_7);
+		label_7.setBackground(Color.black);
+		label_7.setForeground(Color.white);
+		
+		progressBarPanel = new JPanel();
+		progressBarPanel.setBackground(Color.BLACK);
+		statusInputPanel.add(progressBarPanel);
+		progressBarPanel.setLayout(new GridLayout(2, 1, 2, 2));
+		
+		statusTextField = new JTextField();
+		progressBarPanel.add(statusTextField);
+		statusTextField.setBorder(null);
+		statusTextField.setEditable(false);
+		statusTextField.setText("Ready...");
+		statusTextField.setForeground(Color.WHITE);
+		statusTextField.setBackground(Color.BLACK);
+		statusTextField.setColumns(10);
+		
+		decryptProgressBar = new JProgressBar();
+		decryptProgressBar.setPreferredSize(new Dimension(260, 15));
+		progressBarPanel.add(decryptProgressBar);
 		
 		// Decrypts an encrypted messaging using QuadBomb.
 		decryptButton.addActionListener(new ActionListener() {
@@ -131,7 +224,7 @@ public class CaGuiPrototype extends JPanel {
 					decryptProgressBar.setValue(0);
 					resultsPanel.clearSolution();
 					
-					QuadbombManager analyzer = new QuadbombManager(database, cipher, getSettings(), resultsPanel);
+					analyzer = new QuadbombManager(database, cipher, getSettings(), statusTextField, resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {
@@ -145,34 +238,6 @@ public class CaGuiPrototype extends JPanel {
 				}
 			}
 		});
-		
-		inputControlPanel.add(decryptButton);
-		
-		JLabel label_4 = new JLabel("Thread Limit:");
-		inputControlPanel.add(label_4);
-		label_4.setBackground(Color.black);
-		label_4.setForeground(Color.white);
-		
-		threadCountSpinner = new JSpinner();
-		threadCountSpinner.setModel(new SpinnerNumberModel(2, 1, 16, 1));
-		inputControlPanel.add(threadCountSpinner);
-		
-		JLabel label_5 = new JLabel("Candidate Size:");
-		inputControlPanel.add(label_5);
-		label_5.setBackground(Color.black);
-		label_5.setForeground(Color.white);
-		
-		candidateSizeSpinner = new JSpinner();
-		candidateSizeSpinner.setModel(new SpinnerNumberModel(100, 100, 5000, 100));
-		inputControlPanel.add(candidateSizeSpinner);
-		
-		JLabel label_7 = new JLabel("Progress:");
-		inputControlPanel.add(label_7);
-		label_7.setBackground(Color.black);
-		label_7.setForeground(Color.white);
-		
-		decryptProgressBar = new JProgressBar();
-		inputControlPanel.add(decryptProgressBar);
 		
 		JPanel inputSettingsPanel = new JPanel();
 		inputPanel.add(inputSettingsPanel);
@@ -299,18 +364,18 @@ public class CaGuiPrototype extends JPanel {
 		resultsPanel = new ResultsPanel();
 		add(resultsPanel);
 		
-		JPanel cribTestPanel = new JPanel();
-		add(cribTestPanel);
-		cribTestPanel.setBackground(Color.black);
-		cribTestPanel.setForeground(Color.white);
+		//JPanel cribTestPanel = new JPanel();
+		//add(cribTestPanel);
+		//cribTestPanel.setBackground(Color.black);
+		//cribTestPanel.setForeground(Color.white);
 		
 		JTextArea cribTestTextArea = new JTextArea();
 		cribTestTextArea.setColumns(50);
 		cribTestTextArea.setRows(10);
-		cribTestPanel.add(cribTestTextArea);
+		//cribTestPanel.add(cribTestTextArea);
 		
 		JPanel cribControlPanel = new JPanel();
-		cribTestPanel.add(cribControlPanel);
+		//cribTestPanel.add(cribControlPanel);
 		cribControlPanel.setBackground(Color.black);
 		cribControlPanel.setForeground(Color.white);
 		

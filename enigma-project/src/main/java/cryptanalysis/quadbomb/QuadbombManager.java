@@ -30,6 +30,7 @@
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -37,6 +38,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import main.java.GUINew.ResultsPanel;
@@ -47,7 +49,7 @@ import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 import misc.Logger;
 
-public class QuadbombManager extends SwingWorker<Long, Void> {
+public class QuadbombManager extends SwingWorker<Long, Integer> {
 	private final StatisticsGenerator statGenerator;
 	private final CribDetector tester;
 	private final String message;
@@ -57,18 +59,24 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	private EnigmaSettings result;
 	
 	private ResultsPanel resultsPanel;
+	private JTextField statusLabel;
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private PriorityQueue<EnigmaSettings> candidateList;
 	
+	private ExecutorService threadManager;
+	
 	private Logger log;
 	
+	private int operationCount;
+
 	// Constructor.
-	public QuadbombManager(Corpus database, String message, QuadBombSettings settings, ResultsPanel panel) {
+	public QuadbombManager(Corpus database, String message, QuadBombSettings settings, JTextField label, ResultsPanel panel) {
 		this.message = message;
 		
 		this.settings = settings;
 		resultsPanel = panel;
+		this.statusLabel = label;
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
 		candidateList = new PriorityQueue<EnigmaSettings>();
@@ -87,7 +95,7 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 	
 	public Long doInBackground() {
 		// Initialize thread list.
-		ExecutorService threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
+		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
 		CountDownLatch doneSignal = new CountDownLatch(settings.getLatchCount());
 		
 		log.makeEntry("Starting QuadBomb analysis...", true);
@@ -95,6 +103,8 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		log.makeEntry("Start Fitness Score: " + statGenerator.computeFitnessScore(message), true);
 		
 		setProgress(0);
+		operationCount = 0;
+		
 		long startTime = System.currentTimeMillis();
 		
 		// Step 1: Determine possible rotor, reflector, and indicator orders.
@@ -225,9 +235,37 @@ public class QuadbombManager extends SwingWorker<Long, Void> {
 		return (endTime - startTime);	// return elapsed time as a default.
 	}
 	
+	// Updates the status label and the progressbar on the Event Dispatch Thread.
+	protected void process(List<Integer> list) {
+		int statusFlag = 0;
+		
+		for (Integer flag : list) {
+			operationCount++;
+			statusFlag = flag;
+		}
+		
+		switch ((int)statusFlag) {
+			case 1:
+				statusLabel.setText("Testing Reflectors and Rotors...");
+			case 2:
+				statusLabel.setText("Testing Indicator and Ring settings...");
+			case 3:
+				statusLabel.setText("Testing plugboard settings...");
+		}
+		
+		setProgress(operationCount / settings.getTotalOperationCount());
+	}
+	
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
 		resultsPanel.printSolution(result, decryptedMessage);
+	}
+	
+	// Stops all work on the worker threads.
+	public void abort() {
+		if (threadManager != null) {
+			threadManager.shutdownNow();
+		}
 	}
 	
 	// Loads candidateList with the top candidates, with the list size selected by the user.

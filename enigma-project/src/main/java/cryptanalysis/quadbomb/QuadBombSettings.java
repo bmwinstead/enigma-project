@@ -65,6 +65,10 @@ public class QuadBombSettings {
 		candidateSize = candidates;
 	}
 	
+	public int getTotalOperationCount() {
+		return getLatchCount() + candidateSize * 2;
+	}
+	
 	// Gets a Queue of candidates for rotor, reflector, and indicator testing.
 	public Queue<EnigmaSettings> getRotorReflectorCandidateList() {
 		Queue<EnigmaSettings> result = new LinkedList<EnigmaSettings>();
