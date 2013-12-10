@@ -23,15 +23,15 @@ import javax.swing.event.ChangeListener;
 import main.java.enigma.EnigmaSettings;
 
 /**
- * 
+ * Top panel of the modular GUI for the Enigma Machine. Allows setting 
+ * of all Enigma settings, and helps propagate those settings
+ * to other classes that need them through the use of the Enigma
+ * Singleton.
  * @author Team Enigma
  * @version 0.9
- * @date Nov 30, 2013
- * 
- * Panel for rotor/reflector settings
+ * @date Dec 9, 2013
  * 
  */
-
 @SuppressWarnings("serial")
 public class RotorPanel extends JPanel implements Observer {
 	// Constants
@@ -82,7 +82,10 @@ public class RotorPanel extends JPanel implements Observer {
 	private boolean rotorCheck = true;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 
-	// Constructor... puts the thing together.
+	/**
+	 * Constructor, initializes all relevant parts.
+	 * Calls private build methods and glues them together.
+	 */
 	public RotorPanel() {
 		machine.setState(rotors, reflector, ringSettings, rotorPositions,
 				pbString);
@@ -101,6 +104,12 @@ public class RotorPanel extends JPanel implements Observer {
 				.addComponent(plugboardPanel));
 	}
 
+	/**
+	 * Builds top half of the RotorPanel.
+	 * This half contains all the components to allow
+	 * setting the EnigmaMachine settings.
+	 * @return the top panel.
+	 */
 	private JPanel buildTopPanel() {
 		JPanel topPanel = new JPanel();
 		GroupLayout topLayout = new GroupLayout(topPanel);
@@ -216,7 +225,7 @@ public class RotorPanel extends JPanel implements Observer {
 		int medMin = 75;
 		int medPref = 100;
 		int medMax = 120;
-		// LAYOUT CODE AWWW YEAH
+		
 		topLayout
 				.setHorizontalGroup(topLayout
 						.createSequentialGroup()
@@ -312,6 +321,13 @@ public class RotorPanel extends JPanel implements Observer {
 		return topPanel;
 	}
 
+	/**
+	 * Builds the plugboard panel, responsible for 
+	 * displaying the current plugboard state,
+	 * and initializing the pop-up window that will
+	 * allow users to set the plugboard.
+	 * @return the plugboard panel.
+	 */
 	private JPanel buildPlugboardPanel() {
 		JPanel plugboardPanel = new JPanel();
 		plugboardPanel.setBackground(Color.black);
@@ -336,6 +352,7 @@ public class RotorPanel extends JPanel implements Observer {
 		return plugboardPanel;
 	}
 
+	//to delete
 	private void printState() {
 		System.out.println("**** Printing State of RotorPanel ****");
 		System.out.println("Rotors: " + Arrays.toString(rotors));
@@ -346,6 +363,12 @@ public class RotorPanel extends JPanel implements Observer {
 		System.out.println("Plugboard: " + pbString + "\n");
 	}
 
+	/**
+	 * Helper method that sets the rotor positions of the GUI
+	 * components. The GUI components' ActionListeners then propagate
+	 * those changes to the singleton instance of the EnigmaMachine.
+	 * @param positions the new positions of the rotors.
+	 */
 	private void setRotorPositions(char[] positions) {
 		System.out.println("(RotorPanel)(setRotorPositions()) " + Arrays.toString(positions) + "\n");
 		if (positions.length == 4 && positions[0] != '!') {
@@ -361,12 +384,25 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 	
+	/**
+	 * Helper method that sets the string that is representative
+	 * of the plugboard settings. Updates the text field and sets
+	 * the plugboard settings in the EnigmaSingleton.
+	 * @param pbmap the new plugboard string
+	 */
 	private void setPlugboard(String pbmap) {
 		pbField.setText(pbmap);
 		machine.setPlugboard(pbmap);
 		System.out.println("(RotorPanel)Changing plugboard to: " + pbmap + "\n");
 	}
 	
+	/**
+	 * Helper method that sets the state of the GUI components
+	 * that represent the rotor choices. These changes then
+	 * propagate down to the EnigmaSingleton through the
+	 * ActionListeners of the components.
+	 * @param rotors the new rotor selection.
+	 */
 	private void setRotorChoices(int[] rotors) {
 		if (rotors.length == 4) {
 			if (rotors[0] == -1) {
@@ -387,6 +423,13 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 	
+	/**
+	 * Helper method that sets the state of all the GUI
+	 * components that represent the ring settings of the
+	 * rotors. These changes then propagate down to the 
+	 * EnigmaSingleton through the components' ActionListeners.
+	 * @param ringSettings
+	 */
 	private void setRingSettings(char[] ringSettings) {
 		if (ringSettings.length == 4 && ringSettings[0] != '!') {
 			fourthRotorRingSetting.setSelectedIndex('A' - ringSettings[0]);
@@ -401,6 +444,13 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 	
+	/**
+	 * Helper method that sets the state of the GUI 
+	 * component that represents the reflector choice.
+	 * These changes then propagate down to the EnigmaSingleton
+	 * through the components' ActionListeners.
+	 * @param reflectorNum
+	 */
 	private void setReflector(int reflectorNum) {
 		reflectorChoice.setSelectedIndex(reflectorNum);
 	}
@@ -413,6 +463,13 @@ public class RotorPanel extends JPanel implements Observer {
 		rotorCheck = false;
 	}
 	
+	/**
+	 * Implements the Observer functionality.
+	 * When the method is called by the Observable
+	 * (EnigmaSingleton), it triggers the panel to update
+	 * its local machine state and all relevant GUI
+	 * components.
+	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
 //		String s = (String) arg1;
@@ -435,6 +492,14 @@ public class RotorPanel extends JPanel implements Observer {
 		setRotorPositions(settings.getIndicatorSettings());
 	}
 	
+	/**
+	 * Private ActionListener class that handles
+	 * the events for the GUI components that represent
+	 * the ring settings of the rotors.
+	 * @author Bryan Winstead
+	 * @author Team Enigma
+	 *
+	 */
 	private class RingSettingsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("**** Ring Settings Listener Triggered ****");
@@ -474,6 +539,13 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 
+	/**
+	 * Private ActionListener class that handles the 
+	 * events for the GUI components that represent
+	 * the rotor choices of the machine.
+	 * @author Bryan Winstead
+	 * @author Team Enigma
+	 */
 	private class RotorListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -560,6 +632,14 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 
+	/**
+	 * Private ActionListener class that handles
+	 * the events for the GUI components that represent
+	 * the rotor positions of the Enigma machine.
+	 * @author Bryan Winstead
+	 * @author Team Enigma
+	 *
+	 */
 	private class PositionsListener implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent arg0) {
@@ -592,10 +672,25 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 
+	/**
+	 * Probably unnecessary inner class that
+	 * gives us an easy way to identify different 
+	 * JSpinner objects.
+	 * @author Bryan Winstead
+	 * @author Team Enigma
+	 *
+	 */
 	private class EnigmaSpinner extends JSpinner {
 		public String identifier;
 	}
 
+	/**
+	 * Private ActionListener that handles the events
+	 * for the GUI components that handle the plugboard
+	 * settings.
+	 * @author Bryan Winstead
+	 * @author Team Enigma
+	 */
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
