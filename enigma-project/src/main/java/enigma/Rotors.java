@@ -70,7 +70,7 @@ public class Rotors {
 	 */
 	public Rotors(int[] rotorChoices, int reflectorChoice){
 		this.reflectorChoice = reflectorChoice;
-		if(rotorChoices.length == 3){
+		if(rotorChoices.length == 3 || rotorChoices[0] == -1){
 		left = new Rotor(rotorWirings[rotorChoices[0]],rotorNotches[rotorChoices[0]]);
 		middle = new Rotor(rotorWirings[rotorChoices[1]],rotorNotches[rotorChoices[1]]);
 		right = new Rotor(rotorWirings[rotorChoices[2]],rotorNotches[rotorChoices[2]]);
@@ -96,7 +96,7 @@ public class Rotors {
 	 *            or decrypt his message.
 	 */
 	public void setPositions(char[] choices) {
-		if(choices.length == 3){
+		if(choices.length == 3 || choices[0] == '!'){
 		left.setStartPosition(choices[0]);
 		middle.setStartPosition(choices[1]);
 		right.setStartPosition(choices[2]);
@@ -122,7 +122,7 @@ public class Rotors {
 	 *            installed in the Enigma.
 	 */
 	public void setRingSettings(char[] choices) {
-		if(choices.length == 3){
+		if(choices.length == 3 || choices[0] == '!'){
 		left.setRingPosition(choices[0]);
 		middle.setRingPosition(choices[1]);
 		right.setRingPosition(choices[2]);
