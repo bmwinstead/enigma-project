@@ -4,8 +4,10 @@
 package main.java.GUINew;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +16,6 @@ import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -33,8 +34,6 @@ import javax.swing.border.TitledBorder;
 import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.quadbomb.QuadBombSettings;
 import main.java.cryptanalysis.quadbomb.QuadbombManager;
-import java.awt.GridLayout;
-import java.awt.Dimension;
 
 public class CaGuiPrototype extends JPanel {
 	private Corpus database;
