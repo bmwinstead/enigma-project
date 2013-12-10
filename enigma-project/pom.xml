@@ -12,9 +12,6 @@
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
-          <excludes>
-          	<exclude>**/ca_testing/* </exclude>
-          </excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -24,7 +21,7 @@
       	<configuration>
           <archive>
             <manifest>
-              <mainClass>main.java.gui.Enigma</mainClass>
+              <mainClass>main.java.guiNEW.Enigma</mainClass>
             </manifest>
           </archive>
         </configuration>
