@@ -9,11 +9,14 @@ import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
 /**
- * Used to share the EnigmaMachine across various components of the GUI.
- * Basically just wraps around the EnigmaMachine class and allows settings to be
- * changed and stuff.
+ * Uses the Singleton and Observer design patterns to enable 
+ * data sharing across the various modular GUI pieces. Maintains
+ * state consistency for _the_ instance of EnigmaMachine and
+ * provides conveniency methods for manipulating it and performing
+ * encryption.
  * 
- * @author bwinstead
+ * Is thread safe.
+ * @author Bryan Winstead
  * @author Team Enigma
  * @version 0.9
  * @date 30 Nov 2013
@@ -38,7 +41,9 @@ public class EnigmaSingleton extends Observable {
 	}
 
 	/**
-	 * Sets the full state, including plugboardMap and initialPositions.
+	 * Sets the full state, including plugboardMap and initialPositions. Mostly
+	 * used as an initial constructor for the EnigmaMachine. Also used for reset
+	 * functionality.
 	 * 
 	 * @param rotorChoices
 	 * @param reflectorChoice
@@ -93,7 +98,7 @@ public class EnigmaSingleton extends Observable {
 	}
 
 	/**
-	 * 
+	 * Sets rotor positions.
 	 * @param rotorPositions
 	 */
 	public void setPositions(char[] rotorPositions) {
@@ -105,7 +110,7 @@ public class EnigmaSingleton extends Observable {
 	
 	/**
 	 * Sets the machine's current rotor positions to its "initial" positions
-	 * Useful for the Indicator Reset when encrypting multiple messages of the
+	 * Useful for the Indicator Reset when encrypting/decrypting multiple messages of the
 	 * same key and starting indicators. 
 	 */
 	public void setInitPositions() {
@@ -113,7 +118,7 @@ public class EnigmaSingleton extends Observable {
 	}
 
 	/**
-	 * 
+	 * Sets the machines plugboard.
 	 * @param pbMap
 	 */
 	public void setPlugboard(String pbMap) {
@@ -122,7 +127,7 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	/**
-	 * 
+	 * Sets the update type.
 	 * @param newUpdateType
 	 */
 	public void setUpdateType(int newUpdateType) {
@@ -130,7 +135,7 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	/**
-	 * 
+	 * Sets the spaces option
 	 * @param option
 	 */
 	public void setSpacesOption(int option) {
@@ -138,7 +143,7 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	/**
-	 * 
+	 * Gets the current spaces option.
 	 * @return
 	 */
 	public int getSpacesOption() {
@@ -154,9 +159,11 @@ public class EnigmaSingleton extends Observable {
 	}
 
 	/**
-	 * 
-	 * @param c
-	 * @return encryptedChar
+	 * Performs encryption on a character at a time using the current 
+	 * machine state. Then calls notifyObservers() to pass the new machine
+	 * state back to the GUI components, which then update.
+	 * @param c the char to encrypt
+	 * @return encryptedChar the encrypted char
 	 */
 	public char encryptChar(char c) {
 		System.out.println("(Singleton)Encrypting char \"" + c + "\"\n");
@@ -169,7 +176,9 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	/**
-	 * 
+	 * Performs encryption on an entire string using the current machine 
+	 * state. Then calls notifyObserevrs() to pass the new machine state
+	 * back to the GUI components, which then update.
 	 * @param s
 	 * @return
 	 */
@@ -182,10 +191,18 @@ public class EnigmaSingleton extends Observable {
 		return result;
 	}
 	
+	/**
+	 * Adds an observer to be notified on updates.
+	 */
 	@Override
 	public void addObserver(Observer obs){
 		observers.add(obs);
 	}
+	/**
+	 * Implements the message passing interface between various modular
+	 * GUI components by passing the entire machine state after performing
+	 * an action (encryption, changing settings, reset, etc).
+	 */
 	@Override
 	public void notifyObservers() {
 		EnigmaSettings settings = new EnigmaSettings(machine.getRotors(),

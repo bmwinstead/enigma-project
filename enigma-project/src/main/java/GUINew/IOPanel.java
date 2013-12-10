@@ -39,6 +39,16 @@ import javax.swing.text.Document;
 
 import main.java.enigma.EnigmaSettings;
 
+/**
+ * Combines all the IO functionality of the Enigma, providing
+ * ways to encrypt characters, long strings, and entire files.
+ * When encrypting characters it provides a graphical representation
+ * of the "lightboard", lighting up the encrypted character, reminiscient
+ * of how the original machines operated.
+ * @author Bryan Winstead
+ *
+ */
+@SuppressWarnings("serial")
 public class IOPanel extends JPanel implements Observer {
 	private final int tapeLength = 50;
 	private JTextField outputTape;
@@ -52,6 +62,10 @@ public class IOPanel extends JPanel implements Observer {
 	private JLabel manualInputLabel;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 	private Lightboard lightboard;
+	
+	/**
+	 * 
+	 */
 	public IOPanel()  {
 		machine.addObserver(this);
 		GroupLayout mainLayout = new GroupLayout(this);
