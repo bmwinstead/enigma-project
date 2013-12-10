@@ -19,27 +19,27 @@ import main.java.enigma.EnigmaSettings;
 
 public class RingDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;
-	private EnigmaSettings configuration;
+	private EnigmaSettings baseCandidate;
 	private QuadBombSettings settings;
 	private final String message;
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
 	public RingDetector(StatisticsGenerator tester, 
-			EnigmaSettings configuration, 
+			EnigmaSettings baseCandidate, 
 			QuadBombSettings settings, 
 			ConcurrentLinkedQueue<EnigmaSettings> resultsList, 
 			String message) 
 	{
 		this.tester = tester;
-		this.configuration = configuration;
+		this.baseCandidate = baseCandidate;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
 	}
 	
 	public Boolean call() {
-		Queue<EnigmaSettings> testList = settings.getTestingRings(configuration);
+		Queue<EnigmaSettings> testList = settings.getTestingRings(baseCandidate);
 		tester.selectFitnessTest(3);
 		
 		while(!testList.isEmpty()) {
