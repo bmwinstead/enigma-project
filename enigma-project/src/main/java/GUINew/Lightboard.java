@@ -9,12 +9,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 /**
- * 
+ * Lightboard... provides a visual display of the output
+ * character from a character-by-character decryption.
  * @author Team Enigma
  * @version 0.9
  * @date Nov 30, 2013
- * 
- * Light board
  * 
  */
 
@@ -28,13 +27,13 @@ public class Lightboard extends JPanel {
 			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
 			"W", "X", "Y", "Z" };
 	private JLayeredPane layeredPane;
-
+	private final String filePrefix = "";
 	public Lightboard() {
 		layeredPane = new JLayeredPane();
 
 		// Light board Icons for background
 		ImageIcon background = (new javax.swing.ImageIcon // Background Image
-		(getClass().getResource("/main/resources/images/lightboardImage.jpg")));
+		(getClass().getResource(filePrefix + "/images/lightboardImage.jpg")));
 		JLabel backgroundImage = new JLabel(background);
 		backgroundImage.setBackground(Color.black);
 		backgroundImage.setBorder(null);
@@ -46,7 +45,7 @@ public class Lightboard extends JPanel {
 
 		// Light board Icons for "lit up" design
 		ImageIcon plugLightA = (new javax.swing.ImageIcon // Light A
-		(getClass().getResource("/main/resources/images/a.jpg")));
+		(getClass().getResource(filePrefix + "/images/a.jpg")));
 		lightA = new JLabel(plugLightA);
 		//lightA.setBounds(140, 305, 160, 316);
 		lightA.setBounds(15, 37, 45, 77);
@@ -54,175 +53,175 @@ public class Lightboard extends JPanel {
 		layeredPane.add(lightA, new Integer(0), 0);
 
 		ImageIcon plugLightB = (new javax.swing.ImageIcon // Light B
-		(getClass().getResource("/main/resources/images/b.jpg")));
+		(getClass().getResource(filePrefix + "/images/b.jpg")));
 		lightB = new JLabel(plugLightB);
 		lightB.setBounds(245-125, 330-268, 265-115, 340-239);
 		lightB.setBorder(null);
 		layeredPane.add(lightB, new Integer(0), 0);
 
 		ImageIcon plugLightC = (new javax.swing.ImageIcon // Light C
-		(getClass().getResource("/main/resources/images/c.jpg")));
+		(getClass().getResource(filePrefix + "/images/c.jpg")));
 		lightC = new JLabel(plugLightC);
 		lightC.setBounds(201-125, 330-268, 211-115, 340-239);
 		lightC.setBorder(null);
 		layeredPane.add(lightC, new Integer(0), 0);
 
 		ImageIcon plugLightD = (new javax.swing.ImageIcon // Light D
-		(getClass().getResource("/main/resources/images/d.jpg")));
+		(getClass().getResource(filePrefix + "/images/d.jpg")));
 		lightD = new JLabel(plugLightD);
 		lightD.setBounds(185-125, 305-268, 205-115, 316-239);
 		lightD.setBorder(null);
 		layeredPane.add(lightD, new Integer(0), 0);
 
 		ImageIcon plugLightE = (new javax.swing.ImageIcon // Light E
-		(getClass().getResource("/main/resources/images/e.jpg")));
+		(getClass().getResource(filePrefix + "/images/e.jpg")));
 		lightE = new JLabel(plugLightE);
 		lightE.setBounds(175-125, 281-268, 195-115, 291-239);
 		lightE.setBorder(null);
 		layeredPane.add(lightE, new Integer(0), 0);
 
 		ImageIcon plugLightF = (new javax.swing.ImageIcon // Light F
-		(getClass().getResource("/main/resources/images/f.jpg")));
+		(getClass().getResource(filePrefix + "/images/f.jpg")));
 		lightF = new JLabel(plugLightF);
 		lightF.setBounds(210-125, 305-268, 230-115, 316-239);
 		lightF.setBorder(null);
 		layeredPane.add(lightF, new Integer(0), 0);
 
 		ImageIcon plugLightG = (new javax.swing.ImageIcon // Light G
-		(getClass().getResource("/main/resources/images/g.jpg")));
+		(getClass().getResource(filePrefix + "/images/g.jpg")));
 		lightG = new JLabel(plugLightG);
 		lightG.setBounds(230-125, 305-268, 260-115, 316-239);
 		lightG.setBorder(null);
 		layeredPane.add(lightG, new Integer(0), 0);
 
 		ImageIcon plugLightH = (new javax.swing.ImageIcon // Light H
-		(getClass().getResource("/main/resources/images/h.jpg")));
+		(getClass().getResource(filePrefix + "/images/h.jpg")));
 		lightH = new JLabel(plugLightH);
 		lightH.setBounds(252-125, 304-268, 282-115, 315-239);
 		lightH.setBorder(null);
 		layeredPane.add(lightH, new Integer(0), 0);
 
 		ImageIcon plugLightI = (new javax.swing.ImageIcon // Light I
-		(getClass().getResource("/main/resources/images/i.jpg")));
+		(getClass().getResource(filePrefix + "/images/i.jpg")));
 		lightI = new JLabel(plugLightI);
 		lightI.setBounds(292-125, 281-268, 312-115, 291-239);
 		lightI.setBorder(null);
 		layeredPane.add(lightI, new Integer(0), 0);
 
 		ImageIcon plugLightJ = (new javax.swing.ImageIcon // Light J
-		(getClass().getResource("/main/resources/images/j.jpg")));
+		(getClass().getResource(filePrefix + "/images/j.jpg")));
 		lightJ = new JLabel(plugLightJ);
 		lightJ.setBounds(278-125, 304-268, 308-115, 315-239);
 		lightJ.setBorder(null);
 		layeredPane.add(lightJ, new Integer(0), 0);
 
 		ImageIcon plugLightK = (new javax.swing.ImageIcon // Light K
-		(getClass().getResource("/main/resources/images/k.jpg")));
+		(getClass().getResource(filePrefix + "/images/k.jpg")));
 		lightK = new JLabel(plugLightK);
 		lightK.setBounds(298-125, 304-268, 328-112, 315-239);
 		lightK.setBorder(null);
 		layeredPane.add(lightK, new Integer(0), 0);
 
 		ImageIcon plugLightL = (new javax.swing.ImageIcon // Light L
-		(getClass().getResource("/main/resources/images/l.jpg")));
+		(getClass().getResource(filePrefix + "/images/l.jpg")));
 		lightL = new JLabel(plugLightL);
 		lightL.setBounds(312-125, 329-268, 342-115, 339-239);
 		lightL.setBorder(null);
 		layeredPane.add(lightL, new Integer(0), 0);
 
 		ImageIcon plugLightM = (new javax.swing.ImageIcon // Light M
-		(getClass().getResource("/main/resources/images/m.jpg")));
+		(getClass().getResource(filePrefix + "/images/m.jpg")));
 		lightM = new JLabel(plugLightM);
 		lightM.setBounds(289-125, 330-268, 319-115, 340-239);
 		lightM.setBorder(null);
 		layeredPane.add(lightM, new Integer(0), 0);
 
 		ImageIcon plugLightN = (new javax.swing.ImageIcon // Light N
-		(getClass().getResource("/main/resources/images/n.jpg")));
+		(getClass().getResource(filePrefix + "/images/n.jpg")));
 		lightN = new JLabel(plugLightN);
 		lightN.setBounds(265-125, 330-268, 295-115, 340-239);
 		lightN.setBorder(null);
 		layeredPane.add(lightN, new Integer(0), 0);
 
 		ImageIcon plugLightO = (new javax.swing.ImageIcon // Light O
-		(getClass().getResource("/main/resources/images/o.jpg")));
+		(getClass().getResource(filePrefix + "/images/o.jpg")));
 		lightO = new JLabel(plugLightO);
 		lightO.setBounds(316-125, 281-268, 336-115, 291-239);
 		lightO.setBorder(null);
 		layeredPane.add(lightO, new Integer(0), 0);
 
 		ImageIcon plugLightP = (new javax.swing.ImageIcon // Light P
-		(getClass().getResource("/main/resources/images/p.jpg")));
+		(getClass().getResource(filePrefix + "/images/p.jpg")));
 		lightP = new JLabel(plugLightP);
 		lightP.setBounds(127-125, 330-268, 147-115, 340-239);
 		lightP.setBorder(null);
 		layeredPane.add(lightP, new Integer(0), 0);
 
 		ImageIcon plugLightQ = (new javax.swing.ImageIcon // Light Q
-		(getClass().getResource("/main/resources/images/q.jpg")));
+		(getClass().getResource(filePrefix + "/images/q.jpg")));
 		lightQ = new JLabel(plugLightQ);
 		lightQ.setBounds(127-125, 281-268, 147-115, 291-239);
 		lightQ.setBorder(null);
 		layeredPane.add(lightQ, new Integer(0), 0);
 
 		ImageIcon plugLightR = (new javax.swing.ImageIcon // Light R
-		(getClass().getResource("/main/resources/images/r.jpg")));
+		(getClass().getResource(filePrefix + "/images/r.jpg")));
 		lightR = new JLabel(plugLightR);
 		lightR.setBounds(197-125, 281-268, 217-115, 291-239);
 		lightR.setBorder(null);
 		layeredPane.add(lightR, new Integer(0), 0);
 
 		ImageIcon plugLightS = (new javax.swing.ImageIcon // Light S
-		(getClass().getResource("/main/resources/images/s.jpg")));
+		(getClass().getResource(filePrefix + "/images/s.jpg")));
 		lightS = new JLabel(plugLightS);
 		lightS.setBounds(162-125, 304-268, 182-115, 315-239);
 		lightS.setBorder(null);
 		layeredPane.add(lightS, new Integer(0), 0);
 
 		ImageIcon plugLightT = (new javax.swing.ImageIcon // Light T
-		(getClass().getResource("/main/resources/images/t.jpg")));
+		(getClass().getResource(filePrefix + "/images/t.jpg")));
 		lightT = new JLabel(plugLightT);
 		lightT.setBounds(220-125, 281-268, 240-115, 291-239);
 		lightT.setBorder(null);
 		layeredPane.add(lightT, new Integer(0), 0);
 
 		ImageIcon plugLightU = (new javax.swing.ImageIcon // Light U
-		(getClass().getResource("/main/resources/images/u.jpg")));
+		(getClass().getResource(filePrefix + "/images/u.jpg")));
 		lightU = new JLabel(plugLightU);
 		lightU.setBounds(270-125, 281-268, 290-115, 291-239);
 		lightU.setBorder(null);
 		layeredPane.add(lightU, new Integer(0), 0);
 
 		ImageIcon plugLightV = (new javax.swing.ImageIcon // Light V
-		(getClass().getResource("/main/resources/images/v.jpg")));
+		(getClass().getResource(filePrefix + "/images/v.jpg")));
 		lightV = new JLabel(plugLightV);
 		lightV.setBounds(225-125, 330-268, 235-115, 340-239);
 		lightV.setBorder(null);
 		layeredPane.add(lightV, new Integer(0), 0);
 
 		ImageIcon plugLightW = (new javax.swing.ImageIcon // Light W
-		(getClass().getResource("/main/resources/images/w.jpg")));
+		(getClass().getResource(filePrefix + "/images/w.jpg")));
 		lightW = new JLabel(plugLightW);
 		lightW.setBounds(150-125, 281-268, 170-115, 291-239);
 		lightW.setBorder(null);
 		layeredPane.add(lightW, new Integer(0), 0);
 
 		ImageIcon plugLightX = (new javax.swing.ImageIcon // Light X
-		(getClass().getResource("/main/resources/images/x.jpg")));
+		(getClass().getResource(filePrefix + "/images/x.jpg")));
 		lightX = new JLabel(plugLightX);
 		lightX.setBounds(175-125, 330-268, 195-115, 340-239);
 		lightX.setBorder(null);
 		layeredPane.add(lightX, new Integer(0), 0);
 
 		ImageIcon plugLightY = (new javax.swing.ImageIcon // Light Y
-		(getClass().getResource("/main/resources/images/y.jpg")));
+		(getClass().getResource(filePrefix + "/images/y.jpg")));
 		lightY = new JLabel(plugLightY);
 		lightY.setBounds(150-125, 330-268, 170-115, 340-239);
 		lightY.setBorder(null);
 		layeredPane.add(lightY, new Integer(0), 0);
 
 		ImageIcon plugLightZ = (new javax.swing.ImageIcon // Light Z
-		(getClass().getResource("/main/resources/images/z.jpg")));
+		(getClass().getResource(filePrefix + "/images/z.jpg")));
 		lightZ = new JLabel(plugLightZ);
 		lightZ.setBounds(245-125, 281-268, 265-115, 291-239);
 		lightZ.setBorder(null);

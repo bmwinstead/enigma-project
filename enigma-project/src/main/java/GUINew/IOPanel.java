@@ -1,16 +1,6 @@
 package main.java.GUINew;
 
 import java.awt.Color;
-
-/**
- * 
- * @author Team Enigma
- * @version 0.9
- * @date Nov 30, 2013
- * 
- * Panel for file input/output and encrypt button
- * 
- */
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -47,8 +37,11 @@ import main.java.enigma.EnigmaSettings;
  * When encrypting characters it provides a graphical representation
  * of the "lightboard", lighting up the encrypted character, reminiscient
  * of how the original machines operated.
+ * 
  * @author Bryan Winstead
- *
+ * @author Team Enigma
+ * @version .9
+ * @date Nov 30, 2013
  */
 @SuppressWarnings("serial")
 public class IOPanel extends JPanel implements Observer {
