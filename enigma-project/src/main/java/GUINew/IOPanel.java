@@ -236,11 +236,21 @@ public class IOPanel extends JPanel implements Observer {
 				}
 				System.out.println("Text Error Checking and Conversion");
 				encrypted = addSpaces(encrypted);
-				bulkOutput.setText(encrypted);
+				if (encrypted.equals("") || encrypted.equals(null) || encrypted.equals("\n")){
+					bulkOutput.setText("Input text must contain at least one letter or number. "
+							+ "\n" + "Input file must be a text file.");
+					JOptionPane.showMessageDialog(tempFrame,"Error 100: "
+							+ "No valid data in input text.");
+				}
+				else{
+					bulkOutput.setText(encrypted);
+				}
 			} catch(InvalidPathException e){
 				String s = bulkInput.getText();
 				String encrypted = machine.encryptString(s);
 				System.out.println("Text Error Checking and Conversion");
+				JOptionPane.showMessageDialog(tempFrame,"Error 100: "
+						+ "No valid data in input text.");
 				encrypted = addSpaces(encrypted);
 				bulkOutput.setText(encrypted);
 			} catch (IOException e) {
