@@ -6,6 +6,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+/**
+ * Implements a set of databases containing character unigrams, bigrams, trigrams, quadgrams, and whole words, with frequency counts.
+ * 
+ * 
+ * @author Walter Adolph
+ * @author Team Enigma
+ * @version 0.9
+ * @date 30 Nov 2013
+ * 
+ */
+
+
+
+
 // This class represents a corpus (character database) containing unigrams, bigrams, trigrams, and quadgrams.
 // Counts of each type of gram are kept for future statistical use.
 // PriorityQueues are also provided with sorts by gram count.
