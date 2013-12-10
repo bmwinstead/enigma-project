@@ -61,5 +61,5 @@ public class IndicatorDetector implements Callable<Boolean> {
 		}
 		
 		return true;
-	} // End run()
+	} // End call()
 }
