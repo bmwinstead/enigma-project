@@ -26,7 +26,9 @@ import java.util.Observer;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -219,6 +221,7 @@ public class IOPanel extends JPanel implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String possibleFile = fileTextField.getText();
+			JFrame tempFrame = new JFrame(); //Error Message Frame
 			// Set the machine's "initial" positions. Useful for encrypting
 			// multiple messages using the same key and starting indicators. 
 			machine.setInitPositions();
@@ -246,8 +249,12 @@ public class IOPanel extends JPanel implements Observer {
 				lightboard.turnOnLight(s); //Activate Lightboard
 				s = addSpaces(s);
 				bulkOutput.setText(s);
-				if(s.equals("") || s.equals(null))
-					bulkOutput.setText("Input text must contain at least one letter or number.");
+				if(s.equals("") || s.equals(null)){
+					bulkOutput.setText("Input text must contain at least one letter or number. "
+							+ "\n" + "Input file must be a text file.");
+					JOptionPane.showMessageDialog(tempFrame,"Error 100: "
+							+ "No valid data in input text.");
+				}
 			} 
 		} // end actionPerformed method
 		
