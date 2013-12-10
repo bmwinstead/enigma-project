@@ -230,6 +230,8 @@ public class IOPanel extends JPanel implements Observer {
 				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
 				String encrypted = "";
 				for(String s : ls){
+					s = s.replace("e&", "");//This is a hack. See GitHub issue #39
+					s = s.replaceAll("[^\\w\\s]", ""); //Catching crazy characters
 					encrypted += machine.encryptString(s);
 					encrypted = encrypted.replace("\n", "").replace("\r", "");
 					encrypted += "\n"; 
@@ -247,6 +249,7 @@ public class IOPanel extends JPanel implements Observer {
 				}
 			} catch(InvalidPathException e){
 				String s = bulkInput.getText();
+				s = s.replaceAll("[^\\w\\s]", ""); //catching crazy characters
 				String encrypted = machine.encryptString(s);
 				System.out.println("Text Error Checking and Conversion");
 				JOptionPane.showMessageDialog(tempFrame,"Error 100: "
@@ -255,6 +258,7 @@ public class IOPanel extends JPanel implements Observer {
 				bulkOutput.setText(encrypted);
 			} catch (IOException e) {
 				String s = bulkInput.getText();
+				s = s.replaceAll("[^\\w\\s]", ""); //catching crazy characters
 				s = machine.encryptString(s);
 				lightboard.turnOnLight(s); //Activate Lightboard
 				s = addSpaces(s);
