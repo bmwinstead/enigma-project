@@ -576,7 +576,7 @@ public class RotorPanel extends JPanel implements Observer {
 			case "leftRotorChoice":
 				if (rotorCheck && (leftIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
-							"You cannot reuse rotor choices");
+							"Error 101: Selected rotor is already in use.");
 					leftRotorChoice.setSelectedIndex(rotors[1]);
 				} else
 					rotors[1] = temp.getSelectedIndex();
@@ -584,7 +584,7 @@ public class RotorPanel extends JPanel implements Observer {
 			case "middleRotorChoice":
 				if (rotorCheck && (leftIndex == middleIndex || middleIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
-							"You cannot reuse rotor choices");
+							"Error 101: Selected rotor is already in use.");
 					middleRotorChoice.setSelectedIndex(rotors[2]);
 				} else
 					rotors[2] = temp.getSelectedIndex();
@@ -592,7 +592,7 @@ public class RotorPanel extends JPanel implements Observer {
 			case "rightRotorChoice":
 				if (rotorCheck && (rightIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
-							"You cannot reuse rotor choices");
+							"Error 101: Selected rotor is already in use.");
 					rightRotorChoice.setSelectedIndex(rotors[3]);
 				} else
 					rotors[3] = temp.getSelectedIndex();
@@ -604,7 +604,8 @@ public class RotorPanel extends JPanel implements Observer {
 							|| temp.getSelectedIndex() == 3)) {
 						JOptionPane
 								.showMessageDialog(tempFrame,
-										"With the fourth rotor inactive, you can only choose reflector B or C");
+										"Error 102: With the fourth rotor inactive, you can "
+										+ "only choose reflector B or C");
 						reflectorChoice.setSelectedIndex(0); // default
 					} // end if
 					else {
@@ -617,7 +618,8 @@ public class RotorPanel extends JPanel implements Observer {
 							|| temp.getSelectedIndex() == 1)) {
 						JOptionPane
 								.showMessageDialog(tempFrame,
-										"With the fourth rotor active, you can only choose reflector B thin or C thin");
+										"Error 103: With the fourth rotor active, you can "
+										+ "only choose reflector B Thin or C Thin");
 						reflectorChoice.setSelectedIndex(2);
 					} // end if
 					else {
