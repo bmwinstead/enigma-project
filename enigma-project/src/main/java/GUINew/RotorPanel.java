@@ -336,28 +336,25 @@ public class RotorPanel extends JPanel implements Observer {
 		return plugboardPanel;
 	}
 
-
-
 	private void printState() {
-		System.out.println("Printing state of RotorPanel.java");
+		System.out.println("**** Printing State of RotorPanel ****");
 		System.out.println("Rotors: " + Arrays.toString(rotors));
 		System.out.println("Reflector: " + reflector);
 		System.out.println("Ring settings: " + Arrays.toString(ringSettings));
 		System.out.println("Rotor positions: "
 				+ Arrays.toString(rotorPositions));
-		System.out.println("Plugboard: " + pbString);
+		System.out.println("Plugboard: " + pbString + "\n");
 	}
 
 	private void setRotorPositions(char[] positions) {
-		System.out.println(String.valueOf(positions));
+		System.out.println("(RotorPanel)(setRotorPositions()) " + Arrays.toString(positions) + "\n");
 		if (positions.length == 4 && positions[0] != '!') {
-			System.out.println("4");
 			fourthRotorPosition.setValue(String.valueOf(positions[0]));
 			leftRotorPosition.setValue(String.valueOf(positions[1]));
 			middleRotorPosition.setValue(String.valueOf(positions[2]));
 			rightRotorPosition.setValue(String.valueOf(positions[3]));
 		} else {
-			System.out.println("3");
+			fourthRotorPosition.setValue(" ");
 			leftRotorPosition.setValue(String.valueOf(positions[0]));
 			middleRotorPosition.setValue(String.valueOf(positions[1]));
 			rightRotorPosition.setValue(String.valueOf(positions[2]));
@@ -367,7 +364,7 @@ public class RotorPanel extends JPanel implements Observer {
 	private void setPlugboard(String pbmap) {
 		pbField.setText(pbmap);
 		machine.setPlugboard(pbmap);
-		System.out.println("RotorPanel: Changing plugboard to: " + pbmap);
+		System.out.println("(RotorPanel)Changing plugboard to: " + pbmap + "\n");
 	}
 	
 	private void setRotorChoices(int[] rotors) {
@@ -383,6 +380,7 @@ public class RotorPanel extends JPanel implements Observer {
 			rightRotorChoice.setSelectedIndex(rotors[3]);
 		}
 		else {
+			fourthRotorChoice.setSelectedIndex(0);
 			leftRotorChoice.setSelectedIndex(rotors[0]);
 			middleRotorChoice.setSelectedIndex(rotors[1]);
 			rightRotorChoice.setSelectedIndex(rotors[2]);
@@ -396,6 +394,7 @@ public class RotorPanel extends JPanel implements Observer {
 			middleRotorRingSetting.setSelectedIndex('A' - ringSettings[2]);
 			rightRotorRingSetting.setSelectedIndex('A' - ringSettings[3]);
 		} else {
+			fourthRotorRingSetting.setSelectedIndex(0);
 			leftRotorRingSetting.setSelectedIndex('A' - ringSettings[0]);
 			middleRotorRingSetting.setSelectedIndex('A' - ringSettings[1]);
 			rightRotorRingSetting.setSelectedIndex('A' - ringSettings[2]);
@@ -418,26 +417,32 @@ public class RotorPanel extends JPanel implements Observer {
 	public void update(Observable arg0, Object arg1) {
 //		String s = (String) arg1;
 		EnigmaSettings settings = (EnigmaSettings) arg1;
-		System.out.println("Changing rotors to " + String.valueOf(settings.getIndicatorSettings()));
-		setRotorPositions(settings.getIndicatorSettings());
-		
 		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET ) {
+			System.out.println("(RotorPanel(update())Full Reset triggered");
 			rotorCheckOff();
+			System.out.println("Setting plugboard: " + settings.getPlugboardMap());
 			setPlugboard(settings.getPlugboardMap());
-			setRingSettings(settings.getRingSettings());	
+			System.out.println("Setting rotors: " + Arrays.toString(settings.getRotors()));
 			setRotorChoices(settings.getRotors());
+			System.out.println("Setting ring settings: " + Arrays.toString(settings.getRingSettings()));
+			setRingSettings(settings.getRingSettings());	
+			System.out.println("Setting reflector: " + settings.getReflector());
 			setReflector(settings.getReflector());
+			pbDialog.resetPlugBoard();
 			rotorCheckOn();
 		}
+		System.out.println("(RotorPanel)(update())Changing rotors to " + String.valueOf(settings.getIndicatorSettings()) + "\n");
+		setRotorPositions(settings.getIndicatorSettings());
 	}
 	
 	private class RingSettingsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("**** Ring Settings Listener Triggered ****");
 			@SuppressWarnings("rawtypes")
 			JComboBox temp = (JComboBox) e.getSource();
-			System.out
-					.println("Action registered on ring settings combo boxes, dumping state before");
-			printState();
+			System.out.println("(RingSettingsListener) " + e.getActionCommand() + " state " + temp.getSelectedItem());
+//			System.out.println("Action registered on ring settings combo boxes, dumping state before");
+//			printState();
 			switch (temp.getActionCommand()) {
 			case "fourthRotorRingSetting":
 				if (rotorCheck && (fourthRotorChoice.getSelectedIndex() == 0)) {
@@ -463,8 +468,8 @@ public class RotorPanel extends JPanel implements Observer {
 				ringSettings[3] = temp.getSelectedItem().toString().charAt(0);
 				break;
 			}
-			System.out.println("All changes performed, dumping state");
-			printState();
+//			System.out.println("All changes performed, dumping state");
+//			printState();
 			machine.setState(rotors, reflector, ringSettings);
 		}
 	}
@@ -472,15 +477,16 @@ public class RotorPanel extends JPanel implements Observer {
 	private class RotorListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("**** Rotor Listener Triggered ****");
 			@SuppressWarnings("rawtypes")
 			JComboBox temp = (JComboBox) e.getSource();
+			System.out.println("(RotorListener) " + e.getActionCommand() + " state " + temp.getSelectedItem());
 			int leftIndex = leftRotorChoice.getSelectedIndex();
 			int middleIndex = middleRotorChoice.getSelectedIndex();
 			int rightIndex = rightRotorChoice.getSelectedIndex();
 			JFrame tempFrame = new JFrame();
-			System.out
-					.println("Action registered on rotor combo boxes, dumping state before");
-			printState();
+//			System.out.println("Action registered on rotor combo boxes, dumping state before");
+//			printState();
 			switch (e.getActionCommand()) {
 			case "fourthRotorChoice":
 				if (temp.getSelectedIndex() == 0) {
@@ -496,8 +502,7 @@ public class RotorPanel extends JPanel implements Observer {
 				}
 				break;
 			case "leftRotorChoice":
-				if (rotorCheck && 
-						(leftIndex == middleIndex || leftIndex == rightIndex)) {
+				if (rotorCheck && (leftIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"You cannot reuse rotor choices");
 					leftRotorChoice.setSelectedIndex(rotors[1]);
@@ -505,8 +510,7 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[1] = temp.getSelectedIndex();
 				break;
 			case "middleRotorChoice":
-				if (rotorCheck && 
-						(leftIndex == middleIndex || middleIndex == rightIndex)) {
+				if (rotorCheck && (leftIndex == middleIndex || middleIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"You cannot reuse rotor choices");
 					middleRotorChoice.setSelectedIndex(rotors[2]);
@@ -514,8 +518,7 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[2] = temp.getSelectedIndex();
 				break;
 			case "rightRotorChoice":
-				if (rotorCheck && 
-						(rightIndex == middleIndex || leftIndex == rightIndex)) {
+				if (rotorCheck && (rightIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"You cannot reuse rotor choices");
 					rightRotorChoice.setSelectedIndex(rotors[3]);
@@ -551,8 +554,8 @@ public class RotorPanel extends JPanel implements Observer {
 				} // end else
 				break;
 			}
-			System.out.println("All changes performed. Dumping state after");
-			printState();
+//			System.out.println("All changes performed. Dumping state after");
+//			printState();
 			machine.setState(rotors, reflector, ringSettings);
 		}
 	}
@@ -560,7 +563,9 @@ public class RotorPanel extends JPanel implements Observer {
 	private class PositionsListener implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent arg0) {
+			System.out.println("**** Positions Listener Triggered ****");
 			EnigmaSpinner js = (EnigmaSpinner) arg0.getSource();
+			System.out.println("(PositionsListener) " + js.identifier + " state " + js.getValue());
 			switch (js.identifier) {
 			case "fourthRotorPosition":
 				if (fourthRotorChoice.getSelectedIndex() == 0) {
@@ -596,13 +601,16 @@ public class RotorPanel extends JPanel implements Observer {
 		public void actionPerformed(ActionEvent arg0) {
 			String message = arg0.getActionCommand();
 			if (message.equals("Reset")) {
+				System.out.println("**** Plugboard Reset ****");
 				pbDialog.resetPlugBoard();
 				pbString = null;
 				pbField.setText("");
-				System.out.println("Changing plugboard to: ");
+				System.out.println("(RotorPanel)Resetting plugboard\n");
 			} else if (message.equals("Plugboard")) {
+				System.out.println("**** Plugboard Changed ****");
 				pbString = pbDialog.displayDialog();
 				setPlugboard(pbString); 
+				System.out.println("(RotorPanel)Changing plugboard to: " + pbString +"\n");
 			}
 		}
 	}

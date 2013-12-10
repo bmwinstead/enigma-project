@@ -34,7 +34,7 @@ public class ResetPanel extends JPanel {
 	private char[] defaultRotorPositions = { '!', 'A', 'A', 'A' };
 	private char[] defefaultRingSettings = { '!', 'A', 'A', 'A' };
 	private int[] defaultRotors = { -1, 0, 1, 2 };
-	private String defaultPlugboard = "";
+	private String defaultPlugboard = null;
 	private int defaultReflector = 0;
 	
 	public ResetPanel() {
@@ -80,8 +80,10 @@ public class ResetPanel extends JPanel {
 	
 	private class DefaultConfigListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("ResetPanel: Rotors: "
-					+ Arrays.toString(defaultRotors));
+			System.out.println("**** DEFAULT CONFIG PRESSED ****");
+			System.out.println("(ResetPanel) Rotors: "
+					+ Arrays.toString(defaultRotors) + "\n");
+			System.out.println("(ResetPanel) Rotor Positions: " + Arrays.toString(defaultRotorPositions) + "\n");
 			machine.setUpdateType(EnigmaSingleton.FULLRESET);
 			machine.setState(defaultRotors, defaultReflector,
 					defefaultRingSettings, defaultRotorPositions,
@@ -93,12 +95,14 @@ public class ResetPanel extends JPanel {
 	
 	private class ResetIndicatorsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("***** RESET INDICATORS PRESSED *****");
 			machine.indicatorReset();
 		}
 	} // end ResetIndicatorsListener
 	
 	private class ClearTextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("***** CLEAR TEXT PRESSED *****");
 			machine.setUpdateType(EnigmaSingleton.CLEARTEXT);
 			machine.notifyObservers();
 		}

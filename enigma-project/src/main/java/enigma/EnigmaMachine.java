@@ -1,5 +1,7 @@
 package main.java.enigma;
 
+import java.util.Arrays;
+
 /**
  * 
  * @author Bryan Winstead
@@ -112,6 +114,7 @@ public class EnigmaMachine {
 	 * testing. 
 	 */
 	public void reset(){
+		System.out.println("(EnigmaMachine) Initial Positions: " + Arrays.toString(initPositions));
 		rotors.setPositions(initPositions);
 	} // end reset method
 	

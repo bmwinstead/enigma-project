@@ -180,11 +180,11 @@ public class IOPanel extends JPanel implements Observer {
 	public void update(Observable arg0, Object arg1) {
 //		String s = (String) arg1;
 		EnigmaSettings settings = (EnigmaSettings) arg1;
-		System.out.println("Resetting text fields.");
 		
 		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET
 				|| settings.getUpdateType() == EnigmaSingleton.CLEARTEXT) {
 			clearFields();
+			System.out.println("Resetting text fields.");
 		}
 	}
 	

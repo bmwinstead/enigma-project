@@ -59,14 +59,14 @@ public class EnigmaSingleton extends Observable {
 			machine = new EnigmaMachine(rotorChoices, reflectorChoice,
 					ringSettings, initialPositions, plugboardMap);
 
-		System.out.println("Changing rotors to: "
-				+ Arrays.toString(rotorChoices));
-		System.out.println("Changing reflector to: " + reflectorChoice);
-		System.out.println("Changing ring settings to: "
-				+ String.valueOf(ringSettings));
-		System.out.println("Changing rotor positions to: "
-				+ String.valueOf(initialPositions));
-		System.out.println("Changing plugboard to: " + plugboardMap);
+		System.out.println("(Singleton)Changing rotors to: "
+				+ Arrays.toString(rotorChoices) + "\n");
+		System.out.println("(Singleton)Changing reflector to: " + reflectorChoice + "\n");
+		System.out.println("(Singleton)Changing ring settings to: "
+				+ String.valueOf(ringSettings) + "\n");
+		System.out.println("(Singleton)Changing rotor positions to: "
+				+ String.valueOf(initialPositions) + "\n");
+		System.out.println("(Singleton)Changing plugboard to: " + plugboardMap + "\n");
 	} // end setState
 
 	/**
@@ -85,11 +85,11 @@ public class EnigmaSingleton extends Observable {
 		}
 		machine.setRotorChoices(rotorChoices, reflectorChoice);
 		machine.setRingSettings(ringSettings);
-		System.out.println("Changing rotors to: "
-				+ Arrays.toString(rotorChoices));
-		System.out.println("Changing reflector to: " + reflectorChoice);
-		System.out.println("Changing ring settings to: "
-				+ String.valueOf(ringSettings));
+		System.out.println("(Singleton)Changing rotors to: "
+				+ Arrays.toString(rotorChoices) + "\n");
+		System.out.println("(Singleton)Changing reflector to: " + reflectorChoice + "\n");
+		System.out.println("(Singleton)Changing ring settings to: "
+				+ String.valueOf(ringSettings) + "\n");
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class EnigmaSingleton extends Observable {
 	public void setPositions(char[] rotorPositions) {
 		if(rotorPositions.length == 4 && rotorPositions[0] == '!')
 			rotorPositions = new char[] {rotorPositions[1], rotorPositions[2], rotorPositions[3]};
-		System.out.println("Setting rotor positions to: " + String.valueOf(rotorPositions));
+		System.out.println("(Singleton)Setting rotor positions to: " + String.valueOf(rotorPositions) + "\n");
 		machine.setPositions(rotorPositions);
 	}
 	
@@ -117,7 +117,7 @@ public class EnigmaSingleton extends Observable {
 	 * @param pbMap
 	 */
 	public void setPlugboard(String pbMap) {
-		System.out.println("Singleton: Setting plugboard to: " + pbMap);
+		System.out.println("(Singleton)Setting plugboard to: " + pbMap + "\n");
 		machine.setPlugboard(pbMap);
 	}
 	
@@ -159,10 +159,9 @@ public class EnigmaSingleton extends Observable {
 	 * @return encryptedChar
 	 */
 	public char encryptChar(char c) {
-		System.out.println("Encrypting char \"" + c + "\"");
-		System.out.println("Sending space option to config: " + getSpacesOption());
+		System.out.println("(Singleton)Encrypting char \"" + c + "\"\n");
+		System.out.println("Sending space option to config: " + getSpacesOption() + "\n");
 		c = output.configure(c, getSpacesOption()); //Text error checking
-		System.out.println("Text Error Checking and Conversion");
 		// JLI 6Dec13 Was updating the GUI before encryption, not after.
 		char result = machine.encryptChar(c);
 		notifyObservers();
@@ -175,9 +174,8 @@ public class EnigmaSingleton extends Observable {
 	 * @return
 	 */
 	public String encryptString(String s) {
-		System.out.println("Encrypting string " + s);
+		System.out.println("(Singleton)Encrypting string " + s + "\n");
 		s = output.configure(s, getSpacesOption()); //Text error checking
-		System.out.println("Text Error Checking and Conversion");
 		String result = machine.encryptString(s);
 		// JLI 6Dec13 Was updating the GUI before enryption, not after.
 		notifyObservers();
@@ -193,8 +191,12 @@ public class EnigmaSingleton extends Observable {
 		EnigmaSettings settings = new EnigmaSettings(machine.getRotors(),
 				machine.getRingSettings(), machine.getPositions(),
 				machine.getReflector(), machine.getPlugboard(), updateType);
-		System.out.println("Notifying, rotors are currently "
-				+ String.valueOf(machine.getPositions()));
+		System.out.println("(Singleton) Notifying, settings state: ");
+		System.out.println("Plugboard: " + settings.getPlugboardMap());
+		System.out.println("Reflector: " + settings.getReflector());
+		System.out.println("Ring settings: " + Arrays.toString(settings.getRingSettings()));
+		System.out.println("Rotors: " + Arrays.toString(settings.getRotors()));
+		System.out.println("Rotor positions: " + Arrays.toString(settings.getIndicatorSettings()) + "\n");
 		for (Observer obs : observers) {
 			// obs.update(this, String.valueOf(machine.getPositions()));
 			obs.update(this, settings);
