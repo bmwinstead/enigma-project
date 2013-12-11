@@ -78,7 +78,7 @@ public class CaGuiPrototype extends JPanel {
 			is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
 			database = (Corpus)is.readObject();
 		} catch(NullPointerException e){
-			resourceLoc = "training.corpus";
+			resourceLoc = "/training.corpus";
 			try {
 				is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
 				database = (Corpus)is.readObject();
