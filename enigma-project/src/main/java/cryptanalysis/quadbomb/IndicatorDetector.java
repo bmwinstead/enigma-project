@@ -1,12 +1,3 @@
-/**
- * IndicatorDetector.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Nov 26, 2013
- * 
- * Worker thread to determine best indicator settings for a given rotor / reflector configuration.
- */
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.PriorityQueue;
@@ -17,6 +8,15 @@ import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
+/**
+ * Worker thread to determine best indicator settings for a given rotor / reflector configuration.
+ * 
+ * IndicatorDetector.java
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * @version - 0.9
+ * - Nov 26, 2013
+ */
 public class IndicatorDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;
 	private EnigmaSettings baseCandidate;
@@ -26,6 +26,20 @@ public class IndicatorDetector implements Callable<Boolean> {
 	private PriorityQueue<EnigmaSettings> workList;
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param tester
+	 * 			StatisticsGenerator
+	 * @param candidate
+	 * 			EnigmaSettings
+	 * @param settings
+	 * 			QuadBombSettings
+	 * @param resultsList
+	 * 			CurrentLinkedQueue<EnigmaSettings>
+	 * @param message
+	 * 			String
+	 */
 	public IndicatorDetector(StatisticsGenerator tester, 
 			EnigmaSettings candidate, 
 			QuadBombSettings settings, 
@@ -41,6 +55,9 @@ public class IndicatorDetector implements Callable<Boolean> {
 		this.message = message;
 	}
 	
+	/**
+	 * Workhorse method. 
+	 */
 	public Boolean call() {
 		int[] testParameters = settings.getTestingIndicators(baseCandidate.isThreeRotor());
 		tester.selectFitnessTest(3);

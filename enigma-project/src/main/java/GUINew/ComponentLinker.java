@@ -12,13 +12,13 @@ import java.util.Map;
 /**
  * Draws the lines that illustrate which letters are linked 
  * together in the plugboard. 
+ * Most of this code comes from 
+ * <a href="http://stackoverflow.com/a/12389479/909085">http://stackoverflow.com/a/12389479/909085</a>
  * 
  * @author Rosana Montanez
  * @author Team Enigma
  * @version 0.1
- * Nov 27, 2013
- * Most of this code comes from 
- * http://stackoverflow.com/a/12389479/909085
+ * - Nov 27, 2013
  * 
  */
 
@@ -107,7 +107,12 @@ public class ComponentLinker extends JComponent{
         }
         return null;
     }
-
+    
+	/**
+	 * Method not used. Automatically returns false.
+	 * 
+	 * @return false
+	 */
     public boolean contains ( int x, int y )
     {
         return false;

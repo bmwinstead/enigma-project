@@ -19,18 +19,18 @@ import main.java.enigma.EnigmaSettings;
  * @author Bryan Winstead
  * @author Team Enigma
  * @version 0.9
- * Date: 30 Nov 2013
+ * - 30 Nov 2013
  * 
  */
 public class EnigmaSingleton extends Observable {
-	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton();
-	public final static int INDICATORONLY = 0;
-	public final static int FULLRESET = 1;
-	public final static int CLEARTEXT = 2;
-	public final static int NOSPACES = 0;
-	public final static int FOURSPACES = 1;
-	public final static int FIVESPACES = 2;
-	public final static int ORIGINALSPACES = 3;
+	public final static EnigmaSingleton INSTANCE = new EnigmaSingleton(); 
+	public final static int INDICATORONLY = 0; // Update Type for changing only indicators on GUI
+	public final static int FULLRESET = 1; // Update type for fully resetting the GUI
+	public final static int CLEARTEXT = 2; // Update type for clearing the text fields on the GUI
+	public final static int NOSPACES = 0; // Output type for output with no spaces. 
+	public final static int FOURSPACES = 1; // Output type for output with four letter "words"
+	public final static int FIVESPACES = 2; // Output type for output with five letter "words"
+	public final static int ORIGINALSPACES = 3; // Output type for output that maintains its original spaces.
 	private ArrayList<Observer> observers = new ArrayList<Observer>();
 	private EnigmaMachine machine;
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
@@ -46,10 +46,37 @@ public class EnigmaSingleton extends Observable {
 	 * functionality.
 	 * 
 	 * @param rotorChoices
+	 * 	          Array of 3-4 integers numbered 0-9 to determine which rotors
+	 *            to be included in the Enigma. The rotors are mapped as
+	 *            follows: 
+	 *            	0  - Rotor I;
+	 *            	1  - Rotor II;
+	 *            	2  - Rotor III;
+	 *            	3  - Rotor IV;
+	 *            	4  - Rotor V;
+	 *            	5  - Rotor VI;
+	 *            	6  - Rotor VII;
+	 *            	7  - Rotor VIII;
+	 *            	9  - Rotor Beta;
+	 *            	10 - Rotor Gamma 
 	 * @param reflectorChoice
+	 * 	          An integer from 0-3 indicating which of the four available
+	 *            reflectors to include. The reflectors are mapped as follows:
+	 *            	0 - Reflector B;
+	 *            	1 - Reflector C;
+	 *            	2 - Reflector B thin;
+	 *            	3 - Reflector C thin
 	 * @param ringSettings
+	 *            An array of 3-4 characters indicating the rotors' ring
+	 *            settings.
 	 * @param initialPositions
+	 *            An array of 3-4 characters indicating the rotors' initial
+	 *            positions.
 	 * @param plugboardMap
+	 *            String indicating the plugboard replacement mapping. Letters
+	 *            are swapped with their adjacant letters. For example, a 
+	 *            string of "ABCD" swaps A's with B's (and vice-versa) and C's
+	 *            with D's. 
 	 */
 	public void setState(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap) {
 		if (rotorChoices.length == 4 && rotorChoices[0] == -1){
@@ -128,7 +155,12 @@ public class EnigmaSingleton extends Observable {
 	
 	/**
 	 * Sets the update type.
-	 * @param newUpdateType
+	 * 
+	 * @param newUpdateType 	 
+	 *            Integer indicating what type of update or reset is to be
+	 *            performed. 0 means that only the rotor indicators are to be
+	 *            updated. 1 means that the GUI is to be fully reset. 2 means
+	 *            that only the text boxes are to be cleared. 
 	 */
 	public void setUpdateType(int newUpdateType) {
 		updateType = newUpdateType;
@@ -167,6 +199,7 @@ public class EnigmaSingleton extends Observable {
 	 * Performs encryption on a character at a time using the current 
 	 * machine state. Then calls notifyObservers() to pass the new machine
 	 * state back to the GUI components, which then update.
+	 * 
 	 * @param c the char to encrypt
 	 * @return encryptedChar the encrypted char
 	 */
@@ -205,6 +238,7 @@ public class EnigmaSingleton extends Observable {
 	public void addObserver(Observer obs){
 		observers.add(obs);
 	}
+	
 	/**
 	 * Implements the message passing interface between various modular
 	 * GUI components by passing the entire machine state after performing

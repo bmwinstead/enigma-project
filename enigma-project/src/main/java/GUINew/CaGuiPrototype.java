@@ -79,6 +79,11 @@ public class CaGuiPrototype extends JPanel {
 	private JPanel progressBarPanel;
 	private JPanel inputFlowPanel;
 	private JButton decryptButton;
+	
+	/**
+	 * Creates panel to allow user interface with the Enigma Cryptanalysis
+	 * functions. 
+	 */
 	public CaGuiPrototype() {
 		String resourceLoc = "/main/resources/training.corpus";
 		ObjectInputStream is = null;

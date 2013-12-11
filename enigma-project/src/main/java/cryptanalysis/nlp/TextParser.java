@@ -1,14 +1,3 @@
-/**
- * TextParser.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @date - Dec 1, 2013
- * 
- * This parser takes a database reference and scans a text file (UTF-8 is proven to work, other formats are unknown) for
- * character grams and whole words. Nonalphanumeric characters are skipped for character grams, and specific rules are 
- * applied for parsing words.
- */
-
 package main.java.cryptanalysis.nlp;
 
 import java.io.File;
@@ -17,6 +6,17 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * TextParser.java
+ * 
+ * This parser takes a database reference and scans a text file (UTF-8 is proven to work, other formats are unknown) for
+ * character grams and whole words. Nonalphanumeric characters are skipped for character grams, and specific rules are 
+ * applied for parsing words.
+ * 
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * Dec 1, 2013
+ */
 public class TextParser {
 	private Corpus database;
 

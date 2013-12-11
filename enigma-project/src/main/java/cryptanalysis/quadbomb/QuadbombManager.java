@@ -1,32 +1,3 @@
-/**
- * QuadbombManager.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Nov 26, 2013
- * 
- * This manages the thread work list and process flow of QuadBomb.
- * QuadBomb attempts to decrypt an Enigma message using quadgram statistics algorithm as described at the below websites:
- * 
- * References:
- * http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/
- * http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/
- * 
- * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
- * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
- * Step 3: Determine plugboard connections by brute force.
- * 
- * Improvements:
- * Incorporated multiple threading to improve CPU utilization.
- * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
- * 
- * Limitations:
- * This method does not guarantee a correct result. Essentially, this algorithm is equivalent to a local maxima search in that it
- * first searches the wheel order and indicator settings and saves consecutive best matches. Once that search is exhausted, 
- * then it searches for the best ring setting using the list of best rotor settings previously constructed. This search is limited in that the 
- * ring search is restricted to the candidate rotor settings. It is possible that the correct result is a combination of suboptimal
- * rotor and ring settings, and in these cases the algorithm is expected to fail.
- */
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.LinkedList;
@@ -49,6 +20,36 @@ import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
+/**
+ * QuadbombManager.java
+ *  
+ * This manages the thread work list and process flow of QuadBomb.
+ * QuadBomb attempts to decrypt an Enigma message using quadgram statistics algorithm as described at the below websites:
+ * 
+ * 
+ * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
+ * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
+ * Step 3: Determine plugboard connections by brute force.
+ * 
+ * Improvements:
+ * Incorporated multiple threading to improve CPU utilization.
+ * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
+ * 
+ * Limitations:
+ * This method does not guarantee a correct result. Essentially, this algorithm is equivalent to a local maxima search in that it
+ * first searches the wheel order and indicator settings and saves consecutive best matches. Once that search is exhausted, 
+ * then it searches for the best ring setting using the list of best rotor settings previously constructed. This search is limited in that the 
+ * ring search is restricted to the candidate rotor settings. It is possible that the correct result is a combination of suboptimal
+ * rotor and ring settings, and in these cases the algorithm is expected to fail.
+ * 
+ * @see <a href="http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/">Practical Cryptography: Cryptanalysis of Enigma</a>
+ * @see <a href="http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/">Practical Cryptography: Quadram Statistics as a Fitness Measure</a>
+ *
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * @version - 0.9
+ * - Nov 26, 2013
+ */
 public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 	private final StatisticsGenerator statGenerator;
 	private final CribDetector tester;
@@ -69,7 +70,22 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 
 	private int operationCount;
 
-	// Constructor.
+	/**
+	 * Constructor
+	 * 
+	 * @param database
+	 * 				Corpus
+	 * @param message
+	 * 				String
+	 * @param settings
+	 * 				QuadBombSettings
+	 * @param label
+	 * 				JTextField
+	 * @param button
+	 * 				JButton
+	 * @param panel
+	 * 				ResultsPanel
+	 */
 	public QuadbombManager(Corpus database, String message, QuadBombSettings settings, JTextField label, JButton button, ResultsPanel panel) {
 		this.message = message;
 		
@@ -85,6 +101,9 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		tester = new CribDetector(database);
 	}
 	
+	/**
+	 * Workhorse method. Specified by SwingWorker. 
+	 */
 	public Boolean doInBackground() {
 		// Initialize thread list.
 		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
@@ -224,7 +243,10 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		}
 	}
 	
-	// Stops all work on the worker threads.
+	/**
+	 * Stops work on all worker thread, in case the user wishes to cancel
+	 * prematurely. 
+	 */
 	public void abort() {
 		threadManager.shutdownNow();
 	}

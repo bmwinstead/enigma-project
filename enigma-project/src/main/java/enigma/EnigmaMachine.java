@@ -3,14 +3,15 @@ package main.java.enigma;
 import java.util.Arrays;
 
 /**
+ * The complete "guts" of the Enigma Machine, a simulation of the encryption
+ * device used by the Germans during World War II. Includes all rotors, 
+ * reflector, and plugbaord. Allows for the encryption of a single character 
+ * or a string.
  * 
  * @author Bryan Winstead
  * @author Team Enigma
  * @version 0.9
- * Date - Nov 22, 2013
- * 
- * The complete "guts" of the Enigma Machine. Includes all rotors, reflector,
- * and plugbaord. Allows for the encryption of a single character or a string.
+ * - Nov 22, 2013
  *
  */
 public class EnigmaMachine {
@@ -25,10 +26,25 @@ public class EnigmaMachine {
 	 * 
 	 * @param rotorChoices
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma.
+	 *            to be included in the Enigma. The rotors are mapped as
+	 *            follows: 
+	 *            	0  - Rotor I;
+	 *            	1  - Rotor II;
+	 *            	2  - Rotor III;
+	 *            	3  - Rotor IV;
+	 *            	4  - Rotor V;
+	 *            	5  - Rotor VI;
+	 *            	6  - Rotor VII;
+	 *            	7  - Rotor VIII;
+	 *            	9  - Rotor Beta;
+	 *            	10 - Rotor Gamma 
 	 * @param reflectorChoice
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include.
+	 *            reflectors to include. The reflectors are mapped as follows:
+	 *            	0 - Reflector B;
+	 *            	1 - Reflector C;
+	 *            	2 - Reflector B thin;
+	 *            	3 - Reflector C thin
 	 * @param ringSettings
 	 *            An array of 3-4 characters indicating the rotors' ring
 	 *            settings.
@@ -50,10 +66,25 @@ public class EnigmaMachine {
 	 * 
 	 * @param rotorChoices
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma.
+	 *            to be included in the Enigma. The rotors are mapped as
+	 *            follows: 
+	 *            	0  - Rotor I;
+	 *            	1  - Rotor II;
+	 *            	2  - Rotor III;
+	 *            	3  - Rotor IV;
+	 *            	4  - Rotor V;
+	 *            	5  - Rotor VI;
+	 *            	6  - Rotor VII;
+	 *            	7  - Rotor VIII;
+	 *            	9  - Rotor Beta;
+	 *            	10 - Rotor Gamma 
 	 * @param reflectorChoice
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include.
+	 *            reflectors to include. The reflectors are mapped as follows:
+	 *            	0 - Reflector B;
+	 *            	1 - Reflector C;
+	 *            	2 - Reflector B thin;
+	 *            	3 - Reflector C thin
 	 * @param ringSettings
 	 *            An array of 3-4 characters indicating the rotors' ring
 	 *            settings.
@@ -61,7 +92,10 @@ public class EnigmaMachine {
 	 *            An array of 3-4 characters indicating the rotors' initial
 	 *            positions.
 	 * @param plugboardMap
-	 *            String indicating the plugboard replacement mapping.
+	 *            String indicating the plugboard replacement mapping. Letters
+	 *            are swapped with their adjacant letters. For example, a 
+	 *            string of "ABCD" swaps A's with B's (and vice-versa) and C's
+	 *            with D's. 
 	 */
 	public EnigmaMachine(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap){
 		initPositions = initialPositions;
@@ -120,7 +154,7 @@ public class EnigmaMachine {
 	
 	/**
 	 * Sets the EnigmaMachine's positions to the ones provided without
-	 * changing the initial rotor position settings. 
+	 * changing the "initial" rotor position settings. 
 	 * 
 	 * @param newPositions
 	 *            Array of 3-4 character array representing the new positions
@@ -131,9 +165,11 @@ public class EnigmaMachine {
 	} // end setPositions method
 	
 	/**
-	 * Resets the initial positions. 
+	 * Resets the initial rotor positions.
 	 * 
 	 * @param newInit
+	 *            Character array of 3-4 letters indicating the new initial
+	 *            positions of the Enigma's rotors.
 	 */
 	public void setInitPositions(char[] newInit) {
 		initPositions = newInit;
@@ -144,10 +180,25 @@ public class EnigmaMachine {
 	 * 
 	 * @param rotorChoices
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma.
+	 *            to be included in the Enigma. The rotors are mapped as
+	 *            follows: 
+	 *            	0  - Rotor I;
+	 *            	1  - Rotor II;
+	 *            	2  - Rotor III;
+	 *            	3  - Rotor IV;
+	 *            	4  - Rotor V;
+	 *            	5  - Rotor VI;
+	 *            	6  - Rotor VII;
+	 *            	7  - Rotor VIII;
+	 *            	9  - Rotor Beta;
+	 *            	10 - Rotor Gamma
 	 * @param reflectorChoice
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include.
+	 *            reflectors to include. The reflectors are mapped as follows:
+	 *            	0 - Reflector B;
+	 *            	1 - Reflector C;
+	 *            	2 - Reflector B thin;
+	 *            	3 - Reflector C thin
 	 */
 	public void setRotorChoices(int[] rotorChoices,int reflectorChoice){
 		rotorArray = rotorChoices;
@@ -169,7 +220,10 @@ public class EnigmaMachine {
 	 * Sets a new Plugboard map for the Enigma Machine.
 	 * 
 	 * @param pbMap
-	 *            String indicating the plugboard replacement mapping.
+	 *            String indicating the plugboard replacement mapping. Letters
+	 *            are swapped with their adjacant letters. For example, a 
+	 *            string of "ABCD" swaps A's with B's (and vice-versa) and C's
+	 *            with D's. 
 	 */
 	public void setPlugboard(String pbMap){
 		plugboard = new Plugboard(pbMap);
@@ -184,17 +238,28 @@ public class EnigmaMachine {
 	} // end getPositions method
 	
 	/**
-	 * Returns Rotors so the reset panel can notify the GUI that they've
-	 * changed. 
+	 * Returns the rotors. Used so the reset panel can notify the GUI that
+	 * they've changed.
 	 * 
-	 * @return	Array of ints representing the rotors being used. 
+	 * @return Array of 3-4 integers numbered 0-9 to determine which rotors to
+	 *         be included in the Enigma. The rotors are mapped as follows: 
+	 *         	0 - Rotor I; 
+	 *         	1 - Rotor II; 
+	 *         	2 - Rotor III; 
+	 *         	3 - Rotor IV; 
+	 *         	4 - Rotor V; 
+	 *         	5 - Rotor VI; 
+	 *         	6 - Rotor VII; 
+	 *         	7 - Rotor VIII; 
+	 *         	9 - Rotor Beta; 
+	 *         	10 - Rotor Gamma
 	 */
 	public int[] getRotors() {
 		return rotorArray;
 	}
 	
 	/**
-	 * Returns ring settings for resets. 
+	 * Returns ring settings. Used primarily for  for resets. 
 	 * 
 	 * @return Array of 3-4 chars representing the ring positions.
 	 */
@@ -203,14 +268,25 @@ public class EnigmaMachine {
 	}
 	
 	/**
-	 * Returns the reflector settings for resets. 
+	 * Returns the reflector settings. Used primarily for resets. 
 	 * 
-	 * @return int representing the reflector choice. 
+	 * @return An integer from 0-3 indicating which of the four available
+	 *         reflectors to include. The reflectors are mapped as follows:
+	 *            	0 - Reflector B;
+	 *            	1 - Reflector C;
+	 *            	2 - Reflector B thin;
+	 *            	3 - Reflector C thin
 	 */
 	public int getReflector() {
 		return rotors.getReflector();
 	}
 	
+	/**
+	 * Returns a string representing the plugboard mapping.
+	 * 
+	 * @return String representing the current plugboard map, or null if the
+	 *         current Enigma has no plugboard.
+	 */
 	public String getPlugboard() {
 		if (plugboard == null) {
 			return "";

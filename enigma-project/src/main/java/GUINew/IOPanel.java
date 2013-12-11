@@ -59,7 +59,7 @@ public class IOPanel extends JPanel implements Observer {
 	private Lightboard lightboard;
 	
 	/**
-	 * 
+	 * Constructor. 
 	 */
 	public IOPanel()  {
 		machine.addObserver(this);
@@ -79,6 +79,12 @@ public class IOPanel extends JPanel implements Observer {
 				.addComponent(bottomPanel));
 	}
 	
+	/**
+	 * Builds the top panel. 
+	 * 
+	 * @return JPanel representing the top panel. Includes the manual input and
+	 *         output fields. 
+	 */
 	private JPanel setUpTopPanel(){
 		JPanel topPanel = new JPanel();
 		topPanel.setBackground(Color.black);
@@ -122,6 +128,12 @@ public class IOPanel extends JPanel implements Observer {
 		return topPanel;
 	}
 	
+	/**
+	 * Sets up the bottom panel.
+	 * 
+	 * @return JPanel for the bottom segment. Includes the bulk input and
+	 *         output fields, plus the "Browse" button for uploading files.
+	 */
 	private JPanel setUpBottomPanel(){
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.black);
@@ -176,6 +188,9 @@ public class IOPanel extends JPanel implements Observer {
 		return lightboardPanel;
 	}
 	
+	/**
+	 * Clears all text fields and turns off the lightboard. 
+	 */
 	public void clearFields() {
 		outputTape.setText("");
 		manualInput.setText("");

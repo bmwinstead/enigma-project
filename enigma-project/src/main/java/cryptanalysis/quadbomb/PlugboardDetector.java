@@ -1,11 +1,3 @@
-/**
- * PlugboardDetector.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Nov 26, 2013
- * Worker thread to determine plugboard settings.
- */
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.concurrent.Callable;
@@ -15,6 +7,16 @@ import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
+/**
+ * PlugboardDetector.java
+ * 
+ * Worker thread to determine plugboard settings.
+ * 
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * @version - 0.9
+ * Date - Nov 26, 2013
+ */
 public class PlugboardDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;
 	private EnigmaSettings configuration;
@@ -23,6 +25,20 @@ public class PlugboardDetector implements Callable<Boolean> {
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param tester
+	 * 				StatisticsGenerator
+	 * @param configuration
+	 * 				EnigmaSettings
+	 * @param settings
+	 * 				QuadBombSettings
+	 * @param resultsList
+	 * 				CurrentLinkedQueue<EnigmaSettings>
+	 * @param message
+	 * 				String
+	 */
 	public PlugboardDetector(StatisticsGenerator tester, 
 			EnigmaSettings configuration, 
 			QuadBombSettings settings, 
@@ -36,6 +52,9 @@ public class PlugboardDetector implements Callable<Boolean> {
 		this.message = message;
 	}
 	
+	/**
+	 * Required by Callable. Workhorse method. 
+	 */
 	public Boolean call() {
 		tester.selectFitnessTest(3);
 		
@@ -111,5 +130,5 @@ public class PlugboardDetector implements Callable<Boolean> {
 		resultsList.add(candidate);
 		
 		return true;
-	} // End run()
+	} // End call()
 }

@@ -8,7 +8,8 @@ import java.util.Arrays;
 
 /**
  * PlugBoard dialog window pop-up for character
- * pair selection.
+ * pair selection. Allows the user to create the plugboard map to be used by
+ * the EnigmaMachine for encryption. 
  * 
  * @author Rosana Montanez
  * @author Team Enigma
@@ -27,6 +28,9 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 	final int letterTotal = 26;
 	PlugButton plugs[] = new PlugButton[letterTotal];
 
+	/**
+	 * Constructor. 
+	 */
 	public PlugboardDialog() {
 		setTitle("Plugboard");
 		linker = new ComponentLinker();
@@ -106,6 +110,9 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 		}
 	}
 
+	/**
+	 * Resets the plugboard. Clears all pairings and removes linkages.
+	 */
 	public void resetPlugBoard() {
 		// deselect all button and enable them
 		for (int i = 0; i < letterTotal; i++) {
@@ -121,6 +128,12 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 		linker.clear();
 	}
 	
+	/**
+	 * Makes the plugboard visible. 
+	 * 
+	 * @return	String representing the plugboard mapping to be used by the
+	 * 			EnigmaMachine. 
+	 */
 	public String displayDialog(){
 		setVisible(true);
 		return getPBMap();

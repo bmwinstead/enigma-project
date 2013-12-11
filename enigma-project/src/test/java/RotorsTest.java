@@ -6,7 +6,7 @@ import main.java.enigma.Rotors;
 import org.junit.Test;
 
 /**
- * Rotors test. Verifies all methods in the Rotors class work and behave
+ * Rotors JUnit test. Verifies all methods in the Rotors class work and behave
  * as expected. 
  * 
  * @author Jessica Ikley

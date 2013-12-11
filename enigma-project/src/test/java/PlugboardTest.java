@@ -6,8 +6,8 @@ import main.java.enigma.Plugboard;
 import org.junit.Test;
 
 /**
- * Plugboard test. Verifies all methods in the Plugboard class work and behave
- * as expected. 
+ * Plugboard JUnit test. Verifies all methods in the Plugboard class work and 
+ * behave as expected. 
  * 
  * @author Jessica Ikley
  * @author Team Enigma

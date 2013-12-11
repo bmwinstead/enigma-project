@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import main.java.enigma.EnigmaSettings;
 
 /**
- * Panel which displays the results of Cryptanalysis.
+ * Panel which displays the results of a Cryptanalysis attempt.
  * 
  * ResultsPanel.java
  * @author Walter Adolph
@@ -37,6 +37,9 @@ public class ResultsPanel extends JPanel {
 	private JTextField fourthRingTextField;
 	private JTextField fourthIndicatorTextField;
 	
+	/**
+	 * Constructor.
+	 */
 	public ResultsPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -131,7 +134,9 @@ public class ResultsPanel extends JPanel {
 		resultsPanel.add(plugboardTextField);
 	}
 
-	// Clears the result area.
+	/**
+	 * Clears the result area.
+	 */
 	public void clearSolution() {
 		fourthRotorTextField.setText("");
 		leftRotorTextField.setText("");
@@ -154,7 +159,14 @@ public class ResultsPanel extends JPanel {
 		outputTextArea.setText("");
 	}
 	
-	// Outputs the decrypted text and discovered settings to the panel.
+	/**
+	 * Outputs the decrypted text and discovered settings to the panel.
+	 * 
+	 * @param settings
+	 * 				EnigmaSettings
+	 * @param message
+	 * 				String
+	 */
 	public void printSolution(EnigmaSettings settings, String message) {
 		int[] wheel = settings.getRotors();
 		char[] ring = settings.getRingSettings();

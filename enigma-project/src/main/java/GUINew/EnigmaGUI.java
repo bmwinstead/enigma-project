@@ -10,6 +10,9 @@ import javax.swing.JTabbedPane;
 
 /**
  * Driver/outer GUI to contain and organize the Enigma GUI elements.
+ * The Enigma GUI interface allows users to encrypt and decrypt messages
+ * using a simulation of the Enigma devices used by the Germans during
+ * World War II. 
  * 
  * @author Team Enigma
  * @version 0.9
@@ -68,6 +71,5 @@ public class EnigmaGUI {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.pack();
 		mainFrame.setVisible(true);
-//		System.out.println(s);
 	} // end main method
 } // end EnigmaGUI class

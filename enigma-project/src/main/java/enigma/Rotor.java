@@ -1,20 +1,17 @@
 package main.java.enigma;
 
 /**
+ * This class simulates a single rotor of the Enigma encryption machine. It
+ * stores both the forward and reverse wiring to allow for O(1) encryption and
+ * decryption. It also stores the Ring offset (in the physical machine, this was
+ * adjusted before the rotors were placed in the Enigma) and the stepOffset,
+ * which indicates the current position of the rotor. It also stores the
+ * positions of the carry notch(es), which impact when the rotor to the left of
+ * it will rotate.
  * 
  * @author Walter Gene Adolph
  * @author Team Enigma
- * @version 0.9
- * Date - Nov 22, 2013
- * 
- *         This class simulates a single rotor of the Enigma encryption machine.
- *         It stores both the forward and reverse wiring to allow for O(1)
- *         encryption and decryption. It also stores the Ring offset (in the
- *         physical machine, this was adjusted before the rotors were placed in
- *         the Enigma) and the stepOffset, which indicates the current position
- *         of the rotor. It also stores the positions of the carry notch(es),
- *         which impact when the rotor to the left of it will rotate.
- * 
+ * @version 0.9 Nov 22, 2013
  */
 //This implementation uses two substitution databases for ensuring that both forward
 //and reverse encryption is done in O(1) time.

@@ -33,6 +33,10 @@ public class Lightboard extends JPanel {
 			"W", "X", "Y", "Z" };
 	private JLayeredPane layeredPane;
 	private String filePrefix = "/main/resources";
+	
+	/**
+	 * Constructor. 
+	 */
 	public Lightboard() {
 		String testPath = filePrefix + "/images/lightboardImage.jpg";
 		try{
@@ -238,6 +242,9 @@ public class Lightboard extends JPanel {
 		layeredPane.add(lightZ, new Integer(0), 0);
 	}
 
+	/**
+	 * Sets all lights to "off", turning them all dark. 
+	 */
 	public void resetLights(){
 		layeredPane.setLayer(lightA, new Integer(0), 0);
 		layeredPane.setLayer(lightB, new Integer(0), 0);
@@ -267,6 +274,14 @@ public class Lightboard extends JPanel {
 		layeredPane.setLayer(lightZ, new Integer(0), 0);
 	}
 	
+	/**
+	 * Turns on a light corresponding to the last character in the given
+	 * string. 
+	 * 
+	 * @param s
+	 * 			Input string. The last character in this string is turned
+	 * 			on. 
+	 */
 	public void turnOnLight(String s) {
 		resetLights();
 		char switchChar = ' ';

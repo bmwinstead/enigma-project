@@ -6,8 +6,8 @@ import main.java.enigma.EnigmaMachine;
 import org.junit.Test;
 
 /**
- * EnigmaMachine test. Verifies all methods in the EnigmaMachine class work 
- * and behave as expected. 
+ * EnigmaMachine test. JUnit test. Verifies all methods in the EnigmaMachine 
+ * class work and behave as expected. 
  * 
  * @author Jessica Ikley
  * @author Team Enigma

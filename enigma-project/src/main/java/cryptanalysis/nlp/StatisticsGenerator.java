@@ -1,9 +1,9 @@
+package main.java.cryptanalysis.nlp;
+
+import java.util.HashMap;
+
 /**
  * StatisticsGenerator.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Nov 26, 2013
  * 
  * This class computes a variety of statistics, provided at the below references:
  * Each generator can be initialized to use a particular statistic.
@@ -20,16 +20,15 @@
  * 8 - Unigram character probability. (Chi-Squared Statistic)
  * 9 - Bigram character probability. (Chi-Squared Statistic)
  * 
- * References:
- * http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/
- * http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/
+ * @see <a href="http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/">Practical Cryptography: Cryptanalysis of Enigma</a>
+ * @see <a href="http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/">Practical Cryptography: Quadgram Statistics as a Fitness Measure</a>
  * 
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * @version - 0.9
+ * Nov 26, 2013
  * 
  */
-package main.java.cryptanalysis.nlp;
-
-import java.util.HashMap;
-
 public class StatisticsGenerator {
 	private Corpus database;
 	private int statIndex;		// Used to select statistic to use.
@@ -37,7 +36,9 @@ public class StatisticsGenerator {
 	/**
 	 * Default constructor specifying the corpus and the statistic to use.
 	 * @param newDatabase
+	 * 				Corpus
 	 * @param index
+	 * 				int
 	 */
 	public StatisticsGenerator(Corpus newDatabase, int index) {
 		database = newDatabase;
@@ -47,6 +48,7 @@ public class StatisticsGenerator {
 	/**
 	 * Select a statistic, according to the table above.
 	 * @param test
+	 * 			int
 	 */
 	public void selectFitnessTest(int test) {
 		statIndex = test;
@@ -54,8 +56,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes a fitness score using a previously set statistic method.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeFitnessScore(String message) {
 		switch (statIndex) {
@@ -86,8 +88,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a unigram character string compared to a corpus using Sinkov's Statistic.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeSinkovUnigramProbability(String message) {
 		double result = 0.0;
@@ -117,8 +119,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a bigram character string compared to a corpus using Sinkov's Statistic.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeSinkovBigramProbability(String message) {
 		double result = 0.0;
@@ -148,8 +150,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a trigram character string compared to a corpus using Sinkov's Statistic.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeSinkovTrigramProbability(String message) {
 		double result = 0.0;
@@ -179,8 +181,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a quadram character string compared to a corpus using Sinkov's Statistic.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeSinkovQuadgramProbability(String message) {
 		double result = 0.0;
@@ -210,8 +212,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a unigram character string compared to a corpus using Index of Coincidence.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeIocUnigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
@@ -240,8 +242,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a bigram character string compared to a corpus using Index of Coincidence.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeIocBigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
@@ -270,8 +272,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a trigram character string compared to a corpus using Index of Coincidence.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeIocTrigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
@@ -300,8 +302,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a quadgram character string compared to a corpus using Index of Coincidence.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeIocQuadgramProbability(String message) {
 		Corpus iocCounter = new Corpus();
@@ -330,8 +332,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a unigram character string compared to a corpus using Chi-Squared Statistic.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeChiSquaredUnigramProbability(String message) {
 		Corpus gramCounter = new Corpus();
@@ -363,8 +365,8 @@ public class StatisticsGenerator {
 	
 	/**
 	 * Computes log probability of a bigram character string compared to a corpus using Chi-Squared Statistic.
-	 * @param message to analyze
-	 * @return fitness score
+	 * @param message to analyze, a String
+	 * @return fitness score, a double
 	 */
 	public double computeChiSquaredBigramProbability(String message) {
 		Corpus gramCounter = new Corpus();

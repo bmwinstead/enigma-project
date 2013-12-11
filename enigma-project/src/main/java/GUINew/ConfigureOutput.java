@@ -1,15 +1,14 @@
 package main.java.GUINew;
 
 /**
- * Class to format the input for processing. Automatically replaces
- * numbers with their "code" letters, removes all other non-letter
- * characters, and converts everything to upper case. 
+ * Class to format the input for processing by the Enigma Machine. Automatically
+ * replaces numbers with their "code" letters, removes all other non-letter
+ * characters, and converts everything to upper case.
  * 
  * @author Ellen Ohlmacher
  * @author Team Enigma
- * @version 0.8
- * 30 Nov 2013
- *
+ * @version 0.8 30 Nov 2013
+ * 
  */
 public class ConfigureOutput {
 	
@@ -86,14 +85,17 @@ public class ConfigureOutput {
         	return getString;
         }
     } // end configure method
+
 	/**
 	 * Accepts a character and converts it to the proper format for encryption.
 	 * Converts all digits to their corresponding letters and strips out all
-	 * other nonletter characters.
+	 * other nonletter characters. All invalid characters are converted to '!'
+	 * for handling by the calling object.
 	 * 
 	 * @param getChar
 	 *            Input char to be preprocessed for encryption
-	 * @return Properly processed input char.
+	 * @return Properly processed input char. Returns '!' if the character is
+	 *         invalid.
 	 */
 	public char configure(char getChar, int spaceOption){
 		char setChar = '!';
@@ -135,7 +137,6 @@ public class ConfigureOutput {
 		if ((spaceOption == EnigmaSingleton.ORIGINALSPACES)
 				&& (getChar == ' ')) 
 		{
-			System.out.println("I am here in this if.");
 			setChar = getChar;
 		} // end if ((spaceOption == EnigmaSingleton.ORIGINALSPACES)... 
 		return setChar;

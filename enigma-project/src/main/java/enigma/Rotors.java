@@ -1,17 +1,15 @@
 package main.java.enigma;
 
 /**
- * 
- * @author Bryan Matthew Winstead
- * @author Team Enigma
- * @version 0.9
- * Date - Nov 22, 2013
- * 
  * Contains 3-4 instances of the Rotor class. Also acts as the reflector in an
  * Enigma machine. Fully encrypts a character (except for Plugboard
  * Substitutions) and handles the proper cycling of the individual Rotor
  * instances. 
- *
+ * 
+ * @author Bryan Matthew Winstead
+ * @author Team Enigma
+ * @version 0.9
+ * Nov 22, 2013
  */
 public class Rotors {
 	public final static String[] rotorWirings = { 

@@ -1,12 +1,3 @@
-/**
- * RingDetector.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Nov 26, 2013
- * 
- * Worker thread to determine possible ring settings.
- */
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.PriorityQueue;
@@ -17,6 +8,15 @@ import main.java.cryptanalysis.nlp.StatisticsGenerator;
 import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
+/**
+ * Worker thread to determine possible ring settings.
+ * 
+ * RingDetector.java
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * @version - 0.9
+ * - Nov 26, 2013
+ */
 public class RingDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;
 	private EnigmaSettings baseCandidate;
@@ -26,6 +26,20 @@ public class RingDetector implements Callable<Boolean> {
 	private PriorityQueue<EnigmaSettings> workList;
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
+	/**
+	 * Constructor. 
+	 * 
+	 * @param tester
+	 * 				StatisticsGenerator
+	 * @param baseCandidate
+	 * 				EnigmaSettings
+	 * @param settings
+	 * 				QuadBombSettings
+	 * @param resultsList
+	 * 				ConcurrentLinkedQueue<EnigmaSettings>
+	 * @param message
+	 * 				String
+	 */
 	public RingDetector(StatisticsGenerator tester, 
 			EnigmaSettings baseCandidate, 
 			QuadBombSettings settings, 
@@ -41,6 +55,9 @@ public class RingDetector implements Callable<Boolean> {
 		this.message = message;
 	}
 	
+	/**
+	 * Worker method. Specified by Callable interface. 
+	 */
 	public Boolean call() {
 		int[] testParameters = settings.getTestingRings(baseCandidate.isThreeRotor());
 		tester.selectFitnessTest(3);

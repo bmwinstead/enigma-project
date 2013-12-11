@@ -6,13 +6,13 @@ import main.java.enigma.Rotor;
 import org.junit.Test;
 
 /**
- * Rotor test. Verifies all methods in the Rotor class work and behave
+ * Rotor JUnit test. Verifies all methods in the Rotor class work and behave
  * as expected. 
  * 
  * @author Jessica Ikley
  * @author Team Enigma
  * @version 0.9
- * Date - Nov 22, 2013
+ * Nov 22, 2013
  */
 public class RotorTest {
 	

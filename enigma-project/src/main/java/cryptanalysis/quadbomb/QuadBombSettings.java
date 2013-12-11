@@ -1,9 +1,13 @@
+package main.java.cryptanalysis.quadbomb;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+import main.java.enigma.EnigmaSettings;
+
 /**
  * QuadBombSettings.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Dec 6, 2013
+ * 
  * Convenience class to control how QuadBomb will test candidates.
  * 
  * Array definitions
@@ -17,15 +21,12 @@
  * -2 or '!' - Do not test this item.
  * -1 or '?' - Test all values.
  * Any positive value or character - test that value only.
+ * 
+ * @author - Walter Adolph
+ * @author - Team Enigma
+ * @version - 0.9
+ * - Dec 6, 2013
  */
-package main.java.cryptanalysis.quadbomb;
-
-import java.util.LinkedList;
-import java.util.Queue;
-
-import main.java.enigma.EnigmaSettings;
-
-
 public class QuadBombSettings {
 	private static int NUM_ROTORS = 8;	// Used for debugging and rapid testing only.
 	
@@ -40,7 +41,24 @@ public class QuadBombSettings {
 	private int threadCount;
 	private int candidateSize;
 	
-	// Constructor saving settings and determining if testing 3-rotor Enigmas only.
+	/**
+	 * Constructor saving settings and determining if testing 3-rotor Enigmas only.
+	 * 
+	 * @param rotors
+	 * 				Array of 3-4 integers (0-9)
+	 * @param reflector
+	 * 				Integer indicating reflector (0-3)
+	 * @param rings
+	 * 				Array of integers
+	 * @param indicators
+	 * 				Array of integers
+	 * @param plugboard
+	 * 				String
+	 * @param threads
+	 * 				Integer indicating number of threads to use
+	 * @param candidates
+	 * 				Integer indicating number of canidates to track. 
+	 */
 	public QuadBombSettings(int[] rotors, int reflector, int[] rings, int[] indicators, String plugboard, int threads, int candidates) {
 		isThreeRotor = rotors[0] == 0 && (reflector == 0 || reflector == 1 || reflector == 2);
 		
@@ -65,11 +83,20 @@ public class QuadBombSettings {
 		candidateSize = candidates;
 	}
 	
+	/**
+	 * Returns an integer indicating the total number of operations performed.
+	 * 
+	 * @return	int
+	 */
 	public int getTotalOperationCount() {
 		return getLatchCount() + candidateSize * 2;
 	}
 	
-	// Gets a Queue of candidates for rotor, reflector, and indicator testing.
+	/**
+	 * Gets a Queue of candidates for rotor, reflector, and indicator testing.
+	 * 
+	 * @return Queue<EnigmaSettings>
+	 */
 	public Queue<EnigmaSettings> getRotorReflectorCandidateList() {
 		Queue<EnigmaSettings> result = new LinkedList<EnigmaSettings>();
 		
@@ -108,7 +135,11 @@ public class QuadBombSettings {
 		return result;
 	}
 	
-	// Gets number of latches to set for rotor and reflector testing.
+	/**
+	 * Gets number of latches to set for rotor and reflector testing.
+	 * 
+	 * @return integer indicating number of latches. 
+	 */
 	public int getLatchCount() {
 		// Get three-rotor counts.
 		int rotorCount = 1;
@@ -144,21 +175,21 @@ public class QuadBombSettings {
 	}
 	
 	/**
-	 * @return the threadCount
+	 * @return the threadCount, an integer
 	 */
 	public int getThreadCount() {
 		return threadCount;
 	}
 
 	/**
-	 * @return the candidateSize
+	 * @return the candidateSize, an integer
 	 */
 	public int getCandidateSize() {
 		return candidateSize;
 	}
 
 	/**
-	 * @return the plugboardSetting
+	 * @return the plugboardSetting, a String
 	 */
 	public String getPlugboardSetting() {
 		return plugboardSetting;
@@ -238,7 +269,13 @@ public class QuadBombSettings {
 		return result;
 	}
 	
-	// Gets a queue of indicator values to test.
+	/**
+	 * Gets a queue of indicator values to test.
+	 * 
+	 * @param threeRotorsOnly
+	 * 				boolean. Should be true if it's a confirmed 3-rotor message
+	 * @return Array of integers
+	 */
 	public int[] getTestingIndicators(boolean threeRotorsOnly) {
 		int[] result = new int[8];
 		
@@ -260,6 +297,13 @@ public class QuadBombSettings {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param threeRotorOnly
+	 * 				boolean indicating whether the machine is a confirmed
+	 * 				3-rotor Enigma. 
+	 * @return Array of integers. 
+	 */
 	public int[] getTestingRings(boolean threeRotorOnly) {
 		int[] result = new int[8];
 		
@@ -293,6 +337,10 @@ public class QuadBombSettings {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @return Array of booleans
+	 */
 	public boolean[] getTandemStepFlags() {
 		boolean[] result = new boolean[4];
 		

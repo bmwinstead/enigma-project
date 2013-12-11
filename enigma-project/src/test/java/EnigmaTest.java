@@ -1,6 +1,3 @@
-// This is a test comment by Ikley. 
-//Additional comment to test git changes by Eohlmacher.
-
 package test.java;
 
 import static org.junit.Assert.*;
@@ -8,6 +5,13 @@ import main.java.enigma.EnigmaMachine;
 
 import org.junit.Test;
 
+/**
+ * Initial tests of the EnigmaMachine back-end. Used relatively early in
+ * the development cycle. 
+ * 
+ * @author Team Enigma
+ * @version 0.9
+ */
 public class EnigmaTest {
 
 	String pb1 = "ABCEFIUQJXOPHMRWDTYZ";   //AB CE DT FI HM JX OP QU RW YZ
