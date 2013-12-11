@@ -231,19 +231,13 @@ public class QuadBombSettings {
 			}
 		}
 		else {
-			if (isThreeRotor) {
-				result.add(0);
-				result.add(1);
-			}
-			else {
-				result.add(2);
-				result.add(3);
-			}
+			result.add(isThreeRotor ? 0 : 2);
+			result.add(isThreeRotor ? 1 : 3);
 		}
 		
 		return result;
 	}
-	
+	/*
 	// Gets a queue of indicator values to test.
 	public Queue<char[]> getTestingIndicators(boolean threeRotorsOnly) {
 		Queue<char[]> result = new LinkedList<char[]>();
@@ -279,7 +273,30 @@ public class QuadBombSettings {
 		
 		return result;
 	}
+	*/
 	
+	// Gets a queue of indicator values to test.
+	public int[] getTestingIndicators(boolean threeRotorsOnly) {
+		int[] result = new int[8];
+		
+		result[0] = (indicatorSettings[0] == '?') ? 0 : indicatorSettings[0] - 'A';
+		result[2] = (indicatorSettings[1] == '?') ? 0 : indicatorSettings[1] - 'A';
+		result[4] = (indicatorSettings[2] == '?') ? 0 : indicatorSettings[2] - 'A';
+		result[6] = (indicatorSettings[3] == '?') ? 0 : indicatorSettings[3] - 'A';
+		
+		result[1] = (indicatorSettings[0] == '?') ? 26 : indicatorSettings[0] + 1 - 'A';
+		result[3] = (indicatorSettings[1] == '?') ? 26 : indicatorSettings[1] + 1 - 'A';
+		result[5] = (indicatorSettings[2] == '?') ? 26 : indicatorSettings[2] + 1 - 'A';
+		result[7] = (indicatorSettings[3] == '?') ? 26 : indicatorSettings[3] + 1 - 'A';
+		
+		if (threeRotorsOnly) {
+			result[0] = -1;
+			result[1] = -1;
+		}
+		
+		return result;
+	}
+	/*
 	// Gets a queue of ring settings to test, given an existing set-up.
 	public Queue<EnigmaSettings> getTestingRings(EnigmaSettings candidate) {
 		Queue<EnigmaSettings> result = new LinkedList<EnigmaSettings>();
@@ -380,6 +397,50 @@ public class QuadBombSettings {
 				} // End right ring loop.
 			} // End middle ring loop.
 		} // End left ring loop.
+		return result;
+	}
+	*/
+	public int[] getTestingRings(boolean threeRotorOnly) {
+		int[] result = new int[8];
+		
+		result[0] = (ringSettings[0] == '?') ? 0 : ringSettings[0] - 'A';
+		result[2] = (ringSettings[1] == '?') ? 0 : ringSettings[1] - 'A';
+		result[4] = (ringSettings[2] == '?') ? 0 : ringSettings[2] - 'A';
+		result[6] = (ringSettings[3] == '?') ? 0 : ringSettings[3] - 'A';
+		
+		result[1] = (ringSettings[0] == '?') ? 26 : ringSettings[0] + 1 - 'A';
+		result[3] = (ringSettings[1] == '?') ? 26 : ringSettings[1] + 1 - 'A';
+		result[5] = (ringSettings[2] == '?') ? 26 : ringSettings[2] + 1 - 'A';
+		result[7] = (ringSettings[3] == '?') ? 26 : ringSettings[3] + 1 - 'A';
+		
+		// Short-circuit the leftmost ring cycle if no constraints are set.
+		boolean ringTest = ringSettings[1] == '?' && ringSettings[2] == '?' && ringSettings[3] == '?';
+		boolean indicatorTest = indicatorSettings[1] == '?' && indicatorSettings[2] == '?' && indicatorSettings[3] == '?';
+		
+		if (threeRotorOnly) {
+			if (ringTest && indicatorTest) {
+				result[2] = 0;
+				result[3] = 1;
+			}
+		}
+		else {
+			if (ringSettings[0] == '?' && indicatorSettings[0] == '?' && ringTest && indicatorTest) {
+				result[0] = 0;
+				result[1] = 1;
+			}
+		}
+		
+		return result;
+	}
+	
+	public boolean[] getTandemStepFlags() {
+		boolean[] result = new boolean[4];
+		
+		result[0] = indicatorSettings[0] == '?' && ringSettings[0] == '?';
+		result[1] = indicatorSettings[1] == '?' && ringSettings[1] == '?';
+		result[2] = indicatorSettings[2] == '?' && ringSettings[2] == '?';
+		result[3] = indicatorSettings[3] == '?' && ringSettings[3] == '?';
+		
 		return result;
 	}
 }

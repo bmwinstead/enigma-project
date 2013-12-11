@@ -10,7 +10,6 @@
 package main.java.cryptanalysis.quadbomb;
 
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -43,33 +42,44 @@ public class IndicatorDetector implements Callable<Boolean> {
 	}
 	
 	public Boolean call() {
-		Queue<char[]> testList = settings.getTestingIndicators(baseCandidate.isThreeRotor());
+		int[] testParameters = settings.getTestingIndicators(baseCandidate.isThreeRotor());
 		tester.selectFitnessTest(3);
 		
-		while(!testList.isEmpty()) {
-			if (Thread.currentThread().isInterrupted()) {
-				return false;
-			}
-			
-			EnigmaSettings candidate = baseCandidate.copy();
-			candidate.setIndicatorSettings(testList.poll());
-			
-			EnigmaMachine bomb = candidate.createEnigmaMachine();
-			
-			String cipher = bomb.encryptString(message);
-			double testValue = tester.computeFitnessScore(cipher);
-			
-			candidate.setFitnessScore(testValue);
-			
-			workList.add(candidate);
-			
-			while (workList.size() > settings.getCandidateSize()) {
-				workList.poll();
-			}
-		}
+		for (int i = testParameters[2]; i < testParameters[3]; i++) {
+			for (int j = testParameters[4]; j < testParameters[5]; j++) {
+				for (int k = testParameters[6]; k < testParameters[7]; k++) {
+					EnigmaSettings candidate = baseCandidate.copy();
+					
+					if (baseCandidate.isThreeRotor()) {
+						char[] indicators = {(char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
+						
+						candidate.setIndicatorSettings(indicators);
+					}
+					else {
+						for (int l = testParameters[0]; l < testParameters[1]; l++) {
+							char[] indicators = {(char) ('A' + l), (char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
+							
+							candidate.setIndicatorSettings(indicators);
+						}
+					}
+					
+					EnigmaMachine bomb = candidate.createEnigmaMachine();
+					
+					String cipher = bomb.encryptString(message);
+					double testValue = tester.computeFitnessScore(cipher);
+					
+					candidate.setFitnessScore(testValue);
+					
+					workList.add(candidate);
+					
+					while (workList.size() > settings.getCandidateSize()) {
+						workList.poll();
+					}
+				} // End right indicator loop.
+			} // End middle indicator loop.
+		} // End left indicator loop.
 
 		resultsList.addAll(workList);
-		
 		return true;
 	} // End call()
 }

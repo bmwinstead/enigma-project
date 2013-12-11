@@ -3,10 +3,10 @@
  * @author - Walter Adolph
  * @author - Team Enigma
  * @date - Dec 1, 2013
- * This parser accumulates statistical data from a corpus on individual characters.
- * 1, 2, 3 and 4 character grams are analyzed.
- * A word table is also generated.
- * Punctuation is ignored.
+ * 
+ * This parser takes a database reference and scans a text file (UTF-8 is proven to work, other formats are unknown) for
+ * character grams and whole words. Nonalphanumeric characters are skipped for character grams, and specific rules are 
+ * applied for parsing words.
  */
 
 package main.java.cryptanalysis.nlp;
@@ -20,10 +20,18 @@ import java.util.regex.Pattern;
 public class TextParser {
 	private Corpus database;
 
+	/**
+	 * Constructor providing a handle to a corpus instance.
+	 * @param newCorpus
+	 */
 	public TextParser(Corpus newCorpus) {
 		database = newCorpus;
 	}
 	
+	/**
+	 * Parses a file for character grams and words, while applying set rules for nonalphanumeric characters.
+	 * @param text file to be parsed.
+	 */
 	public void parseFile(File file) {
 		try {
 			Scanner scanner = new Scanner(file);
@@ -33,17 +41,15 @@ public class TextParser {
 			char thirdgram = '\0';
 			char fourthgram = '\0';
 			
-			
-			
-			// Parse words.
+			// Parse on word tokens.
 			while (scanner.hasNext()) {
-				String word = scanner.next().trim().toUpperCase();
+				String word = scanner.next().trim().toUpperCase();	// Format word.
 				String gram = "";
 				
 				char[] characters = word.toCharArray();
 				
 				for (char character: characters) {
-					Pattern nonalphanumeric = Pattern.compile("[^\\w&&[^_]]");
+					Pattern nonalphanumeric = Pattern.compile("[^\\w&&[^_]]");					// Matches on nonalphanumeric characters.
 					Matcher invalidCharacterMatcher = nonalphanumeric.matcher("" + character);
 					
 					if (!invalidCharacterMatcher.find() && character != '_') {	// Skip punctuation.
@@ -85,7 +91,17 @@ public class TextParser {
 		}
 	}
 	
-	// Performs a variety of tests to help ensure only properly formatted words are entered.
+	/**
+	 * Adds a word, applying set rules for specific punctuation.
+	 * First, check for words with both numbers and letters, or words with no letters or numbers. If found, reject the word.
+	 * Next, split hyphenated words into word pieces and continue parsing.
+	 * Next, remove all invalid punctuation.
+	 * Next, check for valid single character words (A, I, and digits). Otherwise, reject the word.
+	 * Next, if a number, split the number into individual digits and add.
+	 * Finally, if not an empty string add the word.
+	 * 
+	 * @param word to be parsed.
+	 */
 	private void addWord(String word) {
 		Pattern nonalphanumeric = Pattern.compile("[^\\w&&[^_]]");
 		

@@ -354,7 +354,9 @@ public class Corpus implements Serializable {
 		}
 	}
 	
-	// Inner class to sort database words in descending count order.
+	/**
+	 * Inner class implementing Comparator to order grams and words in descending frequency count.
+	 */
 	public class GramComparator implements Comparator<String>, Serializable {
 		private static final long serialVersionUID = -245563502404239581L;
 		private Map<String, Integer> table;

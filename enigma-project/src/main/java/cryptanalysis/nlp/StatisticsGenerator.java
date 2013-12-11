@@ -34,15 +34,29 @@ public class StatisticsGenerator {
 	private Corpus database;
 	private int statIndex;		// Used to select statistic to use.
 	
+	/**
+	 * Default constructor specifying the corpus and the statistic to use.
+	 * @param newDatabase
+	 * @param index
+	 */
 	public StatisticsGenerator(Corpus newDatabase, int index) {
 		database = newDatabase;
 		statIndex = index;
 	}
 	
+	/**
+	 * Select a statistic, according to the table above.
+	 * @param test
+	 */
 	public void selectFitnessTest(int test) {
 		statIndex = test;
 	}
 	
+	/**
+	 * Computes a fitness score using a previously set statistic method.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeFitnessScore(String message) {
 		switch (statIndex) {
 			case 0:		// Sinkov unigram character probability.
@@ -70,7 +84,11 @@ public class StatisticsGenerator {
 		}
 	}
 	
-	// Compute log probability of a unigram character string compared to a corpus.
+	/**
+	 * Computes log probability of a unigram character string compared to a corpus using Sinkov's Statistic.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeSinkovUnigramProbability(String message) {
 		double result = 0.0;
 		
@@ -97,7 +115,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a bigram character string compared to a corpus.
+	/**
+	 * Computes log probability of a bigram character string compared to a corpus using Sinkov's Statistic.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeSinkovBigramProbability(String message) {
 		double result = 0.0;
 		
@@ -124,7 +146,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a trigram character string compared to a corpus.
+	/**
+	 * Computes log probability of a trigram character string compared to a corpus using Sinkov's Statistic.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeSinkovTrigramProbability(String message) {
 		double result = 0.0;
 		
@@ -151,7 +177,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute log probability of a quadgram character string compared to a corpus.
+	/**
+	 * Computes log probability of a quadram character string compared to a corpus using Sinkov's Statistic.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeSinkovQuadgramProbability(String message) {
 		double result = 0.0;
 		
@@ -178,7 +208,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute I.O.C. probability of a unigram character string compared to a corpus.
+	/**
+	 * Computes log probability of a unigram character string compared to a corpus using Index of Coincidence.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeIocUnigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -204,7 +238,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute I.O.C. probability of a bigram character string compared to a corpus.
+	/**
+	 * Computes log probability of a bigram character string compared to a corpus using Index of Coincidence.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeIocBigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -230,7 +268,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute I.O.C. probability of a trigram character string compared to a corpus.
+	/**
+	 * Computes log probability of a trigram character string compared to a corpus using Index of Coincidence.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeIocTrigramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -256,7 +298,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
-	// Compute I.O.C. probability of a quadgram character string compared to a corpus.
+	/**
+	 * Computes log probability of a quadgram character string compared to a corpus using Index of Coincidence.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeIocQuadgramProbability(String message) {
 		Corpus iocCounter = new Corpus();
 		
@@ -282,6 +328,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
+	/**
+	 * Computes log probability of a unigram character string compared to a corpus using Chi-Squared Statistic.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeChiSquaredUnigramProbability(String message) {
 		Corpus gramCounter = new Corpus();
 		
@@ -310,6 +361,11 @@ public class StatisticsGenerator {
 		return result;
 	}
 	
+	/**
+	 * Computes log probability of a bigram character string compared to a corpus using Chi-Squared Statistic.
+	 * @param message to analyze
+	 * @return fitness score
+	 */
 	public double computeChiSquaredBigramProbability(String message) {
 		Corpus gramCounter = new Corpus();
 		
@@ -357,113 +413,6 @@ public class StatisticsGenerator {
 				}
 			}
 		}
-		
-		return result;
-	}
-	
-	// Test generator used to compare individual probabilities in a single pass.
-	public double[] computeAllScores(String message) {
-		double[] result = new double[8];
-		Corpus iocCounter = new Corpus();
-		
-		int[] totalCount = {database.getTotalUnigramCount(),
-				database.getTotalBigramCount(),
-				database.getTotalTrigramCount(),
-				database.getTotalQuadgramCount()
-		};
-		
-		double[] floorLog = new double[result.length];
-		
-		// Set floor value to 1 / 1000 of single instance of gram. See above references.
-		for (int index = 0; index < 4; index++) {
-			floorLog[index] = -3.0 + Math.log10(1.0 / totalCount[index]);
-		}
-		
-		char[] characters = message.toCharArray();
-		
-		// Compute individual probabilites.
-		// log probabilities are used to avoid numerical underflow. See above references.
-		for (int index = 0; index < message.length(); index++) {
-			// Compute unigram character statistics.
-			String gram = "" + characters[index];
-			long count = database.getUnigramCount(gram);
-			double logProb = Math.log10((double)count / totalCount[0]);
-			
-			if (count > 0)
-				result[0] += logProb;
-			else
-				result[0] += floorLog[0];	// Prevent addition by negative infinity resulting from log(0).
-			
-			iocCounter.addUnigram(gram);
-			
-			if (message.length() - index > 1) {
-				// Compute bigram character statistic.
-				gram = "" + characters[index] + characters[index + 1];
-				count = database.getBigramCount(gram);
-				logProb = Math.log10((double)count / totalCount[1]);
-				
-				if (count > 0)
-					result[1] += logProb;
-				else
-					result[1] += floorLog[1];	// Prevent addition by negative infinity resulting from log(0).
-				
-				iocCounter.addBigram(gram);
-			}
-			
-			if (message.length() - index > 2) {
-				// Compute trigram character statistic.
-				gram = "" + characters[index] + characters[index + 1] + characters[index + 2];
-				count = database.getTrigramCount(gram);
-				logProb = Math.log10((double)count / totalCount[2]);
-				
-				if (count > 0)
-					result[2] += logProb;
-				else
-					result[2] += floorLog[2];	// Prevent addition by negative infinity resulting from log(0).
-				
-				iocCounter.addTrigram(gram);
-			}
-			
-			if (message.length() - index > 3) {
-				// Compute quadgram character statistic.
-				gram = "" + characters[index] + characters[index + 1] + characters[index + 2] + characters[index + 3];
-				count = database.getQuadgramCount(gram);
-				logProb = Math.log10((double)count / totalCount[3]);
-				
-				if (count > 0)
-					result[3] += logProb;
-				else
-					result[3] += floorLog[3];	// Prevent addition by negative infinity resulting from log(0).
-				
-				iocCounter.addQuadgram(gram);
-			}
-		}
-		
-		// Compute Index of Coincidences.
-		for (String gram: iocCounter.getUnigramTestQueue()) {
-			long count = iocCounter.getUnigramCount(gram);
-			result[4] += count * (count - 1);
-		}
-		
-		for (String gram: iocCounter.getBigramTestQueue()) {
-			long count = iocCounter.getBigramCount(gram);
-			result[5] += count * (count - 1);
-		}
-		
-		for (String gram: iocCounter.getTrigramTestQueue()) {
-			long count = iocCounter.getTrigramCount(gram);
-			result[6] += count * (count - 1);
-		}
-		
-		for (String gram: iocCounter.getQuadgramTestQueue()) {
-			long count = iocCounter.getQuadgramCount(gram);
-			result[7] += count * (count - 1);
-		}
-		
-		result[4] /= iocCounter.getTotalUnigramCount() * (iocCounter.getTotalUnigramCount() - 1);
-		result[5] /= iocCounter.getTotalBigramCount() * (iocCounter.getTotalBigramCount() - 1);
-		result[6] /= iocCounter.getTotalTrigramCount() * (iocCounter.getTotalTrigramCount() - 1);
-		result[7] /= iocCounter.getTotalQuadgramCount() * (iocCounter.getTotalQuadgramCount() - 1);
 		
 		return result;
 	}

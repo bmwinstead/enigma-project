@@ -219,8 +219,8 @@ public class CaGuiPrototype extends JPanel {
 		// Decrypts an encrypted messaging using QuadBomb.
 		decryptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				Pattern nonalphanumeric = Pattern.compile("[^a-zA-Z]");
-				Matcher invalidCharacterMatcher = nonalphanumeric.matcher(cipherTextInputTextArea.getText());
+				Pattern nonalphanumeric = Pattern.compile("[^a-zA-Z\\s]");
+				Matcher invalidCharacterMatcher = nonalphanumeric.matcher(cipherTextInputTextArea.getText().replace(" ", ""));
 				
 				boolean validCipherText = !invalidCharacterMatcher.find() && cipherTextInputTextArea.getText().trim().length() > 0;
 				
