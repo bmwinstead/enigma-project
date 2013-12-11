@@ -76,19 +76,17 @@ public class CaGuiPrototype extends JPanel {
 		ObjectInputStream is = null;
 		try{
 			is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
-		} catch(Exception e){
+			database = (Corpus)is.readObject();
+		} catch(NullPointerException e){
 			resourceLoc = "training.corpus";
 			try {
 				is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
-			} catch (IOException e1) {
+				database = (Corpus)is.readObject();
+			} catch (IOException | ClassNotFoundException e1) {
 				JOptionPane.showMessageDialog(null, "Corpus not found");
 			}
-		}
-		try {
-			database = (Corpus)is.readObject();
-		} catch (ClassNotFoundException | IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "Corpus corrupt");
-			e.printStackTrace();
 		}
 		// Automatically generated code.
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
