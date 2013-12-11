@@ -71,5 +71,5 @@ public class IndicatorDetector implements Callable<Boolean> {
 		resultsList.addAll(workList);
 		
 		return true;
-	} // End run()
+	} // End call()
 }

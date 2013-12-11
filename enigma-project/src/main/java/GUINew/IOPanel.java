@@ -1,16 +1,6 @@
 package main.java.GUINew;
 
 import java.awt.Color;
-
-/**
- * 
- * @author Team Enigma
- * @version 0.9
- * @date Nov 30, 2013
- * 
- * Panel for file input/output and encrypt button
- * 
- */
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -47,8 +37,11 @@ import main.java.enigma.EnigmaSettings;
  * When encrypting characters it provides a graphical representation
  * of the "lightboard", lighting up the encrypted character, reminiscient
  * of how the original machines operated.
+ * 
  * @author Bryan Winstead
- *
+ * @author Team Enigma
+ * @version .9
+ * @date Nov 30, 2013
  */
 @SuppressWarnings("serial")
 public class IOPanel extends JPanel implements Observer {
@@ -230,21 +223,35 @@ public class IOPanel extends JPanel implements Observer {
 				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
 				String encrypted = "";
 				for(String s : ls){
+					s = s.replace("e&", "");//This is a hack. See GitHub issue #39
+					s = s.replaceAll("[^\\w\\s]", ""); //Catching crazy characters
 					encrypted += machine.encryptString(s);
 					encrypted = encrypted.replace("\n", "").replace("\r", "");
 					encrypted += "\n"; 
 				}
 				System.out.println("Text Error Checking and Conversion");
 				encrypted = addSpaces(encrypted);
-				bulkOutput.setText(encrypted);
+				if (encrypted.equals("") || encrypted.equals(null) || encrypted.equals("\n")){
+					bulkOutput.setText("Input text must contain at least one letter or number. "
+							+ "\n" + "Input file must be a text file.");
+					JOptionPane.showMessageDialog(tempFrame,"Error 100: "
+							+ "No valid data in input text.");
+				}
+				else{
+					bulkOutput.setText(encrypted);
+				}
 			} catch(InvalidPathException e){
 				String s = bulkInput.getText();
+				s = s.replaceAll("[^\\w\\s]", ""); //catching crazy characters
 				String encrypted = machine.encryptString(s);
 				System.out.println("Text Error Checking and Conversion");
+				JOptionPane.showMessageDialog(tempFrame,"Error 100: "
+						+ "No valid data in input text.");
 				encrypted = addSpaces(encrypted);
 				bulkOutput.setText(encrypted);
 			} catch (IOException e) {
 				String s = bulkInput.getText();
+				s = s.replaceAll("[^\\w\\s]", ""); //catching crazy characters
 				s = machine.encryptString(s);
 				lightboard.turnOnLight(s); //Activate Lightboard
 				s = addSpaces(s);

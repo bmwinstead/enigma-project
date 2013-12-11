@@ -510,7 +510,7 @@ public class RotorPanel extends JPanel implements Observer {
 //			printState();
 			switch (temp.getActionCommand()) {
 			case "fourthRotorRingSetting":
-				if (rotorCheck && (fourthRotorChoice.getSelectedIndex() == 0)) {
+				if (fourthRotorChoice.getSelectedIndex() == 0) {
 					// no fourth rotor
 					fourthRotorRingSetting.setSelectedIndex(0);
 					ringSettings[0] = '!';
