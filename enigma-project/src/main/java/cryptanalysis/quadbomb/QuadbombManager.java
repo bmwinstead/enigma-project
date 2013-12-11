@@ -89,12 +89,12 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		// Initialize thread list.
 		threadManager = Executors.newFixedThreadPool(settings.getThreadCount());
 		
-		setProgress(0);
 		operationCount = 0;
 		
 		Queue<EnigmaSettings> testList = settings.getRotorReflectorCandidateList();
 		LinkedList<Future<Boolean>> threadList = new LinkedList<Future<Boolean>>();
 		
+		updateProgress(0);
 		while (!testList.isEmpty()) {
 			threadList.add(threadManager.submit(new IndicatorDetector(statGenerator, testList.poll(), settings, resultsList, message)));
 		}
@@ -218,6 +218,9 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		if (result != null && decryptedMessage != null) {
 			resultsPanel.printSolution(result, decryptedMessage);
 			statusLabel.setText("Completed");
+		}
+		else if (threadManager.isShutdown()) {
+			statusLabel.setText("Aborted...");
 		}
 	}
 	

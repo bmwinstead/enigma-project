@@ -85,6 +85,10 @@ public class RingDetector implements Callable<Boolean> {
 						candidate.setFitnessScore(testValue);
 						
 						workList.add(candidate);
+						
+						if (Thread.currentThread().isInterrupted()) {
+							return false;
+						}
 					}
 					else {
 						for (int l = testParameters[0]; l < testParameters[1]; l++) {
@@ -125,13 +129,16 @@ public class RingDetector implements Callable<Boolean> {
 							candidate.setFitnessScore(testValue);
 							
 							workList.add(candidate);
+							
+							if (Thread.currentThread().isInterrupted()) {
+								return false;
+							}
 						} // End left ring loop.
 					} // End fourth rotor check.
 					
 					while (workList.size() > settings.getCandidateSize()) {
 						workList.poll();
 					}
-					
 				} // End right ring loop.
 			} // End middle ring loop.
 		} // End left ring loop.

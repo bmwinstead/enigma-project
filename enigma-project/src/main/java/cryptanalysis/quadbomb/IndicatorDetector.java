@@ -48,32 +48,49 @@ public class IndicatorDetector implements Callable<Boolean> {
 		for (int i = testParameters[2]; i < testParameters[3]; i++) {
 			for (int j = testParameters[4]; j < testParameters[5]; j++) {
 				for (int k = testParameters[6]; k < testParameters[7]; k++) {
-					EnigmaSettings candidate = baseCandidate.copy();
-					
 					if (baseCandidate.isThreeRotor()) {
+						EnigmaSettings candidate = baseCandidate.copy();
 						char[] indicators = {(char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
 						
 						candidate.setIndicatorSettings(indicators);
+						
+						EnigmaMachine bomb = candidate.createEnigmaMachine();
+						
+						String cipher = bomb.encryptString(message);
+						double testValue = tester.computeFitnessScore(cipher);
+						
+						candidate.setFitnessScore(testValue);
+						
+						workList.add(candidate);
 					}
 					else {
 						for (int l = testParameters[0]; l < testParameters[1]; l++) {
+							EnigmaSettings candidate = baseCandidate.copy();
 							char[] indicators = {(char) ('A' + l), (char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
 							
 							candidate.setIndicatorSettings(indicators);
+							
+							EnigmaMachine bomb = candidate.createEnigmaMachine();
+							
+							String cipher = bomb.encryptString(message);
+							double testValue = tester.computeFitnessScore(cipher);
+							
+							candidate.setFitnessScore(testValue);
+							
+							workList.add(candidate);
+							
+							while (workList.size() > settings.getCandidateSize()) {
+								workList.poll();
+							}
 						}
 					}
 					
-					EnigmaMachine bomb = candidate.createEnigmaMachine();
-					
-					String cipher = bomb.encryptString(message);
-					double testValue = tester.computeFitnessScore(cipher);
-					
-					candidate.setFitnessScore(testValue);
-					
-					workList.add(candidate);
-					
 					while (workList.size() > settings.getCandidateSize()) {
 						workList.poll();
+					}
+					
+					if (Thread.currentThread().isInterrupted()) {
+						return false;
 					}
 				} // End right indicator loop.
 			} // End middle indicator loop.
