@@ -19,7 +19,7 @@ import main.java.enigma.EnigmaSettings;
  * @author Bryan Winstead
  * @author Team Enigma
  * @version 0.9
- * @date 30 Nov 2013
+ * Date: 30 Nov 2013
  * 
  */
 public class EnigmaSingleton extends Observable {
@@ -136,7 +136,10 @@ public class EnigmaSingleton extends Observable {
 	
 	/**
 	 * Sets the spaces option
+	 * 
 	 * @param option
+	 *            int representing which space option (none, 4, 5, or original)
+	 *            we are using.
 	 */
 	public void setSpacesOption(int option) {
 		spacesOption = option;
@@ -144,7 +147,9 @@ public class EnigmaSingleton extends Observable {
 	
 	/**
 	 * Gets the current spaces option.
-	 * @return
+	 * 
+	 * @return int representing which space option (none, 4, 5, or original) we
+	 *         are using.
 	 */
 	public int getSpacesOption() {
 		return spacesOption;
@@ -176,11 +181,13 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	/**
-	 * Performs encryption on an entire string using the current machine 
-	 * state. Then calls notifyObserevrs() to pass the new machine state
-	 * back to the GUI components, which then update.
+	 * Performs encryption on an entire string using the current machine state.
+	 * Then calls notifyObserevrs() to pass the new machine state back to the
+	 * GUI components, which then update.
+	 * 
 	 * @param s
-	 * @return
+	 *            String to be sent to the Enigma Machine for encryption.
+	 * @return String that has been encrypted.
 	 */
 	public String encryptString(String s) {
 		System.out.println("(Singleton)Encrypting string " + s + "\n");

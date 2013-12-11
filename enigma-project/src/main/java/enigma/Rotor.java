@@ -5,7 +5,7 @@ package main.java.enigma;
  * @author Walter Gene Adolph
  * @author Team Enigma
  * @version 0.9
- * @date - Nov 22, 2013
+ * Date - Nov 22, 2013
  * 
  *         This class simulates a single rotor of the Enigma encryption machine.
  *         It stores both the forward and reverse wiring to allow for O(1)

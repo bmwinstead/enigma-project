@@ -5,7 +5,7 @@ package main.java.enigma;
  * @author Brian Matthew Winstead
  * @author Team Enigma
  * @version 0.9
- * @date - Nov 22, 2013
+ * Date - Nov 22, 2013
  * 
  * This class simulates the plugboard in the Enigma encryption machine. The
  * plugboard was a simple two-way replacement cipher that was available

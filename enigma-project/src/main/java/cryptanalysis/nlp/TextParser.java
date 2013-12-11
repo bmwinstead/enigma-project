@@ -29,8 +29,11 @@ public class TextParser {
 	}
 	
 	/**
-	 * Parses a file for character grams and words, while applying set rules for nonalphanumeric characters.
-	 * @param text file to be parsed.
+	 * Parses a file for character grams and words, while applying set rules for
+	 * nonalphanumeric characters.
+	 * 
+	 * @param file
+	 *            Text file to be parsed.
 	 */
 	public void parseFile(File file) {
 		try {

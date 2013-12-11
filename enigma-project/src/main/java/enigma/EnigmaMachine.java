@@ -7,7 +7,7 @@ import java.util.Arrays;
  * @author Bryan Winstead
  * @author Team Enigma
  * @version 0.9
- * @date - Nov 22, 2013
+ * Date - Nov 22, 2013
  * 
  * The complete "guts" of the Enigma Machine. Includes all rotors, reflector,
  * and plugbaord. Allows for the encryption of a single character or a string.
