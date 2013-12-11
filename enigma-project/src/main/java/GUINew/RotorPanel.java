@@ -27,9 +27,10 @@ import main.java.enigma.EnigmaSettings;
  * of all Enigma settings, and helps propagate those settings
  * to other classes that need them through the use of the Enigma
  * Singleton.
+ * 
  * @author Team Enigma
  * @version 0.9
- * @date Dec 9, 2013
+ * Dec 9, 2013
  * 
  */
 @SuppressWarnings("serial")

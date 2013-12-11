@@ -12,7 +12,7 @@ import org.junit.Test;
  * @author Jessica Ikley
  * @author Team Enigma
  * @version 0.9
- * @date - Nov 22, 2013
+ * Nov 22, 2013
  */
 public class EnigmaMachineTest {
 	// Test cases include most final system test cases. The expected results

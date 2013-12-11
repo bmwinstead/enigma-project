@@ -1,10 +1,3 @@
-/**
- * ResultsPanel.java
- * @author - Walter Adolph
- * @author - Team Enigma
- * @version - 0.9
- * @date - Nov 26, 2013
- */
 package main.java.GUINew;
 
 import java.awt.Color;
@@ -17,6 +10,16 @@ import javax.swing.JTextField;
 
 import main.java.enigma.EnigmaSettings;
 
+/**
+ * Panel which displays the results of Cryptanalysis.
+ * 
+ * ResultsPanel.java
+ * @author Walter Adolph
+ * @author Team Enigma
+ * @version 0.9
+ * Dec 9, 2013
+ * 
+ */
 public class ResultsPanel extends JPanel {
 	private JTextField leftRotorTextField;
 	private JTextField middleRotorTextField;

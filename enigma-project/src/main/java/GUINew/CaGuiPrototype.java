@@ -36,6 +36,16 @@ import main.java.cryptanalysis.nlp.Corpus;
 import main.java.cryptanalysis.quadbomb.QuadBombSettings;
 import main.java.cryptanalysis.quadbomb.QuadbombManager;
 
+/**
+ * User Interface for Cryptanalysis components.
+ * Contains all cryptanalysis fields and options.
+ * 
+ * @author Bryan Winstead
+ * @author Team Enigma
+ * @version 0.5
+ * 12/2/2013
+ */
+
 public class CaGuiPrototype extends JPanel {
 	private Corpus database;
 	private QuadbombManager analyzer;

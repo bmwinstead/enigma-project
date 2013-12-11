@@ -7,10 +7,13 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 /**
+ * PlugBoard dialog window pop-up for character
+ * pair selection.
+ * 
  * @author Rosana Montanez
  * @author Team Enigma
- * @version 0.1
- * @date - Nov 27, 2013
+ * @version 0.9
+ * Nov 27, 2013
  */
 
 @SuppressWarnings("serial")

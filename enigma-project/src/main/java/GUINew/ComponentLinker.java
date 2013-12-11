@@ -10,15 +10,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Draws the lines that illustrate which letters are linked 
+ * together in the plugboard. 
+ * 
  * @author Rosana Montanez
  * @author Team Enigma
  * @version 0.1
- * @date - Nov 27, 2013
+ * Nov 27, 2013
  * Most of this code comes from 
- * @see http://stackoverflow.com/a/12389479/909085
+ * http://stackoverflow.com/a/12389479/909085
  * 
- * Draws the lines that illustrate which letters are linked together in the
- * plugboard. 
  */
 
 

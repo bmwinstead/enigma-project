@@ -1,14 +1,14 @@
 package main.java.GUINew;
 
 /**
- * @Author Ellen Ohlmacher
+ * Class to format the input for processing. Automatically replaces
+ * numbers with their "code" letters, removes all other non-letter
+ * characters, and converts everything to upper case. 
+ * 
+ * @author Ellen Ohlmacher
  * @author Team Enigma
  * @version 0.8
- * @date  30 Nov 2013
- * 
- * Class to format the input for processing. Automatically replaces
- * numbers with their "code" letters, removes all other nonletter
- * characters, and converts everything to upper case. 
+ * 30 Nov 2013
  *
  */
 public class ConfigureOutput {

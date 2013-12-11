@@ -9,13 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 /**
+ * Driver/outer GUI to contain and organize the Enigma GUI elements.
  * 
  * @author Team Enigma
  * @version 0.9
- * @date Nov 30, 2013
- * 
- *       Driver/outer GUI to contain and organize the Enigma GUI elements.
- * 
+ * Nov 30, 2013
  */
 public class EnigmaGUI {
 	private static RotorPanel rotorPanel;

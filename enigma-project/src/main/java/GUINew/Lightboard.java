@@ -10,11 +10,15 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 /**
- * Lightboard... provides a visual display of the output
- * character from a character-by-character decryption.
+ * Provides a visual "Light Board" display of the last 
+ * output character following encryption.
+ * This simulates the "Light Board" output of the
+ * historical Enigma Machines.
+ * 
+ * @author Ellen Ohlmacher
  * @author Team Enigma
  * @version 0.9
- * @date Nov 30, 2013
+ * Nov 30, 2013
  * 
  */
 

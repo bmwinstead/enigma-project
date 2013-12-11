@@ -1,6 +1,6 @@
 /*Issues:  getRotorSetting(). needs work to ensure that data definition matches how 
  * Enigma Machine process the rotors */
-
+ package main.java.GUINew;
 
 import java.awt.*;
 import javax.swing.border.*;
@@ -9,7 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.*;
-
+/**
+ * Back end for Machine Type Selection drop-down.
+ * 
+ * @author Rosana Montanez
+ * @author Team Enigma
+ * @version 0.5
+ * 12/2/2013
+ */
 public class RotorsandReflectorGUI extends JFrame{
 	private String[] machineOptions = {" ","Enigma1", "M3","M4", "M4 - R1", "M4 - R2"};
 	

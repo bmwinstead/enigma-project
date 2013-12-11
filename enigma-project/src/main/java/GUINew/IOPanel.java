@@ -32,7 +32,7 @@ import javax.swing.text.Document;
 import main.java.enigma.EnigmaSettings;
 
 /**
- * Combines all the IO functionality of the Enigma, providing
+ * Combines all of the IO functionality of the Enigma, providing
  * ways to encrypt characters, long strings, and entire files.
  * When encrypting characters it provides a graphical representation
  * of the "lightboard", lighting up the encrypted character, reminiscient
@@ -41,7 +41,7 @@ import main.java.enigma.EnigmaSettings;
  * @author Bryan Winstead
  * @author Team Enigma
  * @version .9
- * @date Nov 30, 2013
+ * Nov 30, 2013
  */
 @SuppressWarnings("serial")
 public class IOPanel extends JPanel implements Observer {

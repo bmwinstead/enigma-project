@@ -21,7 +21,7 @@ import java.util.PriorityQueue;
  * @author Walter Adolph
  * @author Team Enigma
  * @version 0.9
- * @date 30 Nov 2013
+ * 30 Nov 2013
  * 
  */
 
@@ -147,7 +147,7 @@ public class Corpus implements Serializable {
 	
 	/**
 	 * Gets the frequency count of the specified word.
-	 * @param gram - the word to look for.
+	 * @param word - the word to look for.
 	 * @return the number of occurrences of the specified word, or 0 if not found.
 	 */
 	public int getWordCount(String word) {
@@ -215,7 +215,7 @@ public class Corpus implements Serializable {
 	
 	/**
 	 * Counts and adds the specified unigram to the appropriate table. 
-	 * @param a new priority queue of sorted unigrams.
+	 * @param word - a new priority queue of sorted unigrams.
 	 */
 	public void addUnigram(String word) {
 		if (unigramTable.containsKey(word)) {
@@ -231,7 +231,7 @@ public class Corpus implements Serializable {
 	
 	/**
 	 * Counts and adds the specified bigram to the appropriate table. 
-	 * @param a new priority queue of sorted bigrams.
+	 * @param phrase - a new priority queue of sorted bigrams.
 	 */
 	public void addBigram(String phrase) {
 		if (bigramTable.containsKey(phrase)) {
@@ -247,7 +247,7 @@ public class Corpus implements Serializable {
 
 	/**
 	 * Counts and adds the specified trigram to the appropriate table. 
-	 * @param a new priority queue of sorted trigrams.
+	 * @param phrase - a new priority queue of sorted trigrams.
 	 */
 	public void addTrigram(String phrase) {
 		if (trigramTable.containsKey(phrase)) {
@@ -263,7 +263,7 @@ public class Corpus implements Serializable {
 	
 	/**
 	 * Counts and adds the specified quadgram to the appropriate table. 
-	 * @param a new priority queue of sorted quadgrams.
+	 * @param phrase - a new priority queue of sorted quadgrams.
 	 */
 	public void addQuadgram(String phrase) {
 		if (quadgramTable.containsKey(phrase)) {
@@ -279,7 +279,7 @@ public class Corpus implements Serializable {
 	
 	/**
 	 * Counts and adds the specified word to the appropriate table. 
-	 * @param a new priority queue of sorted words.
+	 * @param word - a new priority queue of sorted words.
 	 */
 	public void addWord(String word) {
 		if (wordTable.containsKey(word)) {
@@ -299,7 +299,6 @@ public class Corpus implements Serializable {
 	 * (normally one in a million) are likely garbled.
 	 * As it is expected that the only unigrams are alphanumeric, the check is not applied to the unigram table.
 	 * 
-	 * @param a new priority queue of sorted words.
 	 */
 	public void trimCorpus() {
 		int countThreshold = getTotalBigramCount() / COUNT_THRESHOLD + 1;

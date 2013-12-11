@@ -21,7 +21,7 @@ import java.util.TreeSet;
  * @author Walter Adolph
  * @author Team Enigma
  * @version 0.9
- * @date 1 Dec 2013
+ * 1 Dec 2013
  * 
  */
 

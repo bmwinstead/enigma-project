@@ -1,10 +1,3 @@
-/**
- * ResetPanel.java
- * @author - Jessica Ikley
- * @author - Team Enigma
- * @version - 0.9
- * @date - Dec 5, 2013
- */
 package main.java.GUINew;
 
 import java.awt.Color;
@@ -24,8 +17,11 @@ import javax.swing.SwingConstants;
  * the machine state in one of three different ways.
  * Also includes the functionality for configuring
  * the text output.
+ * 
+ * ResetPanel.java
  * @author Jessica Ikley
  * @author Team Enigma
+ * Dec 5, 2013
  */
 @SuppressWarnings("serial")
 public class ResetPanel extends JPanel {
