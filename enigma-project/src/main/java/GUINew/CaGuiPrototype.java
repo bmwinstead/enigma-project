@@ -73,23 +73,23 @@ public class CaGuiPrototype extends JPanel {
 	private JButton decryptButton;
 	public CaGuiPrototype() {
 		String resourceLoc = "/main/resources/training.corpus";
-		InputStream is;
+		ObjectInputStream is = null;
 		try{
-			is = getClass().getResourceAsStream(resourceLoc);
+			is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
 		} catch(Exception e){
 			resourceLoc = "training.corpus";
-			is = getClass().getResourceAsStream(resourceLoc);
+			try {
+				is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
+			} catch (IOException e1) {
+				JOptionPane.showMessageDialog(null, "Corpus not found");
+			}
 		}
-		ObjectInputStream objectStream;
 		try {
-			objectStream = new ObjectInputStream(is);
-			database = (Corpus) objectStream.readObject();
-		} catch (IOException | ClassNotFoundException e ) {
-			JOptionPane.showMessageDialog(null, "Issue");
+			database = (Corpus)is.readObject();
+		} catch (ClassNotFoundException | IOException e) {
+			JOptionPane.showMessageDialog(null, "Corpus corrupt");
 			e.printStackTrace();
 		}
-
-		
 		// Automatically generated code.
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
