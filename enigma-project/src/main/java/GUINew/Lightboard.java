@@ -32,8 +32,8 @@ public class Lightboard extends JPanel {
 	public Lightboard() {
 		String testPath = filePrefix + "/images/lightboardImage.jpg";
 		try{
-			getClass().getResource(testPath);
-		} catch(Exception e){
+			ImageIcon t = new ImageIcon(getClass().getResource(testPath));
+		} catch(NullPointerException e){
 			filePrefix = "";
 		}
 		layeredPane = new JLayeredPane();

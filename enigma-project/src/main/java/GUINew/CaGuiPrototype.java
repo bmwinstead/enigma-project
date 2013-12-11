@@ -15,6 +15,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,20 +71,23 @@ public class CaGuiPrototype extends JPanel {
 	private JPanel progressBarPanel;
 	private JPanel inputFlowPanel;
 	private JButton decryptButton;
-	
 	public CaGuiPrototype() {
-		// Load the corpus from the default project location.
-		FileInputStream fileStream;
-		try {
-			fileStream = new FileInputStream("training.corpus");
-			ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-			database = (Corpus) objectStream.readObject();
-			objectStream.close();
+		String resourceLoc = "/main/resources/training.corpus";
+		ObjectInputStream is = null;
+		try{
+			is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
+			database = (Corpus)is.readObject();
+		} catch(NullPointerException e){
+			resourceLoc = "/training.corpus";
+			try {
+				is = new ObjectInputStream(getClass().getResourceAsStream(resourceLoc));
+				database = (Corpus)is.readObject();
+			} catch (IOException | ClassNotFoundException e1) {
+				JOptionPane.showMessageDialog(null, "Corpus not found");
+			}
 		} catch (IOException | ClassNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "Corpus not found!");
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Corpus corrupt");
 		}
-		
 		// Automatically generated code.
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
