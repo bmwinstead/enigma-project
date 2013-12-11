@@ -16,6 +16,8 @@ import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -67,6 +69,7 @@ public class CaGuiPrototype extends JPanel {
 	private JTextField statusTextField;
 	private JPanel progressBarPanel;
 	private JPanel inputFlowPanel;
+	private JButton decryptButton;
 	
 	public CaGuiPrototype() {
 		// Load the corpus from the default project location.
@@ -134,7 +137,7 @@ public class CaGuiPrototype extends JPanel {
 		buttonInputPanel.setBackground(Color.BLACK);
 		buttonInputPanel.setLayout(new GridLayout(2, 1, 2, 2));
 		
-		JButton decryptButton = new JButton("Decrypt...");
+		decryptButton = new JButton("Decrypt...");
 		buttonInputPanel.add(decryptButton);
 		
 		abortButton = new JButton("Abort");
@@ -145,6 +148,7 @@ public class CaGuiPrototype extends JPanel {
 					analyzer.abort();
 					analyzer.cancel(true);
 					
+					decryptButton.setEnabled(true);
 					statusTextField.setText("Aborted...");
 				}
 			}
@@ -215,7 +219,15 @@ public class CaGuiPrototype extends JPanel {
 		// Decrypts an encrypted messaging using QuadBomb.
 		decryptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (database.getTotalQuadgramCount() > 0) {
+				Pattern nonalphanumeric = Pattern.compile("[^a-zA-Z]");
+				Matcher invalidCharacterMatcher = nonalphanumeric.matcher(cipherTextInputTextArea.getText());
+				
+				boolean validCipherText = !invalidCharacterMatcher.find() && cipherTextInputTextArea.getText().trim().length() > 0;
+				
+				invalidCharacterMatcher = invalidCharacterMatcher.reset(plugboardTextField.getText());
+				boolean validPlugboardText = !invalidCharacterMatcher.find() && plugboardTextField.getText().replace(" ", "").length() % 2 == 0;
+				
+				if (database.getTotalQuadgramCount() > 0 && validCipherText && validPlugboardText) {
 					String[] words = cipherTextInputTextArea.getText().toUpperCase().split("\\s");	// Split on whitespace.
 					String cipher = "";
 					
@@ -228,7 +240,7 @@ public class CaGuiPrototype extends JPanel {
 					resultsPanel.clearSolution();
 					statusTextField.setText("Starting...");
 					
-					analyzer = new QuadbombManager(database, cipher, getSettings(), statusTextField, resultsPanel);
+					analyzer = new QuadbombManager(database, cipher, getSettings(), statusTextField, decryptButton, resultsPanel);
 					
 					analyzer.addPropertyChangeListener(new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent event) {
@@ -239,6 +251,13 @@ public class CaGuiPrototype extends JPanel {
 					});
 					
 					analyzer.execute();
+					decryptButton.setEnabled(false);
+				}
+				else if (!validCipherText) {
+					JOptionPane.showMessageDialog(null, "Error - Invalid encrypted text.", "Invalid Ciphertext",  JOptionPane.ERROR_MESSAGE);
+				}
+				else if (!validPlugboardText) {
+					JOptionPane.showMessageDialog(null, "Error - Invalid plugboard settings.", "Invalid Plugboard",  JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

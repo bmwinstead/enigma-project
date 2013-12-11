@@ -38,6 +38,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
@@ -59,6 +60,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 	
 	private ResultsPanel resultsPanel;
 	private JTextField statusLabel;
+	private JButton encryptButton;
 	
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	private PriorityQueue<EnigmaSettings> candidateList;
@@ -68,12 +70,13 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 	private int operationCount;
 
 	// Constructor.
-	public QuadbombManager(Corpus database, String message, QuadBombSettings settings, JTextField label, ResultsPanel panel) {
+	public QuadbombManager(Corpus database, String message, QuadBombSettings settings, JTextField label, JButton button, ResultsPanel panel) {
 		this.message = message;
 		
 		this.settings = settings;
-		resultsPanel = panel;
+		this.resultsPanel = panel;
 		this.statusLabel = label;
+		this.encryptButton = button;
 		
 		resultsList = new ConcurrentLinkedQueue<EnigmaSettings>();
 		candidateList = new PriorityQueue<EnigmaSettings>();
@@ -210,6 +213,8 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 	
 	// Prints results on the Event Dispatch Thread once complete.
 	protected void done() {
+		encryptButton.setEnabled(true);
+		
 		if (result != null && decryptedMessage != null) {
 			resultsPanel.printSolution(result, decryptedMessage);
 			statusLabel.setText("Completed");

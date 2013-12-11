@@ -9,6 +9,7 @@
  */
 package main.java.cryptanalysis.quadbomb;
 
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -23,6 +24,7 @@ public class RingDetector implements Callable<Boolean> {
 	private QuadBombSettings settings;
 	private final String message;
 	
+	private PriorityQueue<EnigmaSettings> workList;
 	private ConcurrentLinkedQueue<EnigmaSettings> resultsList;
 	
 	public RingDetector(StatisticsGenerator tester, 
@@ -31,6 +33,8 @@ public class RingDetector implements Callable<Boolean> {
 			ConcurrentLinkedQueue<EnigmaSettings> resultsList, 
 			String message) 
 	{
+		workList = new PriorityQueue<EnigmaSettings>();
+		
 		this.tester = tester;
 		this.baseCandidate = baseCandidate;
 		this.settings = settings;
@@ -57,7 +61,13 @@ public class RingDetector implements Callable<Boolean> {
 			candidate.setFitnessScore(testValue);
 			
 			resultsList.add(candidate);
+			
+			while (workList.size() > settings.getCandidateSize()) {
+				workList.poll();
+			}
 		}
+		
+		resultsList.addAll(workList);
 		
 		return true;
 	} // End run()
