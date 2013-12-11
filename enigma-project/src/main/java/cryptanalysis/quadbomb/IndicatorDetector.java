@@ -10,6 +10,10 @@ import main.java.enigma.EnigmaSettings;
 
 /**
  * Worker thread to determine best indicator settings for a given rotor / reflector configuration.
+ * This thread performs an exhaustive search of all possible indicator settings within defined constraints.
+ * Each candidate indicator setting is applied to the provided machine settings, and scored with a defined statistic.
+ * The best number of candidates (number specified by the user) is saved in resultsList for further use.
+ * Return values indicate if the thread completed it's computation.
  * 
  * IndicatorDetector.java
  * @author - Walter Adolph
@@ -62,50 +66,56 @@ public class IndicatorDetector implements Callable<Boolean> {
 		int[] testParameters = settings.getTestingIndicators(baseCandidate.isThreeRotor());
 		tester.selectFitnessTest(3);
 		
-		for (int i = testParameters[2]; i < testParameters[3]; i++) {
-			for (int j = testParameters[4]; j < testParameters[5]; j++) {
-				for (int k = testParameters[6]; k < testParameters[7]; k++) {
+		// Cycle through each combination of three rotor settings, taking in account set constraints.
+		for (int i = testParameters[2]; i < testParameters[3]; i++) {			// Left rotor loop.
+			for (int j = testParameters[4]; j < testParameters[5]; j++) {		// Middle rotor loop.
+				for (int k = testParameters[6]; k < testParameters[7]; k++) {	// Right rotor loop.
 					if (baseCandidate.isThreeRotor()) {
+						// Copy the rotor and reflector settings and generate indicator settings.
 						EnigmaSettings candidate = baseCandidate.copy();
 						char[] indicators = {(char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
 						
 						candidate.setIndicatorSettings(indicators);
 						
+						// Test the candidate and score.
 						EnigmaMachine bomb = candidate.createEnigmaMachine();
-						
 						String cipher = bomb.encryptString(message);
 						double testValue = tester.computeFitnessScore(cipher);
 						
+						// Save results.
 						candidate.setFitnessScore(testValue);
-						
 						workList.add(candidate);
 					}
-					else {
-						for (int l = testParameters[0]; l < testParameters[1]; l++) {
+					else {	// Is four-rotor.
+						for (int l = testParameters[0]; l < testParameters[1]; l++) {	// Fourth rotor loop.
+							// Copy the rotor and reflector settings and generate indicator settings.
 							EnigmaSettings candidate = baseCandidate.copy();
 							char[] indicators = {(char) ('A' + l), (char) ('A' + i), (char) ('A' + j), (char) ('A' + k)};
 							
 							candidate.setIndicatorSettings(indicators);
 							
+							// Test the candidate and score.
 							EnigmaMachine bomb = candidate.createEnigmaMachine();
-							
 							String cipher = bomb.encryptString(message);
 							double testValue = tester.computeFitnessScore(cipher);
 							
+							// Save results.
 							candidate.setFitnessScore(testValue);
-							
 							workList.add(candidate);
 							
+							// Trim saved results to candidate size to save on memory.
 							while (workList.size() > settings.getCandidateSize()) {
 								workList.poll();
 							}
 						}
 					}
 					
+					// Trim saved results to candidate size to save on memory.
 					while (workList.size() > settings.getCandidateSize()) {
 						workList.poll();
 					}
 					
+					// Allows interrupted thread to terminate.
 					if (Thread.currentThread().isInterrupted()) {
 						return false;
 					}
@@ -113,6 +123,7 @@ public class IndicatorDetector implements Callable<Boolean> {
 			} // End middle indicator loop.
 		} // End left indicator loop.
 
+		// Save results and exit.
 		resultsList.addAll(workList);
 		return true;
 	} // End call()

@@ -10,7 +10,10 @@ import main.java.enigma.EnigmaSettings;
 /**
  * PlugboardDetector.java
  * 
- * Worker thread to determine plugboard settings.
+ * Worker thread to determine plugboard settings. Each combination of possible plugboard settings are tested
+ * and scored. If any combinations score better than the pre-tested message, then the best combination is saved
+ * and then applied in the next iteration of this check. The process iterates until no improvement in score is found
+ * during an iteration. The best result is returned.
  * 
  * @author - Walter Adolph
  * @author - Team Enigma
@@ -19,7 +22,7 @@ import main.java.enigma.EnigmaSettings;
  */
 public class PlugboardDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;
-	private EnigmaSettings configuration;
+	private EnigmaSettings baseCandidate;
 	private QuadBombSettings settings;
 	private final String message;
 	
@@ -40,13 +43,13 @@ public class PlugboardDetector implements Callable<Boolean> {
 	 * 				String
 	 */
 	public PlugboardDetector(StatisticsGenerator tester, 
-			EnigmaSettings configuration, 
+			EnigmaSettings candidate, 
 			QuadBombSettings settings, 
 			ConcurrentLinkedQueue<EnigmaSettings> resultsList, 
 			String message) 
 	{
 		this.tester = tester;
-		this.configuration = configuration;
+		this.baseCandidate = candidate;
 		this.settings = settings;
 		this.resultsList = resultsList;
 		this.message = message;
@@ -58,6 +61,7 @@ public class PlugboardDetector implements Callable<Boolean> {
 	public Boolean call() {
 		tester.selectFitnessTest(3);
 		
+		// Set marker table.
 		String result = settings.getPlugboardSetting();
 		char[] candidates = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 		
@@ -65,12 +69,12 @@ public class PlugboardDetector implements Callable<Boolean> {
 		char bestRight;
 		double controlValue;
 		
-		EnigmaSettings testSettings = configuration.copy();
-		EnigmaSettings candidate = configuration.copy();
+		EnigmaSettings testSettings = baseCandidate.copy();
+		EnigmaSettings candidate = baseCandidate.copy();
 		
 		testSettings.setPlugboardMap(result);
 		
-		// Remove the constraints.
+		// Mark out the constraints.
 		for(char letter : result.toCharArray()) {
 			candidates[letter - 'A'] = '!';
 		}
@@ -85,13 +89,13 @@ public class PlugboardDetector implements Callable<Boolean> {
 			
 			String currentPlugboard = testSettings.getPlugboardMap();
 			
-			for (int left = 0; left < 26; left++) {
-				for (int right = left + 1; right < 26; right++) {
-					if (Thread.currentThread().isInterrupted()) {
+			for (int left = 0; left < 26; left++) {					// Left plugboard pair.
+				for (int right = left + 1; right < 26; right++) {	// Right plugboard pair.
+					if (Thread.currentThread().isInterrupted()) {	// Allows interrupted thread to terminate.
 						return false;
 					}
 					
-					if (candidates[left] != '!' && candidates[right] != '!') {	// Ignore same letter combinations, and previously found steckers.
+					if (candidates[left] != '!' && candidates[right] != '!') {	// Ignore previously found steckers.
 						char testLeft = (char) ('A' + left);
 						char testRight = (char) ('A' + right);
 						

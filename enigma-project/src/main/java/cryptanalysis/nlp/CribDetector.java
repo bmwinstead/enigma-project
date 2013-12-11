@@ -82,7 +82,7 @@ public class CribDetector {
 			
 			// Find a word match.
 			if (wordResults.contains(word)) {
-				// This is used to 'mark out' a found word, by replacing it with a nonalphannumeric character.
+				// This is used to 'mark out' a found word, by replacing it with a nonalphanumeric character.
 				// This prevents previously found words from returning future matches.
 				// i.e. if INCREDULITY is found, a later IT search doesn't give a false spacing.
 				String blackout = word;

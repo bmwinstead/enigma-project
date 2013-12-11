@@ -24,23 +24,24 @@ import main.java.enigma.EnigmaSettings;
  * QuadbombManager.java
  *  
  * This manages the thread work list and process flow of QuadBomb.
- * QuadBomb attempts to decrypt an Enigma message using quadgram statistics algorithm as described at the below websites:
- * 
+ * QuadBomb attempts to decrypt an Enigma message using quadgram statistics algorithm as described at the linked websites:
  * 
  * Step 1: Determine best rotor wheel order and indicator settings, saving each consecutive best result.
- * Step 2: Determine best ring setting by cycling through all rotor combinations from the candidates saved in step 1.
- * Step 3: Determine plugboard connections by brute force.
+ * Step 2: Determine best ring setting by cycling through rotor combinations from the top number of candidates saved in step 1.
+ * Step 3: Determine plugboard connections a pair at a time, saving best results of each pair combo, until no further improvement can be found.
  * 
  * Improvements:
  * Incorporated multiple threading to improve CPU utilization.
- * Reset best fitness score for each reflector combination to avoid biasing the analyzer to reflector B.
  * 
  * Limitations:
- * This method does not guarantee a correct result. Essentially, this algorithm is equivalent to a local maxima search in that it
- * first searches the wheel order and indicator settings and saves consecutive best matches. Once that search is exhausted, 
+ * This method does not guarantee a correct result. Essentially, this algorithm is equivalent to a ensemble local maxima search in that it
+ * first searches the wheel order and indicator settings and saves a set number of best matches. Once that search is exhausted, 
  * then it searches for the best ring setting using the list of best rotor settings previously constructed. This search is limited in that the 
  * ring search is restricted to the candidate rotor settings. It is possible that the correct result is a combination of suboptimal
- * rotor and ring settings, and in these cases the algorithm is expected to fail.
+ * rotor and ring settings, and in these cases the algorithm is expected to fail. Furthermore, in cases of messages encrypted with a large
+ * number of plugboard pairs, the search space scores are very similar until most of the correct settings are recovered. In these cases, it is very
+ * likely that the correct settings are lost in a given step due to a large number of slightly better scoring 'incorrect' setting combinations clogging
+ * the candidate lists.
  * 
  * @see <a href="http://practicalcryptography.com/cryptanalysis/breaking-machine-ciphers/cryptanalysis-enigma/">Practical Cryptography: Cryptanalysis of Enigma</a>
  * @see <a href="http://practicalcryptography.com/cryptanalysis/text-characterisation/quadgrams/">Practical Cryptography: Quadram Statistics as a Fitness Measure</a>
@@ -110,15 +111,18 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		
 		operationCount = 0;
 		
+		// Get rotors and reflectors to test.
 		Queue<EnigmaSettings> testList = settings.getRotorReflectorCandidateList();
 		LinkedList<Future<Boolean>> threadList = new LinkedList<Future<Boolean>>();
 		
-		updateProgress(0);
+		updateProgress(0);	// Reset progress bar and status text.
+		
+		// Step 1: Test indicators for each rotor and reflector combo.
 		while (!testList.isEmpty()) {
 			threadList.add(threadManager.submit(new IndicatorDetector(statGenerator, testList.poll(), settings, resultsList, message)));
 		}
 		
-		// Wait until all tasks are complete.
+		// Spinlock this thread, updating progress and status, until all threads are complete.
 		while (!threadList.isEmpty()) {
 			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
 			
@@ -129,7 +133,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 					publish(operationCount);
 					removeList.add(thread);
 				}
-				else if (Thread.currentThread().isInterrupted()) {
+				else if (Thread.currentThread().isInterrupted()) {	// Allow thread cancellation.
 					updateProgress(0);
 					return false;
 				}
@@ -151,7 +155,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 			threadList.add(threadManager.submit(new RingDetector(statGenerator, candidate, settings, resultsList, message)));
 		}
 		
-		// Wait until all tasks are complete.
+		// Spinlock this thread, updating progress and status, until all threads are complete.
 		while (!threadList.isEmpty()) {
 			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
 			
@@ -162,7 +166,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 					publish(operationCount);
 					removeList.add(thread);
 				}
-				else if (Thread.currentThread().isInterrupted()) {
+				else if (Thread.currentThread().isInterrupted()) {	// Allow thread cancellation.
 					updateProgress(0);
 					return false;
 				}
@@ -184,7 +188,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 			threadList.add(threadManager.submit(new PlugboardDetector(statGenerator, candidate, settings, resultsList, message)));
 		}
 		
-		// Wait until all tasks are complete.
+		// Spinlock this thread, updating progress and status, until all threads are complete.
 		while (!threadList.isEmpty()) {
 			List<Future<Boolean>> removeList = new LinkedList<Future<Boolean>>();
 			
@@ -195,7 +199,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 					publish(operationCount);
 					removeList.add(thread);
 				}
-				else if (Thread.currentThread().isInterrupted()) {
+				else if (Thread.currentThread().isInterrupted()) {	// Allow thread cancellation.
 					updateProgress(0);
 					return false;
 				}
@@ -209,6 +213,7 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		// Trim candidate list.
 		trimCandidateList();
 		
+		// Get best result.
 		while (!candidateList.isEmpty()) {
 			result = candidateList.remove();
 		}
@@ -218,19 +223,23 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		
 		decryptedMessage = tester.parseMessage(decryptedMessage);
 
-		return true;	// return elapsed time as a default.
+		return true;	// Return success flag.
 	}
 	
-	// Updates the status label and the progressbar on the Event Dispatch Thread.
+	/**
+	 * Updates the status label and the progressbar on the Event Dispatch Thread.
+	 * Specified by SwingWorker.
+	 */
 	protected void process(List<Integer> list) {
-		if (!threadManager.isTerminated()) {
-			for (Integer count : list) {
-				statusLabel.setText("Completed operation " + count + " of " + settings.getTotalOperationCount());
-			}
+		for (Integer count : list) {
+			statusLabel.setText("Completed operation " + count + " of " + settings.getTotalOperationCount());
 		}
 	}
 	
-	// Prints results on the Event Dispatch Thread once complete.
+	/**
+	 * Prints results on the Event Dispatch Thread once complete.
+	 * Specified by SwingWorker.
+	 */
 	protected void done() {
 		encryptButton.setEnabled(true);
 		
@@ -244,19 +253,25 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 	}
 	
 	/**
-	 * Stops work on all worker thread, in case the user wishes to cancel
+	 * Stops work on all worker threads, in case the user wishes to cancel
 	 * prematurely. 
 	 */
 	public void abort() {
 		threadManager.shutdownNow();
 	}
 	
+	/**
+	 * Computes a percentage and updates the progress bar.
+	 * @param count
+	 */
 	private void updateProgress(int count) {
 		int percent = (int)(100 * (double)count / settings.getTotalOperationCount());
 		setProgress(percent);
 	}
 	
-	// Loads candidateList with the top candidates, with the list size selected by the user.
+	/**
+	 * Loads candidateList with the top candidates, with the list size specified by the user.
+	 */
 	private void trimCandidateList() {
 		candidateList.clear();
 		candidateList.addAll(resultsList);	// Sorts on adding.

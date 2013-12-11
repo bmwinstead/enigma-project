@@ -62,6 +62,7 @@ public class QuadBombSettings {
 	public QuadBombSettings(int[] rotors, int reflector, int[] rings, int[] indicators, String plugboard, int threads, int candidates) {
 		isThreeRotor = rotors[0] == 0 && (reflector == 0 || reflector == 1 || reflector == 2);
 		
+		// Condition Enigma machine constraints for future use.
 		if (isThreeRotor) {
 			// Flags to indicate not to test for fourth rotor configurations.
 			rotorSettings[0] = -2;	
@@ -102,17 +103,21 @@ public class QuadBombSettings {
 		
 		Queue<Integer> reflectors = getTestingReflectors();
 		
+		// Cycle through each possible reflector.
 		while (!reflectors.isEmpty()) {
 			int reflector = reflectors.poll();
 			
 			boolean threeRotorReflector = (reflector < 2) ? true : false;
 			
+			// Get rotor combinations to use.
 			Queue<int[]> rotors = getTestingRotors(threeRotorReflector);
 			
+			// Cycle through each possible rotor.
 			while (!rotors.isEmpty()) {
 				int[] rotor = rotors.poll();
 				char[] rings = new char[rotor.length];
 				
+				// Initialize ring constraints, if available.
 				if (threeRotorReflector) {
 					rings[0] = (ringSettings[1] == '?') ? 'A' : ringSettings[1];
 					rings[1] = (ringSettings[2] == '?') ? 'A' : ringSettings[2];
@@ -125,6 +130,7 @@ public class QuadBombSettings {
 					rings[3] = (ringSettings[3] == '?') ? 'A' : ringSettings[3];
 				}
 				
+				// Build candidate settings and save result.
 				EnigmaSettings candidate = new EnigmaSettings(rotor, reflector, plugboardSetting);
 				candidate.setRingSettings(rings);
 				
@@ -195,7 +201,13 @@ public class QuadBombSettings {
 		return plugboardSetting;
 	}
 
-	// Takes user rotor settings and init. constraint values.
+	/**
+	 * Takes settings from the spinner values and maps them to facilitate setting loop boundaries.
+	 * @param rotorIndex
+	 * @param rotor
+	 * @param ring
+	 * @param indicator
+	 */
 	private void initRotor(int rotorIndex, int rotor, int ring, int indicator) {
 		if (rotorIndex == 0) {	// Apply fourth rotor specific settings.
 			rotorSettings[rotorIndex] = (rotor == 1) ? -1 : rotor + 6;
@@ -209,10 +221,15 @@ public class QuadBombSettings {
 		indicatorSettings[rotorIndex] = (indicator == 0) ? '?' : (char) (indicator - 1 + 'A');
 	}
 	
-	// Gets a queue of rotor values to test.
+	/**
+	 * Gets a Queue containing rotor combinations.
+	 * @param threeRotorsOnly
+	 * @return a Queue of int arrays containing rotor combinations.
+	 */
 	private Queue<int[]> getTestingRotors(boolean threeRotorsOnly) {
 		Queue<int[]> result = new LinkedList<int[]>();
 		
+		// Compute loop boundaries.
 		int fourthStart = (rotorSettings[0] == -1) ? 8 : rotorSettings[0];
 		int leftStart = (rotorSettings[1] == -1) ? 0 : rotorSettings[1];
 		int middleStart = (rotorSettings[2] == -1) ? 0 : rotorSettings[2];
@@ -223,10 +240,10 @@ public class QuadBombSettings {
 		int middleEnd = (rotorSettings[2] == -1) ? NUM_ROTORS : rotorSettings[2] + 1;
 		int rightEnd = (rotorSettings[3] == -1) ? NUM_ROTORS : rotorSettings[3] + 1;
 		
-		for (int i = leftStart; i < leftEnd; i++) { // Left rotor.
-			for (int j = middleStart; j < middleEnd; j++) { // Middle rotor.
+		for (int i = leftStart; i < leftEnd; i++) { 				// Left rotor.
+			for (int j = middleStart; j < middleEnd; j++) { 		// Middle rotor.
 				if (i != j) { // Skip equal rotor selections.
-					for (int k = rightStart; k < rightEnd; k++) { // Right rotor.
+					for (int k = rightStart; k < rightEnd; k++) { 	// Right rotor.
 						if (i != k && j != k) { // Skip equal rotor selections.
 							if (threeRotorsOnly) {
 								int[] rotors = {i, j, k};
@@ -249,7 +266,10 @@ public class QuadBombSettings {
 		return result;
 	}
 	
-	// Gets a queue of reflector values to test.
+	/**
+	 * Gets a Queue of reflector combinations.
+	 * @return a Queue of reflector combinations
+	 */
 	private Queue<Integer> getTestingReflectors() {
 		Queue<Integer> result = new LinkedList<Integer>();
 		
@@ -338,7 +358,8 @@ public class QuadBombSettings {
 	}
 	
 	/**
-	 * 
+	 * Gets an array of booleans, indexed by rotor position, indicating whether the rotor and ring
+	 * need to be tandem incremented when testing ring combinations.
 	 * @return Array of booleans
 	 */
 	public boolean[] getTandemStepFlags() {

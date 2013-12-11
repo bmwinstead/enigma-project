@@ -9,7 +9,14 @@ import main.java.enigma.EnigmaMachine;
 import main.java.enigma.EnigmaSettings;
 
 /**
- * Worker thread to determine possible ring settings.
+ * Worker thread to determine best ring settings for given rotor / reflector / indicator configurations.
+ * This thread performs an exhaustive search of all possible ring settings within defined constraints.
+ * As rings are tested, the indicators are offset to keep alignment. Because of this, if a full test is done, the leftmost
+ * ring does not need to be stepped.
+ * 
+ * Each candidate ring setting is applied to the provided machine settings, and scored with a defined statistic.
+ * The best number of candidates (number specified by the user) is saved in resultsList for further use.
+ * Return values indicate if the thread completed it's computation.
  * 
  * RingDetector.java
  * @author - Walter Adolph
@@ -65,10 +72,11 @@ public class RingDetector implements Callable<Boolean> {
 		boolean[] tandemCycle = settings.getTandemStepFlags();
 		
 		// Cycle through ring setting combinations.
-		for (int i = testParameters[2]; i < testParameters[3]; i++) {
-			for (int j = testParameters[4]; j < testParameters[5]; j++) {
-				for (int k = testParameters[6]; k < testParameters[7]; k++) {
+		for (int i = testParameters[2]; i < testParameters[3]; i++) {			// Left ring loop.
+			for (int j = testParameters[4]; j < testParameters[5]; j++) {		// Middle ring loop.
+				for (int k = testParameters[6]; k < testParameters[7]; k++) {	// Right ring loop.
 					if (baseCandidate.isThreeRotor()) {
+						// Copy settings and generate ring settings, offsetting indicator settings if necessary.
 						EnigmaSettings candidate = baseCandidate.copy();
 						char[] ringTestSettings = new char[3];
 						char[] indicatorTestSettings = new char[3];
@@ -77,6 +85,7 @@ public class RingDetector implements Callable<Boolean> {
 						ringTestSettings[1] = (char) ('A' + j);
 						ringTestSettings[2] = (char) ('A' + k);
 						
+						// Compute indicator offsets.
 						indicatorTestSettings = candidate.getIndicatorSettings();
 						
 						int leftOffset = indicatorTestSettings[0] + i - 'A';
@@ -94,21 +103,22 @@ public class RingDetector implements Callable<Boolean> {
 						candidate.setIndicatorSettings(indicatorTestSettings);
 						candidate.setRingSettings(ringTestSettings);
 						
+						// Test the candidate and score.
 						EnigmaMachine bomb = candidate.createEnigmaMachine();
-						
 						String cipher = bomb.encryptString(message);
 						double testValue = tester.computeFitnessScore(cipher);
 						
+						// Save results.
 						candidate.setFitnessScore(testValue);
-						
 						workList.add(candidate);
 						
-						if (Thread.currentThread().isInterrupted()) {
+						if (Thread.currentThread().isInterrupted()) {	// Allows interrupted thread to terminate.
 							return false;
 						}
 					}
-					else {
-						for (int l = testParameters[0]; l < testParameters[1]; l++) {
+					else { // Is four-rotor.
+						for (int l = testParameters[0]; l < testParameters[1]; l++) {	// Fourth ring loop.
+							// Copy settings and generate ring settings, offsetting indicator settings if necessary.
 							EnigmaSettings candidate = baseCandidate.copy();
 							char[] ringTestSettings = new char[4];
 							char[] indicatorTestSettings = new char[4];
@@ -118,6 +128,7 @@ public class RingDetector implements Callable<Boolean> {
 							ringTestSettings[2] = (char) ('A' + j);
 							ringTestSettings[3] = (char) ('A' + k);
 							
+							// Compute indicator offsets.
 							indicatorTestSettings = candidate.getIndicatorSettings();
 							
 							int fourthOffset = indicatorTestSettings[0] + l - 'A';
@@ -138,21 +149,22 @@ public class RingDetector implements Callable<Boolean> {
 							candidate.setIndicatorSettings(indicatorTestSettings);
 							candidate.setRingSettings(ringTestSettings);
 							
+							// Test the candidate and score.
 							EnigmaMachine bomb = candidate.createEnigmaMachine();
-							
 							String cipher = bomb.encryptString(message);
 							double testValue = tester.computeFitnessScore(cipher);
 							
+							// Save results.
 							candidate.setFitnessScore(testValue);
-							
 							workList.add(candidate);
 							
-							if (Thread.currentThread().isInterrupted()) {
+							if (Thread.currentThread().isInterrupted()) {	// Allows interrupted thread to terminate.
 								return false;
 							}
 						} // End left ring loop.
 					} // End fourth rotor check.
 					
+					// Trim saved results to candidate size to save on memory.
 					while (workList.size() > settings.getCandidateSize()) {
 						workList.poll();
 					}
@@ -160,6 +172,7 @@ public class RingDetector implements Callable<Boolean> {
 			} // End middle ring loop.
 		} // End left ring loop.
 		
+		// Save results and exit.
 		resultsList.addAll(workList);
 		
 		return true;
