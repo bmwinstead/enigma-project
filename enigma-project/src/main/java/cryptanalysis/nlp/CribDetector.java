@@ -216,11 +216,11 @@ public class CribDetector {
 	}
 	
 	/**
-	 * Inner class to organize word splits and scoring values.
+	 * Inner class to contain statistics on word splits.
 	 * @author Walter
 	 *
 	 */
-	private class WordCount {
+	public class WordCount {
 		private int letters = 0;
 		private double score = 0.0;
 		
