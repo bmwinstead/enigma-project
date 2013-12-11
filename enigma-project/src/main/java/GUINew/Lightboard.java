@@ -2,6 +2,7 @@ package main.java.GUINew;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.nio.file.Paths;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -27,10 +28,15 @@ public class Lightboard extends JPanel {
 			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
 			"W", "X", "Y", "Z" };
 	private JLayeredPane layeredPane;
-	private final String filePrefix = "";
+	private String filePrefix = "/main/resources";
 	public Lightboard() {
+		String testPath = filePrefix + "/images/lightboardImage.jpg";
+		try{
+			getClass().getResource(testPath);
+		} catch(Exception e){
+			filePrefix = "";
+		}
 		layeredPane = new JLayeredPane();
-
 		// Light board Icons for background
 		ImageIcon background = (new javax.swing.ImageIcon // Background Image
 		(getClass().getResource(filePrefix + "/images/lightboardImage.jpg")));
