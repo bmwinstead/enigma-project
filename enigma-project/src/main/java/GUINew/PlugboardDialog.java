@@ -46,6 +46,8 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 
 			final PlugButton plug;
 
+			// Walter Adolph - Commented this out to have one orientation.
+			/*
 			if (i < letterTotal / 2) {
 				plug = new PlugButton(String.valueOf(letter), JRadioButton.TOP);
 			}
@@ -53,6 +55,11 @@ public class PlugboardDialog extends JDialog implements ActionListener {
 				plug = new PlugButton(String.valueOf(letter),
 						JRadioButton.BOTTOM);
 			}
+			*/
+			// Walter Adolph - Just have it where the label is above the button to
+			// keep the drawn lines match the radio buttons.
+			plug = new PlugButton(String.valueOf(letter), JRadioButton.TOP);
+			
 			panel.add(plug);
 
 			plug.addActionListener(new ActionListener() {
