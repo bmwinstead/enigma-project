@@ -84,7 +84,7 @@ public class ResetPanel extends JPanel {
 		clearTextButton.addActionListener(new ClearTextListener());
 		machineTypeDropdown = new JComboBox<String>(machineTypeChoices);
 		machineTypeDropdown.setSelectedIndex(0);
-		machineTypeDropdown.addActionListener(new SpaceDropdownListener());
+		machineTypeDropdown.addActionListener(new MachineTypeListener());
 		
 		mainLayout.setAutoCreateGaps(true);
 		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -185,5 +185,19 @@ public class ResetPanel extends JPanel {
 			machine.setSpacesOption(outSpaceDropdown.getSelectedIndex());
 		}
 	}
+	/**
+	 * Private ActionListener that handles events for the dropdown
+	 * that controls the MachineType selection.
+	 * Should only affect reflector and rotors options.
+	 * @author Rosana Montanez
+	 * @author Team Enigma
+	 */
+	private class MachineTypeListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Setting machine Type option: " 
+					+ machineTypeDropdown.getSelectedIndex());
+			machine.setMachineType(machineTypeDropdown.getSelectedIndex());
+		}
+}
 
 } // end ResetPanel class

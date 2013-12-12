@@ -36,6 +36,8 @@ public class EnigmaSingleton extends Observable {
 	private ConfigureOutput output = new ConfigureOutput(); //Configure
 	private int updateType;
 	private int spacesOption;
+	private int machineType;
+	
 	private EnigmaSingleton() {
 		// No constructor for you.
 	}
@@ -77,6 +79,16 @@ public class EnigmaSingleton extends Observable {
 	 *            are swapped with their adjacant letters. For example, a 
 	 *            string of "ABCD" swaps A's with B's (and vice-versa) and C's
 	 *            with D's. 
+	 * @param machineTypes
+	 * 			A integer from 0 - 5 indicating the available machine type options.
+	 * 			The machine type are mapped as follows
+	 * 				0 - No Restrictions,
+	 *				1 - Enigma I;
+	 *				2 - Enigma M3 Army;
+	 *				3 - Enigma M4 Naval; 
+	 *				4 - Enigma M4 R1;
+	 *				5 - Enigma M4 R2;    
+	 *     
 	 */
 	public void setState(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap) {
 		if (rotorChoices.length == 4 && rotorChoices[0] == -1){
@@ -177,6 +189,9 @@ public class EnigmaSingleton extends Observable {
 		spacesOption = option;
 	}
 	
+	public void setMachineType(int type) {
+		machineType = type;
+	}
 	/**
 	 * Gets the current spaces option.
 	 * 
