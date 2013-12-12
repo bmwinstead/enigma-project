@@ -35,10 +35,11 @@ public class ResetPanel extends JPanel {
 	};
 	private static final String[] machineTypeChoices = {
 		"No Restrictions",
-		"M3 Army",
-		"M4 Naval", 
-		"M4 R1",
-		"M4 R2"
+		"Enigma I",
+		"Enigma M3 Army",
+		"Enigma M4 Naval", 
+		"Enigma M4 R1",
+		"Enigma M4 R2"
 	};
 	private JButton defaultConfigButton;
 	private JButton resetIndicatorsButton;
