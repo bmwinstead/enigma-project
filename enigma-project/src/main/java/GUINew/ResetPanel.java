@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.nio.file.Paths;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,16 +33,27 @@ public class ResetPanel extends JPanel {
 		"5 Spaces",
 		"Original Spaces"
 	};
+	private static final String[] machineTypeChoices = {
+		"No Restrictions",
+		"M3 Army",
+		"M4 Naval", 
+		"M4 R1",
+		"M4 R2"
+	};
 	private JButton defaultConfigButton;
 	private JButton resetIndicatorsButton;
 	private JButton clearTextButton;
 	private JComboBox<String> outSpaceDropdown;
+	private JComboBox<String> machineTypeDropdown;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
 	private char[] defaultRotorPositions = { '!', 'A', 'A', 'A' };
 	private char[] defefaultRingSettings = { '!', 'A', 'A', 'A' };
 	private int[] defaultRotors = { -1, 0, 1, 2 };
 	private String defaultPlugboard = null;
 	private int defaultReflector = 0;
+	private ImageIcon programLogo = (new javax.swing.ImageIcon // Logo
+			(getClass().getResource("/main/resources/images/programlogo.jpg")));
+	private JLabel logoImage = new JLabel(programLogo);
 	
 	/**
 	 * Default and only constructor. Initializes all components
@@ -56,6 +69,8 @@ public class ResetPanel extends JPanel {
 		outSpaceLabel.setForeground(Color.white);
 		JLabel optionsLabel = new JLabel("Reset Options");
 		optionsLabel.setForeground(Color.white);
+		JLabel machineTypeLabel = new JLabel("Machine Version");
+		machineTypeLabel.setForeground(Color.white);
 		
 		outSpaceDropdown = new JComboBox<String>(outSpaceChoices);
 		outSpaceDropdown.setSelectedIndex(0);
@@ -65,7 +80,10 @@ public class ResetPanel extends JPanel {
 		resetIndicatorsButton = new JButton("Reset Indicators");
 		resetIndicatorsButton.addActionListener(new ResetIndicatorsListener());
 		clearTextButton = new JButton("Clear Text");
-		clearTextButton.addActionListener(new ClearTextListener());	
+		clearTextButton.addActionListener(new ClearTextListener());
+		machineTypeDropdown = new JComboBox<String>(machineTypeChoices);
+		machineTypeDropdown.setSelectedIndex(0);
+		machineTypeDropdown.addActionListener(new SpaceDropdownListener());
 		
 		mainLayout.setAutoCreateGaps(true);
 		mainLayout.setHorizontalGroup(mainLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -74,18 +92,26 @@ public class ResetPanel extends JPanel {
 				.addComponent(optionsLabel)
 				.addComponent(defaultConfigButton)
 				.addComponent(resetIndicatorsButton)							
-				.addComponent(clearTextButton));
+				.addComponent(clearTextButton)
+				.addComponent(machineTypeLabel)
+				.addComponent(machineTypeDropdown)
+				.addComponent(logoImage));
 		mainLayout.setVerticalGroup(mainLayout.createSequentialGroup()
 				.addComponent(outSpaceLabel)
 				.addComponent(outSpaceDropdown)
 				.addComponent(optionsLabel)
 				.addComponent(defaultConfigButton)
 				.addComponent(resetIndicatorsButton)
-				.addComponent(clearTextButton)				);
-		mainLayout.linkSize(SwingConstants.HORIZONTAL, defaultConfigButton,
-				resetIndicatorsButton, clearTextButton, outSpaceDropdown);
-		mainLayout.linkSize(SwingConstants.VERTICAL, defaultConfigButton,
-				resetIndicatorsButton, clearTextButton, outSpaceDropdown);
+				.addComponent(clearTextButton)
+				.addComponent(machineTypeLabel)
+				.addComponent(machineTypeDropdown)
+				.addComponent(logoImage));
+		mainLayout.linkSize(SwingConstants.HORIZONTAL, machineTypeDropdown, 
+				defaultConfigButton,resetIndicatorsButton, clearTextButton, 
+				outSpaceDropdown);
+		mainLayout.linkSize(SwingConstants.VERTICAL, machineTypeDropdown, 
+				defaultConfigButton,resetIndicatorsButton, clearTextButton, 
+				outSpaceDropdown);
 	} // end constructor
 	
 	/**
