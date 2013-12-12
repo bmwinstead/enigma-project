@@ -54,7 +54,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 *            	3 - Reflector C thin
 	 * @param newMap
 	 *            String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacant letters. For example, a string
+	 *            are swapped with their adjacent letters. For example, a string
 	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
 	 *            D's.
 	 */
@@ -210,7 +210,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 *            	3 - Reflector C thin
 	 * @param newMap
 	 *            String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacant letters. For example, a string
+	 *            are swapped with their adjacent letters. For example, a string
 	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
 	 *            D's.
 	 */
@@ -252,7 +252,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 *            	3 - Reflector C thin
 	 * @param newMap
 	 *            String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacant letters. For example, a string
+	 *            are swapped with their adjacent letters. For example, a string
 	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
 	 *            D's.
 	 * @param newUpdateType
@@ -377,7 +377,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	/**
 	 * @return the plugboardMap
 	 * 			  String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacant letters. For example, a string
+	 *            are swapped with their adjacent letters. For example, a string
 	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
 	 *            D's.
 	 */

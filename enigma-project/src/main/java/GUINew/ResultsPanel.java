@@ -172,7 +172,7 @@ public class ResultsPanel extends JPanel {
 		char[] ring = settings.getRingSettings();
 		char[] indicator = settings.getIndicatorSettings();
 		
-		if (wheel.length == 3) {
+		if (settings.isThreeRotor()) {
 			leftRotorTextField.setText("" + (wheel[0] + 1));
 			middleRotorTextField.setText("" + (wheel[1] + 1));
 			rightRotorTextField.setText("" + (wheel[2] + 1));
@@ -184,7 +184,7 @@ public class ResultsPanel extends JPanel {
 			rightIndicatorTextField.setText("" + indicator[2]);
 		}
 		else {
-			fourthRotorTextField.setText("" + (wheel[0] + 1));
+			fourthRotorTextField.setText(wheel[0] == 8 ? "B" : "G");
 			leftRotorTextField.setText("" + (wheel[1] + 1));
 			middleRotorTextField.setText("" + (wheel[2] + 1));
 			rightRotorTextField.setText("" + (wheel[3] + 1));
