@@ -360,6 +360,7 @@ public class QuadBombSettings {
 	/**
 	 * Gets an array of booleans, indexed by rotor position, indicating whether the rotor and ring
 	 * need to be tandem incremented when testing ring combinations.
+	 * 
 	 * @return Array of booleans
 	 */
 	public boolean[] getTandemStepFlags() {

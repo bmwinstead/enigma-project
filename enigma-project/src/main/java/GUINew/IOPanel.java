@@ -35,7 +35,7 @@ import main.java.enigma.EnigmaSettings;
  * Combines all of the IO functionality of the Enigma, providing
  * ways to encrypt characters, long strings, and entire files.
  * When encrypting characters it provides a graphical representation
- * of the "lightboard", lighting up the encrypted character, reminiscient
+ * of the "lightboard", lighting up the encrypted character, reminiscent
  * of how the original machines operated.
  * 
  * @author Bryan Winstead

@@ -18,7 +18,7 @@ import main.java.enigma.EnigmaSettings;
  * @author - Walter Adolph
  * @author - Team Enigma
  * @version - 0.9
- * Date - Nov 26, 2013
+ * - Nov 26, 2013
  */
 public class PlugboardDetector implements Callable<Boolean> {
 	private StatisticsGenerator tester;

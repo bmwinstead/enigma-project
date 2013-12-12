@@ -7,6 +7,11 @@ package main.java.enigma;
  * letter input (before processing by rotors and reflectors) and output (after
  * processing). 
  * 
+ * Plugboards are represented through a string that indicates their
+ * replacement mapping. Letters are swapped with their adjacent letters. For 
+ * example, a string of "ABCD" swaps A's with B's (and vice-versa) and C's
+ * with D's. 
+ * 
  * @author Brian Matthew Winstead
  * @author Team Enigma
  * @version 0.9
@@ -20,9 +25,7 @@ public class Plugboard {
 	/**
 	 * Constructor. Accepts a string of characters and creates a simple two-way
 	 * replacement cipher. The string should be formatted in pairs with no
-	 * spaces or punctuation. For example, initializing with a string of "ABCD"
-	 * would swap all 'A's with 'B's, all 'B's with 'A's, all 'C's with 'D's,
-	 * and all 'D's with 'C's.
+	 * spaces or punctuation. 
 	 * 
 	 * The constructor does not check the capitalization of the input and does
 	 * not remove punctuation, spaces, or invalid characters. The constructor

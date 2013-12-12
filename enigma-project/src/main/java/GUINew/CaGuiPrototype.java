@@ -1,6 +1,3 @@
-/**
- * 
- */
 package main.java.GUINew;
 
 import java.awt.Color;
@@ -39,6 +36,14 @@ import main.java.cryptanalysis.quadbomb.QuadbombManager;
 /**
  * User Interface for Cryptanalysis components.
  * Contains all cryptanalysis fields and options.
+ * The user can enter the message in the input field and set specific
+ * constraints if part of the key is known (for example, some or all of
+ * the rotors are known, but not the reflector). After processing is complete,
+ * the GUI displays the QuadBomb results and what it believes to be the most
+ * likely combination of settings and decryption. A four-rotor decryption
+ * attempt using no constraints can potentially take a considerable amount of
+ * time. The user is warned about this in the instructions, and an abort option
+ * is provided. 
  * 
  * @author Bryan Winstead
  * @author Team Enigma
@@ -101,6 +106,7 @@ public class CaGuiPrototype extends JPanel {
 		} catch (IOException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "Corpus corrupt");
 		}
+		
 		// Automatically generated code.
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -108,7 +114,6 @@ public class CaGuiPrototype extends JPanel {
 		add(instructionTextArea);
 		instructionTextArea.setWrapStyleWord(true);
 		instructionTextArea.setText("Note: Text may take some time to decrypt. Decryption time can be decreased if settings are known, more threads are used, or candidate size is decreased. Decreasing candidate size may also decrease likelyhood of accurate decryption.");
-		//instructionTextArea.setText("Instructions: Click Browse or type in a file path to select a text file for parsing, and select Parse  to break the text into 1, 2, and 3 word groups (unigrams, bigrams, and trigrams). Adding subsequent files will add to the databases. Note: Text may take some time to parse.");
 		instructionTextArea.setRows(1);
 		instructionTextArea.setLineWrap(true);
 		instructionTextArea.setFont(new Font("Tahoma", Font.PLAIN, 11));

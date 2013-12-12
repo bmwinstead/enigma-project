@@ -4,7 +4,29 @@ package main.java.enigma;
  * Contains 3-4 instances of the Rotor class. Also acts as the reflector in an
  * Enigma machine. Fully encrypts a character (except for Plugboard
  * Substitutions) and handles the proper cycling of the individual Rotor
- * instances. 
+ * instances.
+ * 
+ * The rotor options are represented as an integer numbered 0-9. The rotors
+ * are mapped as follows: 
+ *            	0  - Rotor I;
+ *            	1  - Rotor II;
+ *            	2  - Rotor III;
+ *            	3  - Rotor IV;
+ *            	4  - Rotor V;
+ *            	5  - Rotor VI;
+ *            	6  - Rotor VII;
+ *            	7  - Rotor VIII;
+ *            	9  - Rotor Beta;
+ *            	10 - Rotor Gamma 
+ *            
+ * Reflector options are also represented as an integer. The options are
+ * numbered 0-3, and are mapped as follows:
+ *  			0 - Reflector B;
+ *            	1 - Reflector C;
+ *            	2 - Reflector B thin;
+ *            	3 - Reflector C thin
+ *            
+ * Ring and rotor settings are represented using characters. 
  * 
  * @author Bryan Matthew Winstead
  * @author Team Enigma

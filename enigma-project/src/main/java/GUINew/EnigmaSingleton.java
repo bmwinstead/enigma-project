@@ -16,6 +16,57 @@ import main.java.enigma.EnigmaSettings;
  * encryption.
  * 
  * Is thread safe.
+ * 
+ * The rotor options are represented as an integer numbered 0-9. The rotors
+ * are mapped as follows: 
+ *            	0  - Rotor I;
+ *            	1  - Rotor II;
+ *            	2  - Rotor III;
+ *            	3  - Rotor IV;
+ *            	4  - Rotor V;
+ *            	5  - Rotor VI;
+ *            	6  - Rotor VII;
+ *            	7  - Rotor VIII;
+ *            	9  - Rotor Beta;
+ *            	10 - Rotor Gamma 
+ *            
+ *  Reflector options are also represented as an integer. The options are
+ *  numbered 0-3, and are mapped as follows:
+ *  			0 - Reflector B;
+ *            	1 - Reflector C;
+ *            	2 - Reflector B thin;
+ *            	3 - Reflector C thin
+ *            
+ *  Ring and rotor settings are represented using characters. 
+ *  
+ *  Plugboards are represented through a string that indicates their
+ *  replacement mapping. Letters are swapped with their adjacent letters. For 
+ *  example, a string of "ABCD" swaps A's with B's (and vice-versa) and C's
+ *  with D's. 
+ *  
+ *  The updateType is an integer indicating what type of update or reset is to 
+ *  be performed. 0 means that only the rotor indicators are to be updated. 
+ *  The rotor positions change with every character encryption. 1 means that 
+ *  the GUI is to be fully reset to its default position. 2 means that only the 
+ *  text boxes are to be cleared. 
+ *  
+ *  The spacesOption is an integer used to determine the spacing in the output. 
+ *  The default setting is no spaces, indicated by a 0. 1 indicates "words" of
+ *  four letters, 2 indicates "words" of five letters, and 3 indicates that the
+ *  original spacing should be maintained. This information is maintained here
+ *  because the original spacing processing must be performed during the input
+ *  processing. 
+ *  
+ *  The machineTypes is	an integer from 0 - 5 indicating the available machine 
+ *  type options.
+ * 			The machine type are mapped as follows
+ * 				0 - No Restrictions,
+ *				1 - Enigma I;
+ *				2 - Enigma M3 Army;
+ *				3 - Enigma M4 Naval; 
+ *				4 - Enigma M4 R1;
+ *				5 - Enigma M4 R2;    
+ *  
  * @author Bryan Winstead
  * @author Team Enigma
  * @version 0.9
@@ -49,25 +100,10 @@ public class EnigmaSingleton extends Observable {
 	 * 
 	 * @param rotorChoices
 	 * 	          Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0  - Rotor I;
-	 *            	1  - Rotor II;
-	 *            	2  - Rotor III;
-	 *            	3  - Rotor IV;
-	 *            	4  - Rotor V;
-	 *            	5  - Rotor VI;
-	 *            	6  - Rotor VII;
-	 *            	7  - Rotor VIII;
-	 *            	9  - Rotor Beta;
-	 *            	10 - Rotor Gamma 
+	 *            to be included in the Enigma. 
 	 * @param reflectorChoice
 	 * 	          An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows:
-	 *            	0 - Reflector B;
-	 *            	1 - Reflector C;
-	 *            	2 - Reflector B thin;
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 * @param ringSettings
 	 *            An array of 3-4 characters indicating the rotors' ring
 	 *            settings.
@@ -81,13 +117,6 @@ public class EnigmaSingleton extends Observable {
 	 *            with D's. 
 	 * @param machineTypes
 	 * 			A integer from 0 - 5 indicating the available machine type options.
-	 * 			The machine type are mapped as follows
-	 * 				0 - No Restrictions,
-	 *				1 - Enigma I;
-	 *				2 - Enigma M3 Army;
-	 *				3 - Enigma M4 Naval; 
-	 *				4 - Enigma M4 R1;
-	 *				5 - Enigma M4 R2;    
 	 *     
 	 */
 	public void setState(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap) {
@@ -117,8 +146,11 @@ public class EnigmaSingleton extends Observable {
 	 * Only sets the rotorChoices, reflectorChoice, and ringSettings.
 	 * 
 	 * @param rotorChoices
+	 * 				Array of 3-4 integers.
 	 * @param reflectorChoice
+	 * 				Array of 3-4 letters.
 	 * @param ringSettings
+	 * 				Array of 3-4 letters. 
 	 */
 	public void setState(int[] rotorChoices, int reflectorChoice,
 			char[] ringSettings) {
@@ -138,7 +170,9 @@ public class EnigmaSingleton extends Observable {
 
 	/**
 	 * Sets rotor positions.
+	 * 
 	 * @param rotorPositions
+	 * 				Array of 3-4 letters. 
 	 */
 	public void setPositions(char[] rotorPositions) {
 		if(rotorPositions.length == 4 && rotorPositions[0] == '!')
@@ -158,7 +192,9 @@ public class EnigmaSingleton extends Observable {
 
 	/**
 	 * Sets the machines plugboard.
+	 * 
 	 * @param pbMap
+	 * 				String representing the plugboard map. 
 	 */
 	public void setPlugboard(String pbMap) {
 		System.out.println("(Singleton)Setting plugboard to: " + pbMap + "\n");
@@ -170,9 +206,7 @@ public class EnigmaSingleton extends Observable {
 	 * 
 	 * @param newUpdateType 	 
 	 *            Integer indicating what type of update or reset is to be
-	 *            performed. 0 means that only the rotor indicators are to be
-	 *            updated. 1 means that the GUI is to be fully reset. 2 means
-	 *            that only the text boxes are to be cleared. 
+	 *            performed. 
 	 */
 	public void setUpdateType(int newUpdateType) {
 		updateType = newUpdateType;
@@ -271,7 +305,6 @@ public class EnigmaSingleton extends Observable {
 		System.out.println("Rotors: " + Arrays.toString(settings.getRotors()));
 		System.out.println("Rotor positions: " + Arrays.toString(settings.getIndicatorSettings()) + "\n");
 		for (Observer obs : observers) {
-			// obs.update(this, String.valueOf(machine.getPositions()));
 			obs.update(this, settings);
 		}
 		setUpdateType(INDICATORONLY);

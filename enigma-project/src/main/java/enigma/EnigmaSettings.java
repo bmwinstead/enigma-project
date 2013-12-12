@@ -7,6 +7,39 @@ package main.java.enigma;
  * candidate state for cryptanalysis testing, or other points when it is useful
  * for passing all Enigma Machine settings at once. 
  * 
+ * The rotor options are represented as an integer numbered 0-9. The rotors
+ * are mapped as follows: 
+ *            	0  - Rotor I;
+ *            	1  - Rotor II;
+ *            	2  - Rotor III;
+ *            	3  - Rotor IV;
+ *            	4  - Rotor V;
+ *            	5  - Rotor VI;
+ *            	6  - Rotor VII;
+ *            	7  - Rotor VIII;
+ *            	9  - Rotor Beta;
+ *            	10 - Rotor Gamma 
+ *            
+ *  Reflector options are also represented as an integer. The options are
+ *  numbered 0-3, and are mapped as follows:
+ *  			0 - Reflector B;
+ *            	1 - Reflector C;
+ *            	2 - Reflector B thin;
+ *            	3 - Reflector C thin
+ *            
+ *  Ring and rotor settings are represented using characters. 
+ *  
+ *  Plugboards are represented through a string that indicates their
+ *  replacement mapping. Letters are swapped with their adjacent letters. For 
+ *  example, a string of "ABCD" swaps A's with B's (and vice-versa) and C's
+ *  with D's.
+ *  
+ *  The updateType is an integer indicating what type of update or reset is to 
+ *  be performed. 0 means that only the rotor indicators are to be updated. 
+ *  The rotor positions change with every character encryption. 1 means that 
+ *  the GUI is to be fully reset to its default position. 2 means that only the 
+ *  text boxes are to be cleared. 
+ * 
  * @author - Walter Adolph
  * @author - Team Enigma
  * @version - 0.9
@@ -27,18 +60,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 * 
 	 * @param newRotors
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 * @param newRingSettings
 	 *            An array of 3-4 characters indicating the rotors' ring
 	 *            settings.
@@ -47,16 +69,9 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 *            positions.
 	 * @param reflectorIndex
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 * @param newMap
-	 *            String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacent letters. For example, a string
-	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
-	 *            D's.
+	 *            String indicating the plugboard replacement mapping. 
 	 */
 	public EnigmaSettings(int[] newRotors, char[] newRingSettings, char[] newIndicatorSettings, int reflectorIndex, String newMap) {
 		rotors = newRotors.clone();
@@ -73,18 +88,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 * 
 	 * @param newRotors
 	 * 			  Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 * @param newRingSettings
 	 *            An array of 3-4 characters indicating the rotors' ring
 	 *            settings.
@@ -93,11 +97,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 *            positions.
 	 * @param reflectorIndex
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 */
 	public EnigmaSettings(int[] newRotors, char[] newRingSettings, char[] newIndicatorSettings, int reflectorIndex) {
 		this(newRotors.clone(), newRingSettings.clone(), newIndicatorSettings.clone(), reflectorIndex, "");
@@ -108,28 +108,13 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 * 
 	 * @param newRotors
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 * @param newIndicatorSettings
 	 *            An array of 3-4 characters indicating the rotors' initial
 	 *            positions.
 	 * @param reflectorIndex
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 */
 	public EnigmaSettings(int[] newRotors, char[] newIndicatorSettings, int reflectorIndex) {
 		char[] defaultRings = new char[newRotors.length];
@@ -150,25 +135,10 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 * 
 	 * @param newRotors
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 * @param reflectorIndex
 	 * 	          An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 */
 	public EnigmaSettings(int[] newRotors, int reflectorIndex) {
 		char[] defaultSettings = new char[newRotors.length];
@@ -189,30 +159,12 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 * 
 	 * @param newRotors
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 * @param reflectorIndex
 	 * 	          An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 * @param newMap
-	 *            String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacent letters. For example, a string
-	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
-	 *            D's.
+	 *            String indicating the plugboard replacement mapping. 
 	 */
 	public EnigmaSettings(int[] newRotors, int reflectorIndex, String newMap) {
 		this (newRotors, reflectorIndex);
@@ -225,18 +177,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 * 
 	 * @param newRotors
 	 *            Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 * @param newRingSettings
 	 *            An array of 3-4 characters indicating the rotors' ring
 	 *            settings.
@@ -245,21 +186,12 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	 *            positions.
 	 * @param reflectorIndex
 	 *            An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 * @param newMap
-	 *            String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacent letters. For example, a string
-	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
-	 *            D's.
+	 *            String indicating the plugboard replacement mapping. 
 	 * @param newUpdateType
 	 *            Integer indicating what type of update or reset is to be
-	 *            performed. 0 means that only the rotor indicators are to be
-	 *            updated. 1 means that the GUI is to be fully reset. 2 means
-	 *            that only the text boxes are to be cleared. 
+	 *            performed. 
 	 */
 	public EnigmaSettings(int[] newRotors, char[] newRingSettings,
 			char[] newIndicatorSettings, int reflectorIndex, String newMap,
@@ -321,11 +253,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	/**
 	 * @return the reflector.
 	 * 			  An integer from 0-3 indicating which of the four available
-	 *            reflectors to include. The reflectors are mapped as follows: 
-	 *            	0 - Reflector B; 
-	 *            	1 - Reflector C; 
-	 *            	2 - Reflector B thin; 
-	 *            	3 - Reflector C thin
+	 *            reflectors to include. 
 	 */
 	public int getReflector() {
 		return reflector;
@@ -341,18 +269,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	/**
 	 * @return the rotors.
 	 * 			  Array of 3-4 integers numbered 0-9 to determine which rotors
-	 *            to be included in the Enigma. The rotors are mapped as
-	 *            follows: 
-	 *            	0 - Rotor I; 
-	 *            	1 - Rotor II; 
-	 *            	2 - Rotor III; 
-	 *            	3 - Rotor IV; 
-	 *            	4 - Rotor V; 
-	 *            	5 - Rotor VI; 
-	 *            	6 - Rotor VII; 
-	 *            	7 - Rotor VIII;
-	 *              9 - Rotor Beta; 
-	 *              10 - Rotor Gamma
+	 *            to be included in the Enigma. 
 	 */
 	public int[] getRotors() {
 		return rotors.clone();
@@ -376,10 +293,7 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 
 	/**
 	 * @return the plugboardMap
-	 * 			  String indicating the plugboard replacement mapping. Letters
-	 *            are swapped with their adjacent letters. For example, a string
-	 *            of "ABCD" swaps A's with B's (and vice-versa) and C's with
-	 *            D's.
+	 * 			  String indicating the plugboard replacement mapping. 
 	 */
 	public String getPlugboardMap() {
 		return plugboardMap;
@@ -388,10 +302,6 @@ public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	/**
 	 * 
 	 * @return updateType. Used for passing settings among GUI components. 
-	 * 			  Integer indicating what type of update or reset is to be
-	 *            performed. 0 means that only the rotor indicators are to be
-	 *            updated. 1 means that the GUI is to be fully reset. 2 means
-	 *            that only the text boxes are to be cleared. 
 	 */
 	public int getUpdateType() {
 		return updateType;
