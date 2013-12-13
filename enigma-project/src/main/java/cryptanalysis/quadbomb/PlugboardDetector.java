@@ -33,7 +33,7 @@ public class PlugboardDetector implements Callable<Boolean> {
 	 * 
 	 * @param tester
 	 * 				StatisticsGenerator
-	 * @param configuration
+	 * @param candidate
 	 * 				EnigmaSettings
 	 * @param settings
 	 * 				QuadBombSettings

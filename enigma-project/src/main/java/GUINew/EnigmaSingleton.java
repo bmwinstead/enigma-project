@@ -116,8 +116,6 @@ public class EnigmaSingleton extends Observable {
 	 *            are swapped with their adjacant letters. For example, a 
 	 *            string of "ABCD" swaps A's with B's (and vice-versa) and C's
 	 *            with D's. 
-	 * @param machineTypes
-	 * 			A integer from 0 - 5 indicating the available machine type options.
 	 *     
 	 */
 	public void setState(int[] rotorChoices, int reflectorChoice, char[] ringSettings, char[] initialPositions, String plugboardMap) {
