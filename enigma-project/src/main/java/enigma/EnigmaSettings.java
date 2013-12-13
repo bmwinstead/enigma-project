@@ -30,12 +30,8 @@ package main.java.enigma;
  * 
  * @author - Walter Adolph
  * @author - Team Enigma
-<<<<<<< HEAD
  * @version - 0.9
  * Nov 22, 2013
-=======
- * @version - 0.9 - Nov 22, 2013
->>>>>>> branch 'master' of https://github.com/bmwinstead/enigma-project.git
  */
 public class EnigmaSettings implements Comparable<EnigmaSettings> {
 	private int[] rotors;
