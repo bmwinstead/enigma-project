@@ -88,6 +88,7 @@ public class EnigmaSingleton extends Observable {
 	private int updateType;
 	private int spacesOption;
 	private int machineType;
+	public boolean machineTypeChanged;
 	
 	private EnigmaSingleton() {
 		// No constructor for you.
@@ -211,7 +212,7 @@ public class EnigmaSingleton extends Observable {
 	public void setUpdateType(int newUpdateType) {
 		updateType = newUpdateType;
 	}
-	
+
 	/**
 	 * Sets the spaces option
 	 * 
@@ -224,7 +225,9 @@ public class EnigmaSingleton extends Observable {
 	}
 	
 	public void setMachineType(int type) {
+		machineTypeChanged = true;
 		machineType = type;
+		notifyObservers();
 	}
 	/**
 	 * Gets the current spaces option.
@@ -297,17 +300,19 @@ public class EnigmaSingleton extends Observable {
 	public void notifyObservers() {
 		EnigmaSettings settings = new EnigmaSettings(machine.getRotors(),
 				machine.getRingSettings(), machine.getPositions(),
-				machine.getReflector(), machine.getPlugboard(), updateType);
+				machine.getReflector(), machine.getPlugboard(), updateType, machineType);
 		System.out.println("(Singleton) Notifying, settings state: ");
 		System.out.println("Plugboard: " + settings.getPlugboardMap());
 		System.out.println("Reflector: " + settings.getReflector());
 		System.out.println("Ring settings: " + Arrays.toString(settings.getRingSettings()));
 		System.out.println("Rotors: " + Arrays.toString(settings.getRotors()));
-		System.out.println("Rotor positions: " + Arrays.toString(settings.getIndicatorSettings()) + "\n");
+		System.out.println("Rotor positions: " + Arrays.toString(settings.getIndicatorSettings()));
+		System.out.println("Machine Type: " + machineType + "\n");
 		for (Observer obs : observers) {
 			obs.update(this, settings);
 		}
 		setUpdateType(INDICATORONLY);
+		machineTypeChanged = false;
 	}
 	
 } // end EnigmaSingleton class
