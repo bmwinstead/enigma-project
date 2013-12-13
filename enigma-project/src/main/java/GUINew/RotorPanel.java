@@ -613,6 +613,9 @@ public class RotorPanel extends JPanel implements Observer {
 			JFrame tempFrame = new JFrame();
 			switch (e.getActionCommand()) {
 			case "fourthRotorChoice":
+				if(machineType > 3 && temp.getSelectedIndex() == 0){
+					fourthRotorChoice.setSelectedIndex(1);
+				}
 				if (temp.getSelectedIndex() == 0) {
 					fourthRotorRingSetting.setSelectedIndex(0);
 					rotors[0] = -1;
