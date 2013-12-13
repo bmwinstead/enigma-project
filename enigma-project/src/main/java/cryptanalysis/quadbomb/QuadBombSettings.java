@@ -25,7 +25,7 @@ import main.java.enigma.EnigmaSettings;
  * @author - Walter Adolph
  * @author - Team Enigma
  * @version - 0.9
- * - Dec 6, 2013
+ * Dec 6, 2013
  */
 public class QuadBombSettings {
 	private static int NUM_ROTORS = 8;	// Used for debugging and rapid testing only.
@@ -57,7 +57,7 @@ public class QuadBombSettings {
 	 * @param threads
 	 * 				Integer indicating number of threads to use
 	 * @param candidates
-	 * 				Integer indicating number of canidates to track. 
+	 * 				Integer indicating number of candidates to track. 
 	 */
 	public QuadBombSettings(int[] rotors, int reflector, int[] rings, int[] indicators, String plugboard, int threads, int candidates) {
 		isThreeRotor = rotors[0] == 0 && (reflector == 0 || reflector == 1 || reflector == 2);

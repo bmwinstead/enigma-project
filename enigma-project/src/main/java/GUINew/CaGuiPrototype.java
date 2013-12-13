@@ -409,18 +409,11 @@ public class CaGuiPrototype extends JPanel {
 		resultsPanel = new ResultsPanel();
 		add(resultsPanel);
 		
-		//JPanel cribTestPanel = new JPanel();
-		//add(cribTestPanel);
-		//cribTestPanel.setBackground(Color.black);
-		//cribTestPanel.setForeground(Color.white);
-		
 		JTextArea cribTestTextArea = new JTextArea();
 		cribTestTextArea.setColumns(50);
 		cribTestTextArea.setRows(10);
-		//cribTestPanel.add(cribTestTextArea);
 		
 		JPanel cribControlPanel = new JPanel();
-		//cribTestPanel.add(cribControlPanel);
 		cribControlPanel.setBackground(Color.black);
 		cribControlPanel.setForeground(Color.white);
 		
