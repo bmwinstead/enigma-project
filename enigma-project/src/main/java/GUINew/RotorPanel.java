@@ -80,9 +80,10 @@ public class RotorPanel extends JPanel implements Observer {
 	private EnigmaSpinner middleRotorPosition;
 	private EnigmaSpinner rightRotorPosition;
 	private PlugboardDialog pbDialog;
-	private boolean rotorCheck = true;
+	private boolean goNuts = true;
+	private boolean rotorFlag = false;
 	private EnigmaSingleton machine = EnigmaSingleton.INSTANCE;
-
+	private int machineType;
 	/**
 	 * Constructor, initializes all relevant parts.
 	 * Calls private build methods and glues them together.
@@ -353,16 +354,6 @@ public class RotorPanel extends JPanel implements Observer {
 		return plugboardPanel;
 	}
 
-	//to delete
-	private void printState() {
-		System.out.println("**** Printing State of RotorPanel ****");
-		System.out.println("Rotors: " + Arrays.toString(rotors));
-		System.out.println("Reflector: " + reflector);
-		System.out.println("Ring settings: " + Arrays.toString(ringSettings));
-		System.out.println("Rotor positions: "
-				+ Arrays.toString(rotorPositions));
-		System.out.println("Plugboard: " + pbString + "\n");
-	}
 
 	/**
 	 * Helper method that sets the rotor positions of the GUI
@@ -456,14 +447,6 @@ public class RotorPanel extends JPanel implements Observer {
 		reflectorChoice.setSelectedIndex(reflectorNum);
 	}
 	
-	private void rotorCheckOn() {
-		rotorCheck = true;
-	}
-	
-	private void rotorCheckOff() {
-		rotorCheck = false;
-	}
-	
 	/**
 	 * Implements the Observer functionality.
 	 * When the method is called by the Observable
@@ -473,11 +456,14 @@ public class RotorPanel extends JPanel implements Observer {
 	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
-//		String s = (String) arg1;
 		EnigmaSettings settings = (EnigmaSettings) arg1;
-		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET ) {
+		if(settings.getMachineType() == machineType)
+			machine.machineTypeChanged = false;
+		if(machine.machineTypeChanged)
+			changeMachineType(settings.getMachineType());
+		if (settings.getUpdateType() == EnigmaSingleton.FULLRESET) {
 			System.out.println("(RotorPanel(update())Full Reset triggered");
-			rotorCheckOff();
+			rotorFlag = true;
 			System.out.println("Setting plugboard: " + settings.getPlugboardMap());
 			setPlugboard(settings.getPlugboardMap());
 			System.out.println("Setting rotors: " + Arrays.toString(settings.getRotors()));
@@ -487,10 +473,76 @@ public class RotorPanel extends JPanel implements Observer {
 			System.out.println("Setting reflector: " + settings.getReflector());
 			setReflector(settings.getReflector());
 			pbDialog.resetPlugBoard();
-			rotorCheckOn();
+			rotorFlag = false;
 		}
 		System.out.println("(RotorPanel)(update())Changing rotors to " + String.valueOf(settings.getIndicatorSettings()) + "\n");
 		setRotorPositions(settings.getIndicatorSettings());
+	}
+	
+	/**
+	 * Changes the machine type to match the 
+	 * @param newMachineType
+	 */
+	private void changeMachineType(int newMachineType){
+		System.out.println("Changing machine type to: " + newMachineType);
+		machineType = newMachineType;
+		changeRotors(newMachineType);
+		if(newMachineType < 4 && newMachineType != 0){
+			fourthRotorChoice.setSelectedIndex(0);
+			fourthRotorChoice.setEnabled(false);
+			fourthRotorPosition.setEnabled(false);
+			fourthRotorRingSetting.setEnabled(false);
+		} else{
+			fourthRotorChoice.setEnabled(true);
+			fourthRotorChoice.setSelectedIndex(1);
+			fourthRotorPosition.setEnabled(true);
+			fourthRotorRingSetting.setEnabled(true);
+		}
+	}
+
+	private void changeRotors(int newMachineType){
+		String[][] machineTypeRotors = {
+				{"ROTOR I","ROTOR II","ROTOR III","ROTOR IV","ROTOR V","ROTOR VI","ROTOR VII","ROTOR VIII"}, //0
+				{"ROTOR I","ROTOR II","ROTOR III"}, //1
+				{"ROTOR I","ROTOR II","ROTOR III","ROTOR IV","ROTOR V"}, //2
+				{"ROTOR I","ROTOR II","ROTOR III","ROTOR IV","ROTOR V","ROTOR VI","ROTOR VII","ROTOR VIII"}, //3
+				{"ROTOR I","ROTOR II","ROTOR III","ROTOR IV","ROTOR V","ROTOR VI","ROTOR VII","ROTOR VIII"}, //4
+				{"ROTOR I","ROTOR II","ROTOR III","ROTOR IV","ROTOR V","ROTOR VI","ROTOR VII","ROTOR VIII"} //5
+			};
+		String[][] machineTypeReflectors = {
+				{"REFLECTOR B","REFLECTOR C","REFLECTOR B THIN","REFLECTOR C THIN"}, //0
+				{"REFLECTOR B","REFLECTOR C"}, //1 
+				{"REFLECTOR B","REFLECTOR C"}, //2
+				{"REFLECTOR B","REFLECTOR C"}, //3
+				{"REFLECTOR B THIN","REFLECTOR C THIN"}, //4
+				{"REFLECTOR B THIN","REFLECTOR C THIN"}  //5
+		};
+		rotorFlag = true;
+		goNuts = true;
+		leftRotorChoice.removeAllItems();
+		middleRotorChoice.removeAllItems();
+		rightRotorChoice.removeAllItems();
+		reflectorChoice.removeAllItems();
+		for(String s : machineTypeReflectors[newMachineType]){
+			reflectorChoice.addItem(s);
+		}
+		for(String s : machineTypeRotors[newMachineType]){
+			leftRotorChoice.addItem(s);
+			middleRotorChoice.addItem(s);
+			rightRotorChoice.addItem(s);
+		}
+		leftRotorChoice.setSelectedIndex(0);
+		middleRotorChoice.setSelectedIndex(1);
+		rightRotorChoice.setSelectedIndex(2);
+		if(newMachineType != 0)
+			goNuts = false;
+		rotorFlag = false;
+		leftRotorPosition.setValue("A");
+		middleRotorPosition.setValue("B");
+		rightRotorPosition.setValue("C");
+		leftRotorRingSetting.setSelectedIndex(0);
+		middleRotorRingSetting.setSelectedIndex(0);
+		rightRotorRingSetting.setSelectedIndex(0);
 	}
 	
 	/**
@@ -536,7 +588,8 @@ public class RotorPanel extends JPanel implements Observer {
 			}
 //			System.out.println("All changes performed, dumping state");
 //			printState();
-			machine.setState(rotors, reflector, ringSettings);
+			if(!rotorFlag)
+				machine.setState(rotors, mapReflector(reflector), ringSettings);
 		}
 	}
 
@@ -558,24 +611,23 @@ public class RotorPanel extends JPanel implements Observer {
 			int middleIndex = middleRotorChoice.getSelectedIndex();
 			int rightIndex = rightRotorChoice.getSelectedIndex();
 			JFrame tempFrame = new JFrame();
-//			System.out.println("Action registered on rotor combo boxes, dumping state before");
-//			printState();
 			switch (e.getActionCommand()) {
 			case "fourthRotorChoice":
+				if(machineType > 3 && temp.getSelectedIndex() == 0){
+					fourthRotorChoice.setSelectedIndex(1);
+				}
 				if (temp.getSelectedIndex() == 0) {
 					fourthRotorRingSetting.setSelectedIndex(0);
 					rotors[0] = -1;
 					fourthRotorPosition.setValue(" ");
-					reflectorChoice.setSelectedIndex(0);
 				} else {
 					rotors[0] = temp.getSelectedIndex() + 7;
 					fourthRotorRingSetting.setSelectedIndex(1);
 					fourthRotorPosition.setValue("A");
-					reflectorChoice.setSelectedIndex(2);
 				}
 				break;
 			case "leftRotorChoice":
-				if (rotorCheck && (leftIndex == middleIndex || leftIndex == rightIndex)) {
+				if (!goNuts && (leftIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"Error 101: Selected rotor is already in use.");
 					leftRotorChoice.setSelectedIndex(rotors[1]);
@@ -583,7 +635,7 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[1] = temp.getSelectedIndex();
 				break;
 			case "middleRotorChoice":
-				if (rotorCheck && (leftIndex == middleIndex || middleIndex == rightIndex)) {
+				if (!goNuts && (leftIndex == middleIndex || middleIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"Error 101: Selected rotor is already in use.");
 					middleRotorChoice.setSelectedIndex(rotors[2]);
@@ -591,7 +643,7 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[2] = temp.getSelectedIndex();
 				break;
 			case "rightRotorChoice":
-				if (rotorCheck && (rightIndex == middleIndex || leftIndex == rightIndex)) {
+				if (!goNuts && (rightIndex == middleIndex || leftIndex == rightIndex)) {
 					JOptionPane.showMessageDialog(tempFrame,
 							"Error 101: Selected rotor is already in use.");
 					rightRotorChoice.setSelectedIndex(rotors[3]);
@@ -599,39 +651,11 @@ public class RotorPanel extends JPanel implements Observer {
 					rotors[3] = temp.getSelectedIndex();
 				break;
 			case "reflectorChoice":
-				if (fourthRotorChoice.getSelectedIndex() == 0) {
-					// no fourth rotor, need 0 or 1, if we're checking rotors.
-					if (rotorCheck && (temp.getSelectedIndex() == 2
-							|| temp.getSelectedIndex() == 3)) {
-						JOptionPane
-								.showMessageDialog(tempFrame,
-										"Error 102: With the fourth rotor inactive, you can "
-										+ "only choose reflector B or C");
-						reflectorChoice.setSelectedIndex(0); // default
-					} // end if
-					else {
-						reflector = temp.getSelectedIndex();
-					} // end else
-				} // end if
-				else {
-					// fourth rotor, need 2 or 3, if we're checking rotors
-					if (rotorCheck && (temp.getSelectedIndex() == 0
-							|| temp.getSelectedIndex() == 1)) {
-						JOptionPane
-								.showMessageDialog(tempFrame,
-										"Error 103: With the fourth rotor active, you can "
-										+ "only choose reflector B Thin or C Thin");
-						reflectorChoice.setSelectedIndex(2);
-					} // end if
-					else {
-						reflector = temp.getSelectedIndex();
-					} // end else
-				} // end else
+				reflector = temp.getSelectedIndex();
 				break;
 			}
-//			System.out.println("All changes performed. Dumping state after");
-//			printState();
-			machine.setState(rotors, reflector, ringSettings);
+			if(!rotorFlag)
+				machine.setState(rotors, mapReflector(reflector), ringSettings);
 		}
 	}
 
@@ -671,10 +695,16 @@ public class RotorPanel extends JPanel implements Observer {
 				rotorPositions[3] = js.getValue().toString().toCharArray()[0];
 				break;
 			}
-			machine.setPositions(rotorPositions);
+			if(!rotorFlag)
+				machine.setPositions(rotorPositions);
 		}
 	}
 
+	private int mapReflector(int i){
+		if(machineType > 3)
+			return i + 2;
+		return i;
+	}
 	/**
 	 * Probably unnecessary inner class that
 	 * gives us an easy way to identify different 

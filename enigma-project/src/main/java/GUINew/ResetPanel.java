@@ -52,9 +52,8 @@ public class ResetPanel extends JPanel {
 	private int[] defaultRotors = { -1, 0, 1, 2 };
 	private String defaultPlugboard = null;
 	private int defaultReflector = 0;
-	private ImageIcon programLogo = (new javax.swing.ImageIcon // Logo
-			(getClass().getResource("/main/resources/images/programlogo.jpg")));
-	private JLabel logoImage = new JLabel(programLogo);
+	private ImageIcon programLogo;
+	private JLabel logoImage;
 	
 	/**
 	 * Default and only constructor. Initializes all components
@@ -62,6 +61,18 @@ public class ResetPanel extends JPanel {
 	 * 
 	 */
 	public ResetPanel() {
+		String filePrefix = "/main/resources";
+		//Changed to support jar loading.
+		try{
+		programLogo = (new javax.swing.ImageIcon // Logo
+				(getClass().getResource(filePrefix + "/images/programlogo.jpg")));
+		logoImage = new JLabel(programLogo);
+		} catch(NullPointerException e){
+			filePrefix = "";
+			programLogo = (new javax.swing.ImageIcon // Logo
+					(getClass().getResource(filePrefix + "/images/programlogo.jpg")));
+			logoImage = new JLabel(programLogo);
+		}
 		GroupLayout mainLayout = new GroupLayout(this);
 		setLayout(mainLayout);
 		setBackground(Color.black);
@@ -126,9 +137,6 @@ public class ResetPanel extends JPanel {
 	private class DefaultConfigListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("**** DEFAULT CONFIG PRESSED ****");
-			System.out.println("(ResetPanel) Rotors: "
-					+ Arrays.toString(defaultRotors) + "\n");
-			System.out.println("(ResetPanel) Rotor Positions: " + Arrays.toString(defaultRotorPositions) + "\n");
 			machine.setUpdateType(EnigmaSingleton.FULLRESET);
 			machine.setState(defaultRotors, defaultReflector,
 					defefaultRingSettings, defaultRotorPositions,
@@ -194,8 +202,7 @@ public class ResetPanel extends JPanel {
 	 */
 	private class MachineTypeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Setting machine Type option: " 
-					+ machineTypeDropdown.getSelectedIndex());
+			System.out.println("**** MACHINE TYPE CHANGED ****");
 			machine.setMachineType(machineTypeDropdown.getSelectedIndex());
 		}
 }

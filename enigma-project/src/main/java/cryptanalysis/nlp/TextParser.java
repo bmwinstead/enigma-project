@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * 
  * @author - Walter Adolph
  * @author - Team Enigma
- * @vesion 0.9
+ * @version 0.9
  * Dec 1, 2013
  */
 public class TextParser {

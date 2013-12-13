@@ -45,7 +45,7 @@ import main.java.cryptanalysis.quadbomb.QuadbombManager;
  * time. The user is warned about this in the instructions, and an abort option
  * is provided. 
  * 
- * @author Bryan Winstead
+ * @author Walter Adolph
  * @author Team Enigma
  * @version 0.5
  * 12/2/2013
