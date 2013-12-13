@@ -485,6 +485,7 @@ public class RotorPanel extends JPanel implements Observer {
 	 */
 	private void changeMachineType(int newMachineType){
 		System.out.println("Changing machine type to: " + newMachineType);
+		machineType = newMachineType;
 		changeRotors(newMachineType);
 		if(newMachineType < 4 && newMachineType != 0){
 			fourthRotorChoice.setSelectedIndex(0);
@@ -497,7 +498,6 @@ public class RotorPanel extends JPanel implements Observer {
 			fourthRotorPosition.setEnabled(true);
 			fourthRotorRingSetting.setEnabled(true);
 		}
-		machineType = newMachineType;
 	}
 
 	private void changeRotors(int newMachineType){
@@ -589,7 +589,7 @@ public class RotorPanel extends JPanel implements Observer {
 //			System.out.println("All changes performed, dumping state");
 //			printState();
 			if(!rotorFlag)
-				machine.setState(rotors, reflector, ringSettings);
+				machine.setState(rotors, mapReflector(reflector), ringSettings);
 		}
 	}
 
@@ -649,12 +649,10 @@ public class RotorPanel extends JPanel implements Observer {
 				break;
 			case "reflectorChoice":
 				reflector = temp.getSelectedIndex();
-				if(machineType > 3)
-					reflector += 2;
 				break;
 			}
 			if(!rotorFlag)
-				machine.setState(rotors, reflector, ringSettings);
+				machine.setState(rotors, mapReflector(reflector), ringSettings);
 		}
 	}
 
@@ -699,6 +697,11 @@ public class RotorPanel extends JPanel implements Observer {
 		}
 	}
 
+	private int mapReflector(int i){
+		if(machineType > 3)
+			return i + 2;
+		return i;
+	}
 	/**
 	 * Probably unnecessary inner class that
 	 * gives us an easy way to identify different 
