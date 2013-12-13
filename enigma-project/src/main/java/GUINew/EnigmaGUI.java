@@ -11,18 +11,25 @@ import javax.swing.JPanel;
  * @version 0.9
  * Nov 30, 2013
  */
-public class EnigmaGUI {
+public class EnigmaGUI extends JFrame {
 	private static JPanel mainPanel;
-	private static JFrame mainFrame;
 	
 	public static void main(String[] args){
-		
-		mainPanel = new PrimaryGUIPanel();
-		mainFrame = new JFrame();
-		mainFrame.add(mainPanel);
-		mainFrame.setTitle("CMSC495 Enigma Machine");
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.pack();
-		mainFrame.setVisible(true); 
+		EnigmaGUI app = new EnigmaGUI();
+		app.createGUI();
 	} // end main method
+	
+	/**
+	 * GUI design moved here in order to allow for Webstart. 
+	 */
+	private void createGUI() {
+		// Create and set up the content pane.
+		mainPanel = new PrimaryGUIPanel();
+		this.add(mainPanel);
+		this.setTitle("CMSC495 Enigma Machine");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
+		this.setVisible(true); 
+		
+	}
 } // end EnigmaGUI class
