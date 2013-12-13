@@ -143,9 +143,13 @@ public class IOPanel extends JPanel implements Observer {
 		panel2Layout.setAutoCreateContainerGaps(true);
 		
 		bulkInput = new JTextArea(5, 20);
+		bulkInput.setWrapStyleWord(true);							// Added by Walter Adolph
+		bulkInput.setLineWrap(true);
 		JScrollPane inputScrollPane = new JScrollPane(bulkInput);
 		bulkOutput = new JTextArea(5, 20);
 		bulkOutput.setEditable(false);
+		bulkOutput.setWrapStyleWord(true);							// Added by Walter Adolph
+		bulkOutput.setLineWrap(true);
 		JScrollPane outputScrollPane = new JScrollPane(bulkOutput);
 		fileTextField = new JTextField(20);
 		browseButton = new JButton("Browse");
