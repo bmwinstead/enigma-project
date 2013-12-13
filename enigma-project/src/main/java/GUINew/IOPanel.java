@@ -242,7 +242,6 @@ public class IOPanel extends JPanel implements Observer {
 				List<String> ls = Files.readAllLines(file, Charset.defaultCharset());
 				String encrypted = "";
 				for(String s : ls){
-					s = s.replace("e&", "");//This is a hack. See GitHub issue #39
 					s = s.replaceAll("[^\\w\\s]", ""); //Catching crazy characters
 					encrypted += machine.encryptString(s);
 					encrypted = encrypted.replace("\n", "").replace("\r", "");
