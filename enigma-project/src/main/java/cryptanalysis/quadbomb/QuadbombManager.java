@@ -245,10 +245,12 @@ public class QuadbombManager extends SwingWorker<Boolean, Integer> {
 		
 		if (result != null && decryptedMessage != null) {
 			resultsPanel.printSolution(result, decryptedMessage);
+			setProgress(100);
 			statusLabel.setText("Completed");
 		}
 		else if (threadManager.isShutdown()) {
 			statusLabel.setText("Aborted...");
+			setProgress(0);
 		}
 	}
 	
