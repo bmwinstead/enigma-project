@@ -17,6 +17,7 @@ import javax.swing.JTabbedPane;
  * Dec 13, 2013
  *
  */
+@SuppressWarnings("serial")
 public class PrimaryGUIPanel extends JPanel {
 	private static RotorPanel rotorPanel;
 	private static ResetPanel resetPanel;

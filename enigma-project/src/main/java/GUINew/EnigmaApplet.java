@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
  * Dec 13, 2013
  *
  */
+@SuppressWarnings("serial")
 public class EnigmaApplet extends JApplet {
 	
 	public void init() {

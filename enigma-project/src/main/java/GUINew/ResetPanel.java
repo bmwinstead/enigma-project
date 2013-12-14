@@ -3,8 +3,6 @@ package main.java.GUINew;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.nio.file.Paths;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;

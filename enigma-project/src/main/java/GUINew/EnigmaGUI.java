@@ -11,6 +11,7 @@ import javax.swing.JPanel;
  * @version 0.9
  * Nov 30, 2013
  */
+@SuppressWarnings("serial")
 public class EnigmaGUI extends JFrame {
 	private static JPanel mainPanel;
 	

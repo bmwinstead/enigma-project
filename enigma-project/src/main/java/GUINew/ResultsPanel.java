@@ -20,6 +20,7 @@ import main.java.enigma.EnigmaSettings;
  * Dec 9, 2013
  * 
  */
+@SuppressWarnings("serial")
 public class ResultsPanel extends JPanel {
 	private JTextField leftRotorTextField;
 	private JTextField middleRotorTextField;

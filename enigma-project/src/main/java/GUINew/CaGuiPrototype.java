@@ -51,6 +51,7 @@ import main.java.cryptanalysis.quadbomb.QuadbombManager;
  * 12/2/2013
  */
 
+@SuppressWarnings("serial")
 public class CaGuiPrototype extends JPanel {
 	private Corpus database;
 	private QuadbombManager analyzer;

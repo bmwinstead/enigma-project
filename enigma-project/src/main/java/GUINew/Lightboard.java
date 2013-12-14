@@ -2,7 +2,6 @@ package main.java.GUINew;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.nio.file.Paths;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -40,6 +39,7 @@ public class Lightboard extends JPanel {
 	public Lightboard() {
 		String testPath = filePrefix + "/images/lightboardImage.jpg";
 		try{
+			@SuppressWarnings("unused")
 			ImageIcon t = new ImageIcon(getClass().getResource(testPath));
 		} catch(NullPointerException e){
 			filePrefix = "";
