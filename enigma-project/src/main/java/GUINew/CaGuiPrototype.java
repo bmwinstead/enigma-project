@@ -113,7 +113,7 @@ public class CaGuiPrototype extends JPanel {
 		JTextArea instructionTextArea = new JTextArea();
 		add(instructionTextArea);
 		instructionTextArea.setWrapStyleWord(true);
-		instructionTextArea.setText("Note: Text may take some time to decrypt. Decryption time can be decreased if settings are known, more threads are used, or candidate size is decreased. Decreasing candidate size may also decrease likelyhood of accurate decryption.");
+		instructionTextArea.setText("Instructions: Enter a valid Enigma encrypted text below in the text box. Increasing the thread count will speed decryption attempts, but will consume more CPU resources. Increasing the candidate size will improve odds of decryption, but will take longer. Also, the longer the message, the longer it will take to decrypt, but the chances of a successful decryption will be higher. If some of the settings are known, they can be entered on the right. With more known settings, the faster the algorithm will run and the odds of decryption will be higher.\r\n\r\nNote: With most computers, decryption will take quite some time to run. Decryption times can vary from a few minutes on high-end computers to an hour or more on most machines.");
 		instructionTextArea.setRows(1);
 		instructionTextArea.setLineWrap(true);
 		instructionTextArea.setFont(new Font("Tahoma", Font.PLAIN, 11));
