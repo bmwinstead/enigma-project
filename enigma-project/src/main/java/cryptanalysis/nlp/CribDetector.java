@@ -127,7 +127,7 @@ public class CribDetector {
 	 * As the method works through the parse, discovered phrases are saved in a static word list
 	 * to facilitate later lookups, saving rework.
 	 * 
-	 * @param phrase to be parsed
+	 * @param message phrase to be parsed
 	 * @param referenceList to be used as a reference.
 	 * @return the best phrase split
 	 */
