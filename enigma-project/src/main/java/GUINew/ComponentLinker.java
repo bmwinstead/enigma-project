@@ -75,10 +75,7 @@ public class ComponentLinker extends JComponent{
 
     private Point getRectCenter ( Rectangle rect )
     {
-    	// Walter Adolph - Set up a hack to align the bars with the radio buttons.
-    	// It works when the dialog is resized, so maybe it'll work?
-    	
-        //return new Point ( rect.x + rect.width / 2, rect.y + rect.height / 2 );
+    	// Walter Adolph - Modified to align the bars with the radio buttons.
     	return new Point ( rect.x + 10, rect.y + rect.height / 2 + 10);
     }
 

@@ -45,7 +45,6 @@ public class Plugboard {
 			int j = (int) Math.floor(i/2);
 			plugboard[j][i%2]=cArr[i];
 		}
-		//System.out.println("Plugboard: created using map " + mapping ); - Walter: Commented this line due to interference in my testing.
 	}
 	
 	/**

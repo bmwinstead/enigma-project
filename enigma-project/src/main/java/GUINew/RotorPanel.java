@@ -559,8 +559,6 @@ public class RotorPanel extends JPanel implements Observer {
 			@SuppressWarnings("rawtypes")
 			JComboBox temp = (JComboBox) e.getSource();
 			System.out.println("(RingSettingsListener) " + e.getActionCommand() + " state " + temp.getSelectedItem());
-//			System.out.println("Action registered on ring settings combo boxes, dumping state before");
-//			printState();
 			switch (temp.getActionCommand()) {
 			case "fourthRotorRingSetting":
 				if (fourthRotorChoice.getSelectedIndex() == 0) {
@@ -586,8 +584,6 @@ public class RotorPanel extends JPanel implements Observer {
 				ringSettings[3] = temp.getSelectedItem().toString().charAt(0);
 				break;
 			}
-//			System.out.println("All changes performed, dumping state");
-//			printState();
 			if(!rotorFlag)
 				machine.setState(rotors, mapReflector(reflector), ringSettings);
 		}
